@@ -1,0 +1,26 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors ${EKOISMYLOVE} (${elyismylove@gmail.com})
+ * @date    2018-01-18
+ * @version $1$
+ */
+
+#textType{
+	width: 1200px;
+  	height: 300px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -150px 0 0 -600px;
+}
+
+h1{
+	color : #FFFFFF;
+	text-align: center;
+	font-size : 48pt;
+}
+
+body{
+	background-color : #000000;
+}
