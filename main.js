@@ -16,5 +16,5 @@ function setTime(){
 	var seconds = ('0'+ T.getSeconds()).substr(-2);
 
 	document.getElementById("time").innerHTML = "Now Time is : " + hours + ":" + minutes + ":" + seconds;	
-	var t=setTimeout("setTime()",1000);
+	var t=setTimeout("setTime()",500);
 }
