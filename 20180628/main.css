@@ -1,8 +1,5 @@
 @media only screen and (max-width: 480px){
-  body
-  {
-    background: black;
-  }
+
   .photo
   {
   max-width: 95%;
@@ -12,10 +9,7 @@
 }
 
 @media only screen and (max-width: 1024px) {
- body
- {
- background: red;
- }
+
  .photo
   {
   max-width: 50%;
@@ -25,9 +19,7 @@
 }
 
 @media only screen and (max-width: 768px) {
- body {
- background: yellow;
-   }
+
 
   .photo
   {
@@ -38,10 +30,7 @@
 }
 
 @media only screen and (min-width: 1025px) {
- body
- {
- background: pink;
- }
+
  .photo
   {
   max-width: 33%;
