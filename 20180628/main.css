@@ -1,0 +1,81 @@
+@media only screen and (max-width: 480px){
+  body
+  {
+    background: black;
+  }
+  .photo
+  {
+  max-width: 95%;
+  max-height: 95%;
+  padding: 2px;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+ body
+ {
+ background: red;
+ }
+ .photo
+  {
+  max-width: 50%;
+  max-height: 50%;
+  padding: 2px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+ body {
+ background: yellow;
+   }
+
+  .photo
+  {
+  max-width: 75%;
+  max-height: 75%;
+  padding: 2px;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+ body
+ {
+ background: pink;
+ }
+ .photo
+  {
+  max-width: 33%;
+  max-height: 33%;
+  padding: 2px;
+  float: left;
+  }
+}
+
+
+
+.upload {
+  font-size: 16px;
+  background-color: black;
+  color : white;
+  border-radius: 16px;
+  padding: 8px 16px;
+}
+
+#upload{
+  font-size: 12px;
+}
+
+.photo{
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+
+  filter: grayscale(100%);
+
+  filter: gray;
+}
+
+body {
+  text-align: center;
+}
