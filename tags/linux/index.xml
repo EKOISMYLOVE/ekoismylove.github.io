@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Linux - Tag - Wei&#39;s Note</title>
+        <link>http://example.org/tags/linux/</link>
+        <description>Linux - Tag - Wei&#39;s Note</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 29 Dec 2021 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/linux/" rel="self" type="application/rss+xml" /><item>
+    <title>如何從 Debian 10 升級至 Debian 11</title>
+    <link>http://example.org/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</link>
+    <pubDate>Wed, 29 Dec 2021 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</guid>
+    <description><![CDATA[如何從 Debian 10 升級至 Debian 11 前言 自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)
+準備  備份你所有的資料。（文件、圖片、設定檔、驅動程式等） 關閉所有的應用程式與服務。 關閉或刪除任何的個人套件庫(Personal Package Archive, PPA)，更新完成後再開啟或新增即可。 盡可能確保網路是穩定的。 保留一些時間進行升級。  更新步驟 更新現有的 package 開啟terminal，輸入 apt update &amp;&amp; apt upgrade 更新套件索引(package indexes)與套件（packges），需要先將更新目前的packages。
+root@server:~# apt update &amp;&amp; apt upgrade ### 注意使用者身份，不是root的話，請加上sudo ### user@server:~$ sudo apt update &amp;&amp; sudo apt upgrade 更新來源(source.list) 修改apt的source.list，將來源由buster更改為新的bullseye。修改 /etc/apt/source.list (注意編輯權限)，不一定要使用vim，用自己喜歡的編輯器即可(e.g. emacs, nano)，請記得編輯設定檔前記得備份！！！
+user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server:~$ sudo vim /etc/apt/source.list 修改前的檔案 修改後的檔案 這裡再補充介紹 main, contrib, non-free]]></description>
+</item></channel>
+</rss>

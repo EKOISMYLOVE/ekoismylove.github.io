@@ -1,0 +1,36 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>go - Tag - Wei&#39;s Note</title>
+        <link>http://example.org/tags/go/</link>
+        <description>go - Tag - Wei&#39;s Note</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/go/" rel="self" type="application/rss+xml" /><item>
+    <title>Golang-類型與聲明(Types and Declarations)</title>
+    <link>http://example.org/posts/go/go_note2/</link>
+    <pubDate>Sat, 12 Feb 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/go/go_note2/</guid>
+    <description><![CDATA[Golang-類型與聲明(Types and Declarations) Introduction 本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
+如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。
+但我比較喜歡使用宣告，後面若看到宣告意同聲明。(Declarations)
+Zero Value 在 Golang 中，會默認 Zero Value分配給已經聲明，但未分配數值的任何變數，換句話說也可以被稱為預設值，不同的類型的 Zero Value 也有所不同。這裡列出了幾個常用的變數的 Zero Value。
+【Zero Value 並不是代表為 0 !! 不同類型的變數有不同的 Zero Value !!】
+Literal Literal 簡單來說是在程式碼中賦予的數值、字元或是字串，例如：
+func main(){ fmt.Println(&#34;Hello World&#34;) } 這裡的 &quot;Hello World&quot; 就是字串型態的 Literal。
+Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的進制方式。另外，當整數字串過長時，可以透過 underscore 將數字進行分組，提高閱讀的效能，但不能在該數字的開頭或結尾使用。
+0b111 // 2進制 0o111 // 8進制 0x111 // 16進制 0111 // 這也是代表8進制，但容易搞混，不要使用這種方式!! //b,o,x可以用大寫B,O,X代替，會是一樣的作用。  a := 1111 b := 1_111 // 這兩組代表的是相同的數字。 Float literal 若 Literal 為 float 時，可以使用字母 e 和數字組合出要使用的指數數值。與 Integer Literal 一樣能使用 underscore 提高閱讀的效能。]]></description>
+</item><item>
+    <title>Golang-環境建置</title>
+    <link>http://example.org/posts/go/go_note1/</link>
+    <pubDate>Sat, 15 Jan 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/go/go_note1/</guid>
+    <description><![CDATA[Golang-環境建置 Introduction 本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。
+Install go 我自己的開發環境是在 macos 底下，基本上透過 brew install go 就會安裝完成。如果網路沒問題的話?
+$ brew install go 在 Windows 環境下，可以透過 Chocolatey 進行安裝，此外官方網站有提供相關壓縮檔與安裝檔，挑選自己使用的平台下載相關檔案後，解壓縮或是進行安裝即可。
+安裝完成後，可以透過 go version指令，確定是否安裝完成。
+$ go version go version go1.15.2 darwin/amd64 First program 建立一個檔案，通常第一支程式都會是設法在 Terminal 上顯示 Hello world!，故這程式碼的檔名先命名為 hello.go，並編輯該檔案。
+$ touch hello.go $ vim hello.go 程式碼大致如下。
+package main import &#34;fmt&#34; func main() { fmt.Println(&#34;Hello world!&#34;) } 儲存該檔案後，在 Terminal 執行下列指令，此時應該能看到 Hello world! 顯示在Terminal上。
+$ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編譯成 binary 後執行，執行完成後刪除這個檔案，若要編譯成 binary 並使用，則使用 go build 。]]></description>
+</item></channel>
+</rss>
