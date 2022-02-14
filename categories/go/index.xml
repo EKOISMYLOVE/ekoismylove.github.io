@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Go - Category - Wei&#39;s Note</title>
+        <link>http://example.org/categories/go/</link>
+        <description>Go - Category - Wei&#39;s Note</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/categories/go/" rel="self" type="application/rss+xml" /><item>
+    <title>Golang-類型與聲明(Types and Declarations)</title>
+    <link>http://example.org/posts/go/go_note2/</link>
+    <pubDate>Sat, 12 Feb 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/go/go_note2/</guid>
+    <description><![CDATA[<p>本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。</p>
+<p>如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。</p>]]></description>
+</item><item>
+    <title>Golang-環境建置</title>
+    <link>http://example.org/posts/go/go_note1/</link>
+    <pubDate>Sat, 15 Jan 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/go/go_note1/</guid>
+    <description><![CDATA[<p>本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。</p>]]></description>
+</item></channel>
+</rss>

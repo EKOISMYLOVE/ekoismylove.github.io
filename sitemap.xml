@@ -2,6 +2,8 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
+            <loc>http://example.org/categories/</loc><lastmod>2022-02-12T00:00:00&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/categories/go/</loc><lastmod>2022-02-12T00:00:00&#43;00:00</lastmod></url><url>
             <loc>http://example.org/tags/go/</loc><lastmod>2022-02-12T00:00:00&#43;00:00</lastmod></url><url>
             <loc>http://example.org/tags/golang/</loc><lastmod>2022-02-12T00:00:00&#43;00:00</lastmod></url><url>
             <loc>http://example.org/posts/go/go_note2/</loc><lastmod>2022-02-12T00:00:00&#43;00:00</lastmod></url><url>
@@ -14,5 +16,4 @@
             <loc>http://example.org/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</loc><lastmod>2021-12-29T00:00:00&#43;00:00</lastmod></url><url>
             <loc>http://example.org/tags/introduction/</loc><lastmod>2021-12-28T00:00:00&#43;00:00</lastmod></url><url>
             <loc>http://example.org/posts/start/</loc><lastmod>2021-12-28T00:00:00&#43;00:00</lastmod></url><url>
-            <loc>http://example.org/about/</loc></url><url>
-            <loc>http://example.org/categories/</loc></url></urlset>
+            <loc>http://example.org/about/</loc></url></urlset>

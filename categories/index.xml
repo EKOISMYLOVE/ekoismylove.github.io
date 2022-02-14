@@ -3,5 +3,12 @@
         <title>Categories - Category - Wei&#39;s Note</title>
         <link>http://example.org/categories/</link>
         <description>Categories - Category - Wei&#39;s Note</description>
-        <generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="http://example.org/categories/" rel="self" type="application/rss+xml" /></channel>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/categories/" rel="self" type="application/rss+xml" /><item>
+    <title>Go</title>
+    <link>http://example.org/categories/go/</link>
+    <pubDate>Sat, 12 Feb 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/categories/go/</guid>
+    <description><![CDATA[]]></description>
+</item></channel>
 </rss>
