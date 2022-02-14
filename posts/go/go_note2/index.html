@@ -6,15 +6,8 @@
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>Golang-類型與聲明(Types and Declarations) - Wei&#39;s Note</title><meta name="Description" content=""><meta property="og:title" content="Golang-類型與聲明(Types and Declarations)" />
-<meta property="og:description" content="Golang-類型與聲明(Types and Declarations) Introduction 本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
-如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。
-但我比較喜歡使用宣告，後面若看到宣告意同聲明。(Declarations)
-Zero Value 在 Golang 中，會默認 Zero Value分配給已經聲明，但未分配數值的任何變數，換句話說也可以被稱為預設值，不同的類型的 Zero Value 也有所不同。這裡列出了幾個常用的變數的 Zero Value。
-【Zero Value 並不是代表為 0 !! 不同類型的變數有不同的 Zero Value !!】
-Literal Literal 簡單來說是在程式碼中賦予的數值、字元或是字串，例如：
-func main(){ fmt.Println(&#34;Hello World&#34;) } 這裡的 &quot;Hello World&quot; 就是字串型態的 Literal。
-Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的進制方式。另外，當整數字串過長時，可以透過 underscore 將數字進行分組，提高閱讀的效能，但不能在該數字的開頭或結尾使用。
-0b111 // 2進制 0o111 // 8進制 0x111 // 16進制 0111 // 這也是代表8進制，但容易搞混，不要使用這種方式!! //b,o,x可以用大寫B,O,X代替，會是一樣的作用。  a := 1111 b := 1_111 // 這兩組代表的是相同的數字。 Float literal 若 Literal 為 float 時，可以使用字母 e 和數字組合出要使用的指數數值。與 Integer Literal 一樣能使用 underscore 提高閱讀的效能。" />
+<meta property="og:description" content="本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
+如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://example.org/posts/go/go_note2/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-02-12T00:00:00+00:00" />
@@ -22,15 +15,8 @@ Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的�
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Golang-類型與聲明(Types and Declarations)"/>
-<meta name="twitter:description" content="Golang-類型與聲明(Types and Declarations) Introduction 本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
-如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。
-但我比較喜歡使用宣告，後面若看到宣告意同聲明。(Declarations)
-Zero Value 在 Golang 中，會默認 Zero Value分配給已經聲明，但未分配數值的任何變數，換句話說也可以被稱為預設值，不同的類型的 Zero Value 也有所不同。這裡列出了幾個常用的變數的 Zero Value。
-【Zero Value 並不是代表為 0 !! 不同類型的變數有不同的 Zero Value !!】
-Literal Literal 簡單來說是在程式碼中賦予的數值、字元或是字串，例如：
-func main(){ fmt.Println(&#34;Hello World&#34;) } 這裡的 &quot;Hello World&quot; 就是字串型態的 Literal。
-Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的進制方式。另外，當整數字串過長時，可以透過 underscore 將數字進行分組，提高閱讀的效能，但不能在該數字的開頭或結尾使用。
-0b111 // 2進制 0o111 // 8進制 0x111 // 16進制 0111 // 這也是代表8進制，但容易搞混，不要使用這種方式!! //b,o,x可以用大寫B,O,X代替，會是一樣的作用。  a := 1111 b := 1_111 // 這兩組代表的是相同的數字。 Float literal 若 Literal 為 float 時，可以使用字母 e 和數字組合出要使用的指數數值。與 Integer Literal 一樣能使用 underscore 提高閱讀的效能。"/>
+<meta name="twitter:description" content="本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
+如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。"/>
 <meta name="application-name" content="Wei&#39;s Note">
 <meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -43,12 +29,12 @@ Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的�
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/go\/go_note2\/"
-        },"genre": "posts","keywords": "go, golang","wordcount":  495 ,
+        },"genre": "posts","keywords": "go, golang","wordcount":  491 ,
         "url": "http:\/\/example.org\/posts\/go\/go_note2\/","datePublished": "2022-02-12T00:00:00+00:00","dateModified": "2022-02-12T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
-                "name": "Author"
+                "name": "Wei"
             },"description": ""
     }
     </script></head>
@@ -119,8 +105,8 @@ Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的�
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Golang-類型與聲明(Types and Declarations)</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Author</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-12">2022-02-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;495 words&nbsp;
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-12">2022-02-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;491 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -129,7 +115,6 @@ Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的�
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#introduction">Introduction</a></li>
     <li><a href="#zero-value">Zero Value</a></li>
     <li><a href="#literal">Literal</a>
       <ul>
@@ -155,9 +140,7 @@ Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的�
     <li><a href="#參考資料">參考資料</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="golang-類型與聲明types-and-declarations">Golang-類型與聲明(Types and Declarations)</h1>
-<h2 id="introduction">Introduction</h2>
-<p>本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。</p>
+            </div><div class="content" id="content"><p>本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。</p>
 <p>如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。</p>
 <p>但我比較喜歡使用宣告，後面若看到宣告意同聲明。(Declarations)</p>
 <h2 id="zero-value">Zero Value</h2>
@@ -364,8 +347,7 @@ Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的�
 <ol>
 <li><a href="https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216" target="_blank" rel="noopener noreffer">Learning Go</a>(書籍)</li>
 <li><a href="https://go101.org/article/basic-types-and-value-literals.html" target="_blank" rel="noopener noreffer">Basic Types and Basic Value Literals</a></li>
-</ol>
-</div><div class="post-footer" id="post-footer">
+</ol></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
@@ -395,7 +377,7 @@ Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的�
             </noscript></div></article></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span></div>
         </div>
     </footer></div>
 
@@ -404,5 +386,5 @@ Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的�
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="https://ekoismylove.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"CK53NZPEPH","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"7402eafd3601aa9a11662b4aaa586604","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="https://ekoismylove.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

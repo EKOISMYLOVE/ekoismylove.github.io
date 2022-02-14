@@ -6,14 +6,7 @@
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>Golang-環境建置 - Wei&#39;s Note</title><meta name="Description" content=""><meta property="og:title" content="Golang-環境建置" />
-<meta property="og:description" content="Golang-環境建置 Introduction 本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。
-Install go 我自己的開發環境是在 macos 底下，基本上透過 brew install go 就會安裝完成。如果網路沒問題的話?
-$ brew install go 在 Windows 環境下，可以透過 Chocolatey 進行安裝，此外官方網站有提供相關壓縮檔與安裝檔，挑選自己使用的平台下載相關檔案後，解壓縮或是進行安裝即可。
-安裝完成後，可以透過 go version指令，確定是否安裝完成。
-$ go version go version go1.15.2 darwin/amd64 First program 建立一個檔案，通常第一支程式都會是設法在 Terminal 上顯示 Hello world!，故這程式碼的檔名先命名為 hello.go，並編輯該檔案。
-$ touch hello.go $ vim hello.go 程式碼大致如下。
-package main import &#34;fmt&#34; func main() { fmt.Println(&#34;Hello world!&#34;) } 儲存該檔案後，在 Terminal 執行下列指令，此時應該能看到 Hello world! 顯示在Terminal上。
-$ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編譯成 binary 後執行，執行完成後刪除這個檔案，若要編譯成 binary 並使用，則使用 go build 。" />
+<meta property="og:description" content="本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://example.org/posts/go/go_note1/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-01-15T00:00:00+00:00" />
@@ -21,14 +14,7 @@ $ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Golang-環境建置"/>
-<meta name="twitter:description" content="Golang-環境建置 Introduction 本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。
-Install go 我自己的開發環境是在 macos 底下，基本上透過 brew install go 就會安裝完成。如果網路沒問題的話?
-$ brew install go 在 Windows 環境下，可以透過 Chocolatey 進行安裝，此外官方網站有提供相關壓縮檔與安裝檔，挑選自己使用的平台下載相關檔案後，解壓縮或是進行安裝即可。
-安裝完成後，可以透過 go version指令，確定是否安裝完成。
-$ go version go version go1.15.2 darwin/amd64 First program 建立一個檔案，通常第一支程式都會是設法在 Terminal 上顯示 Hello world!，故這程式碼的檔名先命名為 hello.go，並編輯該檔案。
-$ touch hello.go $ vim hello.go 程式碼大致如下。
-package main import &#34;fmt&#34; func main() { fmt.Println(&#34;Hello world!&#34;) } 儲存該檔案後，在 Terminal 執行下列指令，此時應該能看到 Hello world! 顯示在Terminal上。
-$ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編譯成 binary 後執行，執行完成後刪除這個檔案，若要編譯成 binary 並使用，則使用 go build 。"/>
+<meta name="twitter:description" content="本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。"/>
 <meta name="application-name" content="Wei&#39;s Note">
 <meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -41,12 +27,12 @@ $ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/go\/go_note1\/"
-        },"genre": "posts","keywords": "go, golang","wordcount":  254 ,
+        },"genre": "posts","keywords": "go, golang","wordcount":  252 ,
         "url": "http:\/\/example.org\/posts\/go\/go_note1\/","datePublished": "2022-01-15T00:00:00+00:00","dateModified": "2022-01-15T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
-                "name": "Author"
+                "name": "Wei"
             },"description": ""
     }
     </script></head>
@@ -117,8 +103,8 @@ $ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Golang-環境建置</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Author</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-01-15">2022-01-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;254 words&nbsp;
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-01-15">2022-01-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;252 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -127,7 +113,6 @@ $ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#introduction">Introduction</a></li>
     <li><a href="#install-go">Install go</a></li>
     <li><a href="#first-program">First program</a></li>
     <li><a href="#format">Format</a></li>
@@ -136,9 +121,7 @@ $ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編
     <li><a href="#參考資料reference">參考資料(Reference)</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="golang-環境建置">Golang-環境建置</h1>
-<h2 id="introduction">Introduction</h2>
-<p>本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。</p>
+            </div><div class="content" id="content"><p>本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。</p>
 <h2 id="install-go">Install go</h2>
 <p>我自己的開發環境是在 macos 底下，基本上透過 <code>brew install go</code> 就會安裝完成。<del>如果網路沒問題的話?</del></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">$ brew install go
@@ -232,8 +215,7 @@ $ go build <span class="o">[</span>targetPath<span class="o">]</span>
 <li><a href="https://pkg.go.dev/golang.org/x/tools/cmd/goimports" target="_blank" rel="noopener noreffer">goimports</a></li>
 <li><a href="https://github.com/golangci/golangci-lint" target="_blank" rel="noopener noreffer">golangci-lint</a></li>
 <li><a href="https://golangci-lint.run/usage/configuration/" target="_blank" rel="noopener noreffer">.golangci.yml</a></li>
-</ol>
-</div><div class="post-footer" id="post-footer">
+</ol></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
@@ -264,7 +246,7 @@ $ go build <span class="o">[</span>targetPath<span class="o">]</span>
             </noscript></div></article></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span></div>
         </div>
     </footer></div>
 
@@ -273,5 +255,5 @@ $ go build <span class="o">[</span>targetPath<span class="o">]</span>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="https://ekoismylove.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"CK53NZPEPH","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"7402eafd3601aa9a11662b4aaa586604","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="https://ekoismylove.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

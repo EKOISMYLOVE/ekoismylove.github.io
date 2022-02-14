@@ -6,10 +6,7 @@
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>如何從 Debian 10 升級至 Debian 11 - Wei&#39;s Note</title><meta name="Description" content=""><meta property="og:title" content="如何從 Debian 10 升級至 Debian 11" />
-<meta property="og:description" content="如何從 Debian 10 升級至 Debian 11 前言 自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)
-準備  備份你所有的資料。（文件、圖片、設定檔、驅動程式等） 關閉所有的應用程式與服務。 關閉或刪除任何的個人套件庫(Personal Package Archive, PPA)，更新完成後再開啟或新增即可。 盡可能確保網路是穩定的。 保留一些時間進行升級。  更新步驟 更新現有的 package 開啟terminal，輸入 apt update &amp;&amp; apt upgrade 更新套件索引(package indexes)與套件（packges），需要先將更新目前的packages。
-root@server:~# apt update &amp;&amp; apt upgrade ### 注意使用者身份，不是root的話，請加上sudo ### user@server:~$ sudo apt update &amp;&amp; sudo apt upgrade 更新來源(source.list) 修改apt的source.list，將來源由buster更改為新的bullseye。修改 /etc/apt/source.list (注意編輯權限)，不一定要使用vim，用自己喜歡的編輯器即可(e.g. emacs, nano)，請記得編輯設定檔前記得備份！！！
-user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server:~$ sudo vim /etc/apt/source.list 修改前的檔案 修改後的檔案 這裡再補充介紹 main, contrib, non-free" />
+<meta property="og:description" content="自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://example.org/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-12-29T00:00:00+00:00" />
@@ -17,10 +14,7 @@ user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="如何從 Debian 10 升級至 Debian 11"/>
-<meta name="twitter:description" content="如何從 Debian 10 升級至 Debian 11 前言 自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)
-準備  備份你所有的資料。（文件、圖片、設定檔、驅動程式等） 關閉所有的應用程式與服務。 關閉或刪除任何的個人套件庫(Personal Package Archive, PPA)，更新完成後再開啟或新增即可。 盡可能確保網路是穩定的。 保留一些時間進行升級。  更新步驟 更新現有的 package 開啟terminal，輸入 apt update &amp;&amp; apt upgrade 更新套件索引(package indexes)與套件（packges），需要先將更新目前的packages。
-root@server:~# apt update &amp;&amp; apt upgrade ### 注意使用者身份，不是root的話，請加上sudo ### user@server:~$ sudo apt update &amp;&amp; sudo apt upgrade 更新來源(source.list) 修改apt的source.list，將來源由buster更改為新的bullseye。修改 /etc/apt/source.list (注意編輯權限)，不一定要使用vim，用自己喜歡的編輯器即可(e.g. emacs, nano)，請記得編輯設定檔前記得備份！！！
-user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server:~$ sudo vim /etc/apt/source.list 修改前的檔案 修改後的檔案 這裡再補充介紹 main, contrib, non-free"/>
+<meta name="twitter:description" content="自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)"/>
 <meta name="application-name" content="Wei&#39;s Note">
 <meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -33,12 +27,12 @@ user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11\/"
-        },"genre": "posts","keywords": "Linux, Debian","wordcount":  202 ,
+        },"genre": "posts","keywords": "Linux, Debian","wordcount":  211 ,
         "url": "http:\/\/example.org\/posts\/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11\/","datePublished": "2021-12-29T00:00:00+00:00","dateModified": "2021-12-29T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
-                "name": "Author"
+                "name": "Wei"
             },"description": ""
     }
     </script></head>
@@ -109,8 +103,8 @@ user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">如何從 Debian 10 升級至 Debian 11</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Author</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-29">2021-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;202 words&nbsp;
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-29">2021-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;211 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -119,7 +113,6 @@ user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#前言">前言</a></li>
     <li><a href="#準備">準備</a></li>
     <li><a href="#更新步驟">更新步驟</a>
       <ul>
@@ -133,9 +126,7 @@ user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server
     <li><a href="#參考資料">參考資料</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="如何從-debian-10-升級至-debian-11">如何從 Debian 10 升級至 Debian 11</h1>
-<h2 id="前言">前言</h2>
-<p>自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 <del>(其實是有Service在運作並做一些測試，不想重弄)</del></p>
+            </div><div class="content" id="content"><p>自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 <del>(其實是有Service在運作並做一些測試，不想重弄)</del></p>
 <h2 id="準備">準備</h2>
 <ul>
 <li>備份你所有的資料。（文件、圖片、<strong>設定檔</strong>、<strong>驅動程式</strong>等）</li>
@@ -155,24 +146,28 @@ user@server:~$ sudo apt update <span class="o">&amp;&amp;</span> sudo apt upgrad
 <p>修改apt的source.list，將來源由buster更改為新的bullseye。修改 <code>/etc/apt/source.list</code> (注意編輯權限)，不一定要使用vim，用自己喜歡的編輯器即可(e.g. emacs, nano)，<strong>請記得編輯設定檔前記得備份！！！</strong></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak
 user@server:~$ sudo vim /etc/apt/source.list
-</code></pre></div><p>修改前的檔案
-<img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="./image/updateDebian_1.jpeg"
-        data-srcset="./image/updateDebian_1.jpeg, ./image/updateDebian_1.jpeg 1.5x, ./image/updateDebian_1.jpeg 2x"
-        data-sizes="auto"
-        alt="./image/updateDebian_1.jpeg"
-        title="notedit" /></p>
-<p>修改後的檔案
-<img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="./image/updateDebian_2.jpeg"
-        data-srcset="./image/updateDebian_2.jpeg, ./image/updateDebian_2.jpeg 1.5x, ./image/updateDebian_2.jpeg 2x"
-        data-sizes="auto"
-        alt="./image/updateDebian_2.jpeg"
-        title="edited" /></p>
+</code></pre></div><p>修改前的檔案</p>
+<figure><a class="lightgallery" href="../image/updateDebian_1.jpeg" title="../image/updateDebian_1.jpeg" data-thumbnail="../image/updateDebian_1.jpeg" data-sub-html="<h2>修改前的檔案</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="../image/updateDebian_1.jpeg"
+            data-srcset="../image/updateDebian_1.jpeg, ../image/updateDebian_1.jpeg 1.5x, ../image/updateDebian_1.jpeg 2x"
+            data-sizes="auto"
+            alt="../image/updateDebian_1.jpeg" width="100%" />
+    </a><figcaption class="image-caption">修改前的檔案</figcaption>
+    </figure>
+<p>修改後的檔案</p>
+<figure><a class="lightgallery" href="../image/updateDebian_2.jpeg" title="../image/updateDebian_2.jpeg" data-thumbnail="../image/updateDebian_2.jpeg" data-sub-html="<h2>修改後的檔案</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="../image/updateDebian_2.jpeg"
+            data-srcset="../image/updateDebian_2.jpeg, ../image/updateDebian_2.jpeg 1.5x, ../image/updateDebian_2.jpeg 2x"
+            data-sizes="auto"
+            alt="../image/updateDebian_2.jpeg" width="100%" />
+    </a><figcaption class="image-caption">修改後的檔案</figcaption>
+    </figure>
 <p>這裡再補充介紹 <code>main, contrib, non-free</code></p>
 <ul>
 <li>main: 主要為完全符合 Debian 自由軟體指南(Debian Free Software Guidelines, DFSG)的所有package。</li>
@@ -184,34 +179,39 @@ user@server:~$ sudo vim /etc/apt/source.list
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">user@server:~$ sudo apt update
 user@server:~$ sudo apt full-upgrade
 </code></pre></div><p>途中會有一些訊息需要選擇。</p>
-<p>顯示有關packages更新的新聞。按<code>q</code>退出。
-<img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="./image/updateDebian_3.jpeg"
-        data-srcset="./image/updateDebian_3.jpeg, ./image/updateDebian_3.jpeg 1.5x, ./image/updateDebian_3.jpeg 2x"
-        data-sizes="auto"
-        alt="./image/updateDebian_3.jpeg"
-        title="apt-listchanges:News" /></p>
-<p>Package configuration，請選擇 <code>&lt;Yes&gt;</code>
-<img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="./image/updateDebian_4.jpeg"
-        data-srcset="./image/updateDebian_4.jpeg, ./image/updateDebian_4.jpeg 1.5x, ./image/updateDebian_4.jpeg 2x"
-        data-sizes="auto"
-        alt="./image/updateDebian_4.jpeg"
-        title="lib6" /></p>
-<p>相關package的configuration，請依據需求設定，建議用 N 保留設定。
-<img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="./image/updateDebian_5.jpeg"
-        data-srcset="./image/updateDebian_5.jpeg, ./image/updateDebian_5.jpeg 1.5x, ./image/updateDebian_5.jpeg 2x"
-        data-sizes="auto"
-        alt="./image/updateDebian_5.jpeg"
-        title="packageModified" />
-Options description :</p>
+<p>顯示有關packages更新的新聞。按<code>q</code>退出。</p>
+<figure><a class="lightgallery" href="../image/updateDebian_3.jpeg" title="../image/updateDebian_3.jpeg" data-thumbnail="../image/updateDebian_3.jpeg" data-sub-html="<h2>Information about package update</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="../image/updateDebian_3.jpeg"
+            data-srcset="../image/updateDebian_3.jpeg, ../image/updateDebian_3.jpeg 1.5x, ../image/updateDebian_3.jpeg 2x"
+            data-sizes="auto"
+            alt="../image/updateDebian_3.jpeg" width="100%" />
+    </a><figcaption class="image-caption">Information about package update</figcaption>
+    </figure>
+<p>Package configuration，請選擇 <code>&lt;Yes&gt;</code></p>
+<figure><a class="lightgallery" href="../image/updateDebian_3.jpeg" title="../image/updateDebian_3.jpeg" data-thumbnail="../image/updateDebian_3.jpeg" data-sub-html="<h2>Package configuration</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="../image/updateDebian_3.jpeg"
+            data-srcset="../image/updateDebian_3.jpeg, ../image/updateDebian_3.jpeg 1.5x, ../image/updateDebian_3.jpeg 2x"
+            data-sizes="auto"
+            alt="../image/updateDebian_3.jpeg" width="100%" />
+    </a><figcaption class="image-caption">Package configuration</figcaption>
+    </figure>
+<p>相關package的configuration，請依據需求設定，建議用 N 保留設定。</p>
+<a class="lightgallery" href="../image/updateDebian_3.jpeg" title="../image/updateDebian_3.jpeg" data-thumbnail="../image/updateDebian_3.jpeg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="../image/updateDebian_3.jpeg"
+            data-srcset="../image/updateDebian_3.jpeg, ../image/updateDebian_3.jpeg 1.5x, ../image/updateDebian_3.jpeg 2x"
+            data-sizes="auto"
+            alt="../image/updateDebian_3.jpeg" width="100%" />
+    </a>
+<p>Options description :</p>
 <ul>
 <li>Y or I : install the package maintainer&rsquo;s version (安裝維護者版本的package，會覆蓋掉該檔案的設定。)</li>
 <li>N or O : keep your currently-installed verstion (保留目前安裝的版本。)</li>
@@ -238,8 +238,7 @@ Codename:       bullseye
 <li><a href="https://debian-handbook.info/browse/zh-TW/stable/" target="_blank" rel="noopener noreffer">Debian管理者手冊</a></li>
 <li><a href="https://www.debian.org/social_contract.html#guidelines" target="_blank" rel="noopener noreffer">Debian自由軟體指南,DFSG</a></li>
 <li><a href="https://askubuntu.com/questions/27513/what-is-the-difference-between-debian-contrib-non-free-and-how-do-they-corresp/27514#27514" target="_blank" rel="noopener noreffer">main,contrib,nonfree解釋</a></li>
-</ul>
-</div><div class="post-footer" id="post-footer">
+</ul></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
@@ -270,7 +269,7 @@ Codename:       bullseye
             </noscript></div></article></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span></div>
         </div>
     </footer></div>
 
@@ -279,5 +278,5 @@ Codename:       bullseye
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="https://ekoismylove.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"CK53NZPEPH","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"7402eafd3601aa9a11662b4aaa586604","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="https://ekoismylove.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

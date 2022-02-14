@@ -22,7 +22,10 @@
     {
         "@context": "http://schema.org",
         "@type": "WebSite",
-        "url": "http:\/\/example.org\/","inLanguage": "en-us","name": "Wei's Note"
+        "url": "http:\/\/example.org\/","inLanguage": "en-us","author": {
+                "@type": "Person",
+                "name": "Wei"
+            },"name": "Wei's Note"
     }
     </script></head>
     <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
@@ -98,50 +101,29 @@
         title="/profile.jpg" /></a></div><h2 class="home-subtitle">This is Site of Note.</h2><div class="links"><a href="https://github.com/EKOISMYLOVE" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://linkedin.com/in/jia-wei-guo-702a87137" title="LinkedIn" target="_blank" rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href="https://twitter.com/wiwi571246" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a><a href="https://medium.com/@wiwi571246" title="Medium" target="_blank" rel="noopener noreffer me"><i class="fab fa-medium fa-fw"></i></a><a href="https://steamcommunity.com/profiles/76561198119974806" title="Steam" target="_blank" rel="noopener noreffer me"><i class="fab fa-steam fa-fw"></i></a><a href="https://mastodon.social/@EKOISMYLOVE" title="Mastodon" target="_blank" rel="noopener noreffer me"><i class="fab fa-mastodon fa-fw"></i></a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/posts/go/go_note2/">Golang-類型與聲明(Types and Declarations)</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Author</a></span>&nbsp;<span class="post-publish">published on <time datetime="2022-02-12">2022-02-12</time></span></div><div class="content">Golang-類型與聲明(Types and Declarations) Introduction 本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
-如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。
-但我比較喜歡使用宣告，後面若看到宣告意同聲明。(Declarations)
-Zero Value 在 Golang 中，會默認 Zero Value分配給已經聲明，但未分配數值的任何變數，換句話說也可以被稱為預設值，不同的類型的 Zero Value 也有所不同。這裡列出了幾個常用的變數的 Zero Value。
-【Zero Value 並不是代表為 0 !! 不同類型的變數有不同的 Zero Value !!】
-Literal Literal 簡單來說是在程式碼中賦予的數值、字元或是字串，例如：
-func main(){ fmt.Println(&#34;Hello World&#34;) } 這裡的 &quot;Hello World&quot; 就是字串型態的 Literal。
-Integer literal 若 Literal 為整數時，透過不同的前綴代表不同的進制方式。另外，當整數字串過長時，可以透過 underscore 將數字進行分組，提高閱讀的效能，但不能在該數字的開頭或結尾使用。
-0b111 // 2進制 0o111 // 8進制 0x111 // 16進制 0111 // 這也是代表8進制，但容易搞混，不要使用這種方式!! //b,o,x可以用大寫B,O,X代替，會是一樣的作用。  a := 1111 b := 1_111 // 這兩組代表的是相同的數字。 Float literal 若 Literal 為 float 時，可以使用字母 e 和數字組合出要使用的指數數值。與 Integer Literal 一樣能使用 underscore 提高閱讀的效能。</div><div class="post-footer">
+    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-publish">published on <time datetime="2022-02-12">2022-02-12</time></span></div><div class="content"><p>本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。</p>
+<p>如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。</p></div><div class="post-footer">
         <a href="/posts/go/go_note2/">Read More</a><div class="post-tags">
                 <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">go</a>,&nbsp;<a href="/tags/golang/">golang</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/posts/go/go_note1/">Golang-環境建置</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Author</a></span>&nbsp;<span class="post-publish">published on <time datetime="2022-01-15">2022-01-15</time></span></div><div class="content">Golang-環境建置 Introduction 本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。
-Install go 我自己的開發環境是在 macos 底下，基本上透過 brew install go 就會安裝完成。如果網路沒問題的話?
-$ brew install go 在 Windows 環境下，可以透過 Chocolatey 進行安裝，此外官方網站有提供相關壓縮檔與安裝檔，挑選自己使用的平台下載相關檔案後，解壓縮或是進行安裝即可。
-安裝完成後，可以透過 go version指令，確定是否安裝完成。
-$ go version go version go1.15.2 darwin/amd64 First program 建立一個檔案，通常第一支程式都會是設法在 Terminal 上顯示 Hello world!，故這程式碼的檔名先命名為 hello.go，並編輯該檔案。
-$ touch hello.go $ vim hello.go 程式碼大致如下。
-package main import &#34;fmt&#34; func main() { fmt.Println(&#34;Hello world!&#34;) } 儲存該檔案後，在 Terminal 執行下列指令，此時應該能看到 Hello world! 顯示在Terminal上。
-$ go run hello.go Hello world! go run 指令會將程式碼在臨時目錄中編譯成 binary 後執行，執行完成後刪除這個檔案，若要編譯成 binary 並使用，則使用 go build 。</div><div class="post-footer">
+    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-publish">published on <time datetime="2022-01-15">2022-01-15</time></span></div><div class="content"><p>本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。</p></div><div class="post-footer">
         <a href="/posts/go/go_note1/">Read More</a><div class="post-tags">
                 <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">go</a>,&nbsp;<a href="/tags/golang/">golang</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/">如何從 Debian 10 升級至 Debian 11</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Author</a></span>&nbsp;<span class="post-publish">published on <time datetime="2021-12-29">2021-12-29</time></span></div><div class="content">如何從 Debian 10 升級至 Debian 11 前言 自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)
-準備  備份你所有的資料。（文件、圖片、設定檔、驅動程式等） 關閉所有的應用程式與服務。 關閉或刪除任何的個人套件庫(Personal Package Archive, PPA)，更新完成後再開啟或新增即可。 盡可能確保網路是穩定的。 保留一些時間進行升級。  更新步驟 更新現有的 package 開啟terminal，輸入 apt update &amp;&amp; apt upgrade 更新套件索引(package indexes)與套件（packges），需要先將更新目前的packages。
-root@server:~# apt update &amp;&amp; apt upgrade ### 注意使用者身份，不是root的話，請加上sudo ### user@server:~$ sudo apt update &amp;&amp; sudo apt upgrade 更新來源(source.list) 修改apt的source.list，將來源由buster更改為新的bullseye。修改 /etc/apt/source.list (注意編輯權限)，不一定要使用vim，用自己喜歡的編輯器即可(e.g. emacs, nano)，請記得編輯設定檔前記得備份！！！
-user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server:~$ sudo vim /etc/apt/source.list 修改前的檔案 修改後的檔案 這裡再補充介紹 main, contrib, non-free</div><div class="post-footer">
+    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-publish">published on <time datetime="2021-12-29">2021-12-29</time></span></div><div class="content"><p>自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 <del>(其實是有Service在運作並做一些測試，不想重弄)</del></p></div><div class="post-footer">
         <a href="/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/">Read More</a><div class="post-tags">
                 <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/linux/">Linux</a>,&nbsp;<a href="/tags/debian/">Debian</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/posts/start/">Start</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Author</a></span>&nbsp;<span class="post-publish">published on <time datetime="2021-12-28">2021-12-28</time></span></div><div class="content">Start 一來是學過一些網路與系統服務的知識與技能，但一直都沒有做詳細的筆記，簡單來說這筆記只有自己看得懂，自己懂是一回事，要讓別人懂又是另一回事。
-二來是以寫筆記或是技術文章的方式，可以促使自己學習好一點，深入一點，自己做開發或設定時，有些功能或參數可能就是把它 turn on turn off，而不會去想說這個是代表什麼，寫文章的話則必須要去解釋這個功能，進而讓自己深入學習。
-三來是受大神同學影響，因為他真的很強，我也想跟他一樣強(?
- 有空會放上自己以前做過的服務或遇到的問題處理方式(troubleshooting)，往後學習新技能時或遇到新問題時，也盡量寫成文章記錄做出回饋。（主要是以技術文章寫筆記）
-文筆不太好，若有問題請多指教。</div><div class="post-footer">
+    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-publish">published on <time datetime="2021-12-28">2021-12-28</time></span></div><div class="content"></div><div class="post-footer">
         <a href="/posts/start/">Read More</a><div class="post-tags">
                 <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/introduction/">Introduction</a></div></div>
 </article></div></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span></div>
         </div>
     </footer></div>
 
@@ -150,5 +132,5 @@ user@server:~$ sudo cp /etc/apt/source.list /etc/apt/source.list.bak user@server
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"CK53NZPEPH","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"7402eafd3601aa9a11662b4aaa586604","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>
