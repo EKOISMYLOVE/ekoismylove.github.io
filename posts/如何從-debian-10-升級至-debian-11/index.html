@@ -6,7 +6,7 @@
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>如何從 Debian 10 升級至 Debian 11 - Wei&#39;s Note</title><meta name="Description" content=""><meta property="og:title" content="如何從 Debian 10 升級至 Debian 11" />
-<meta property="og:description" content="自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)" />
+<meta property="og:description" content="自己常用的 Linux 是 Debian，從 Debian 6(squeeze) 用到 Debian 10(buster)。Debian 在 2021.08.14 時釋出了 Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://example.org/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-12-29T00:00:00+00:00" />
@@ -14,7 +14,7 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="如何從 Debian 10 升級至 Debian 11"/>
-<meta name="twitter:description" content="自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)"/>
+<meta name="twitter:description" content="自己常用的 Linux 是 Debian，從 Debian 6(squeeze) 用到 Debian 10(buster)。Debian 在 2021.08.14 時釋出了 Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 (其實是有Service在運作並做一些測試，不想重弄)"/>
 <meta name="application-name" content="Wei&#39;s Note">
 <meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11\/"
-        },"genre": "posts","keywords": "Linux, Debian","wordcount":  211 ,
+        },"genre": "posts","keywords": "Linux, Debian","wordcount":  221 ,
         "url": "http:\/\/example.org\/posts\/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11\/","datePublished": "2021-12-29T00:00:00+00:00","dateModified": "2021-12-29T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -104,8 +104,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">如何從 Debian 10 升級至 Debian 11</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-29">2021-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;211 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-29">2021-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;221 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
@@ -126,7 +126,7 @@
     <li><a href="#參考資料">參考資料</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 <del>(其實是有Service在運作並做一些測試，不想重弄)</del></p>
+            </div><div class="content" id="content"><p>自己常用的 Linux 是 Debian，從 Debian 6(squeeze) 用到 Debian 10(buster)。Debian 在 2021.08.14 時釋出了 Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 <del>(其實是有Service在運作並做一些測試，不想重弄)</del></p>
 <h2 id="準備">準備</h2>
 <ul>
 <li>備份你所有的資料。（文件、圖片、<strong>設定檔</strong>、<strong>驅動程式</strong>等）</li>

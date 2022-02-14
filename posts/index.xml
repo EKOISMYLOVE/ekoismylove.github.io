@@ -24,7 +24,7 @@
     <pubDate>Wed, 29 Dec 2021 00:00:00 &#43;0000</pubDate>
     <author>Author</author>
     <guid>http://example.org/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</guid>
-    <description><![CDATA[<p>自己常用的Linux是Debian，從Debian 6(squeeze)用到Debian 10(buster)。在2021.08.14時釋出了Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 <del>(其實是有Service在運作並做一些測試，不想重弄)</del></p>]]></description>
+    <description><![CDATA[<p>自己常用的 Linux 是 Debian，從 Debian 6(squeeze) 用到 Debian 10(buster)。Debian 在 2021.08.14 時釋出了 Debian 11(bullseye)，自己以往都是至官方連結下載新版的ISO重新安裝，這次則想說透過升級的方式進行更新，且這也是Debian著名的功能，故想於這次嘗試之。 <del>(其實是有Service在運作並做一些測試，不想重弄)</del></p>]]></description>
 </item><item>
     <title>Start</title>
     <link>http://example.org/posts/start/</link>
