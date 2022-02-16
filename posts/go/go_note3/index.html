@@ -146,7 +146,7 @@
 <p>如同其他程式語言，Go 也有 Array，Array 中的所有元素，都必須是指定的類型。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">x</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span>
 </code></pre></div><p>此時會建立長度為 3 的 Array，但未指定初始值，上一章提到若未指定初始值，則預設值會是 Zero Value，在這個 Array 中，類型是 <code>int</code>，故初始值會是 <strong>0</strong> 。</p>
-<p>若要指定初始值，則使用這個方式。</p>
+<p>若要指定初始值，則可以使用這個方式。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">x</span> <span class="p">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">}</span>
 </code></pre></div><p>也可以用 index 的方式指定初始值。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// index:value
