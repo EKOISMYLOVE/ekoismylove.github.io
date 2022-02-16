@@ -1,2 +1,4 @@
 User-agent: *
+Disallow:
 Sitemap: https://ekoismylove.github.io/sitemap.xml
+Host: ekoismylove.github.io
