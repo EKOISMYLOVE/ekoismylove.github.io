@@ -3,8 +3,15 @@
         <title>Go - Category - Wei&#39;s Note</title>
         <link>http://example.org/categories/go/</link>
         <description>Go - Category - Wei&#39;s Note</description>
-        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 12 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/categories/go/" rel="self" type="application/rss+xml" /><item>
-    <title>Golang-類型與聲明(Types and Declarations)</title>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 16 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/categories/go/" rel="self" type="application/rss+xml" /><item>
+    <title>Golang - 複合類型 (Composite Types)</title>
+    <link>http://example.org/posts/go/go_note3/</link>
+    <pubDate>Wed, 16 Feb 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/go/go_note3/</guid>
+    <description><![CDATA[<p>本篇文章基本上是介紹 Go 的複合類型（Array, Slice, Map）與內置函式，另外會簡單介紹 struct。</p>]]></description>
+</item><item>
+    <title>Golang - 類型與聲明 (Types and Declarations)</title>
     <link>http://example.org/posts/go/go_note2/</link>
     <pubDate>Sat, 12 Feb 2022 00:00:00 &#43;0000</pubDate>
     <author>Author</author>
@@ -12,7 +19,7 @@
     <description><![CDATA[<p>本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。</p>
 <p>如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。</p>]]></description>
 </item><item>
-    <title>Golang-環境建置</title>
+    <title>Golang - 環境建置 (Environment)</title>
     <link>http://example.org/posts/go/go_note1/</link>
     <pubDate>Sat, 15 Jan 2022 00:00:00 &#43;0000</pubDate>
     <author>Author</author>
