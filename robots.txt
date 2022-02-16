@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://ekoismylove.github.io/sitemap.xml
