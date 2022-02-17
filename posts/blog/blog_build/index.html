@@ -135,7 +135,7 @@
             alt="../../image/hugo_logo.png" width="100%" />
     </a>
 <p>基本上建置這個部落格是為了紀錄自己的筆記，與自己遇到的問題和如何解決的方式，但從無到有建置一個非常麻煩，又不太想用像是 Medium 之類的網站，會少了一點自由，故想說使用框架產生靜態網頁的方式建置。</p>
-<p>最一開始使用 Vuepress，使用了一陣子之後覺得用起來不是很順手，過了一陣子則有了換框架的想法，於是先換了 Docusaurus，<del>因為小恐龍很可愛</del>，沒想到 Docusaurus 對於自己來說，更難用！不到一天的使用時間，決定再次換框架，使用了 Hugo 建置，雖然搬遷是一項苦工，但開始搬遷時第一個反應是：</p>
+<p>最一開始使用 Vuepress，使用了一陣子之後覺得用起來不是很順手，過了一陣子則有了換框架的想法，於是先換了 Docusaurus，<del>因為小恐龍很可愛</del>，沒想到 Docusaurus 對於自己來說，更難用！不到一天的使用時間，決定再次換框架，使用了 Hugo 建置，雖然搬遷很煩躁，但開始搬遷時第一個反應是：</p>
 <blockquote>
 <p>哇塞，太快了吧！</p>
 </blockquote>
@@ -160,7 +160,7 @@ $ git clone https://github.com/dillonzq/LoveIt.git themes/LoveIt
 <h2 id="增加內容">增加內容</h2>
 <p>通常內容都會放置在專案內的 content 資料夾中，可以手動新增，也可以使用 hugo new 的方式新增，會自動在 frontmatter 補上標題與時間的資訊。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ hugo new posts/first.md
-</code></pre></div><p>產生檔案後，就用 markdown 語法寫文章即可，這邊要提醒一點是圖片的方式，要使用 HTML tag，而不能使用 <code>![name](url)</code> 的方式。</p>
+</code></pre></div><p>產生檔案後，就用 markdown 語法寫文章即可，這邊要提醒一點是使用圖片的方式，要使用 HTML tag，而不能使用 <code>![name](url)</code> 的方式。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="c">&lt;!-- 請參考下面的程式碼，使用時請手動刪除 {{與&lt; 和 &gt;與}} 之間的空格。--&gt;</span>
 {{ <span class="p">&lt;</span><span class="nt">image</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;folder/filename&#34;</span> <span class="na">caption</span><span class="o">=</span><span class="s">&#34;This is a image.&#34;</span> <span class="p">&gt;</span> }}
 </code></pre></div><hr>
