@@ -1,9 +1,9 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Linux - Tag - Wei&#39;s Note</title>
-        <link>http://example.org/tags/linux/</link>
-        <description>Linux - Tag - Wei&#39;s Note</description>
-        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 29 Dec 2021 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/linux/" rel="self" type="application/rss+xml" /><item>
+        <title>System - Category - Wei&#39;s Note</title>
+        <link>http://example.org/categories/system/</link>
+        <description>System - Category - Wei&#39;s Note</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 29 Dec 2021 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/categories/system/" rel="self" type="application/rss+xml" /><item>
     <title>如何從 Debian 10 升級至 Debian 11</title>
     <link>http://example.org/posts/system/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</link>
     <pubDate>Wed, 29 Dec 2021 00:00:00 &#43;0000</pubDate>

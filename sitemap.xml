@@ -2,24 +2,25 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>http://example.org/tags/blog/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/categories/blog/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/categories/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/tags/hugo/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/posts/blog/blog_build/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/posts/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/tags/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/tags/web/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/</loc><lastmod>2022-02-17T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/tags/blog/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/categories/blog/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/categories/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/tags/hugo/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/posts/blog/blog_build/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/posts/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/tags/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/tags/web/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
+            <loc>http://example.org/</loc><lastmod>2022-02-20T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
             <loc>http://example.org/categories/go/</loc><lastmod>2022-02-16T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
             <loc>http://example.org/tags/go/</loc><lastmod>2022-02-16T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
             <loc>http://example.org/tags/golang/</loc><lastmod>2022-02-16T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
             <loc>http://example.org/posts/go/go_note3/</loc><lastmod>2022-02-16T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/posts/go/go_note2/</loc><lastmod>2022-02-12T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>1</priority></url><url>
-            <loc>http://example.org/posts/go/go_note1/</loc><lastmod>2022-01-15T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url><url>
+            <loc>http://example.org/posts/go/go_note2/</loc><lastmod>2022-02-12T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url><url>
+            <loc>http://example.org/posts/go/go_note1/</loc><lastmod>2022-01-15T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url><url>
             <loc>http://example.org/tags/debian/</loc><lastmod>2021-12-29T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url><url>
             <loc>http://example.org/tags/linux/</loc><lastmod>2021-12-29T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url><url>
-            <loc>http://example.org/posts/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</loc><lastmod>2021-12-29T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url><url>
+            <loc>http://example.org/categories/system/</loc><lastmod>2021-12-29T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url><url>
+            <loc>http://example.org/posts/system/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</loc><lastmod>2021-12-29T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url><url>
             <loc>http://example.org/tags/introduction/</loc><lastmod>2021-12-28T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url><url>
             <loc>http://example.org/posts/start/</loc><lastmod>2021-12-28T00:00:00&#43;00:00</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url><url>
             <loc>http://example.org/about/</loc><changefreq>monthly</changefreq><priority>0.5</priority></url></urlset>

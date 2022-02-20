@@ -8,11 +8,12 @@
         <title>Hugo 部落格建置 - 安裝與部署 - Wei&#39;s Note</title><meta name="Description" content=""><meta property="og:title" content="Hugo 部落格建置 - 安裝與部署" />
 <meta property="og:description" content="本篇文章基本上是介紹如何用 Hugo 建置 blog，並部署至 Github pages 上。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://example.org/posts/blog/blog_build/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="http://example.org/posts/blog/blog_build/" /><meta property="og:image" content="http://example.org/posts/blog/blog_build/hugo_logo.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-02-17T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-02-17T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-02-20T00:00:00+00:00" />
 
-<meta name="twitter:card" content="summary"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/posts/blog/blog_build/hugo_logo.png"/>
 <meta name="twitter:title" content="Hugo 部落格建置 - 安裝與部署"/>
 <meta name="twitter:description" content="本篇文章基本上是介紹如何用 Hugo 建置 blog，並部署至 Github pages 上。"/>
 <meta name="application-name" content="Wei&#39;s Note">
@@ -27,8 +28,13 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/blog\/blog_build\/"
-        },"genre": "posts","keywords": "Hugo, blog, Web","wordcount":  208 ,
-        "url": "http:\/\/example.org\/posts\/blog\/blog_build\/","datePublished": "2022-02-17T00:00:00+00:00","dateModified": "2022-02-17T00:00:00+00:00","publisher": {
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/example.org\/posts\/blog\/blog_build\/hugo_logo.png",
+                            "width":  1280 ,
+                            "height":  350 
+                        }],"genre": "posts","keywords": "Hugo, blog, Web","wordcount":  211 ,
+        "url": "http:\/\/example.org\/posts\/blog\/blog_build\/","datePublished": "2022-02-17T00:00:00+00:00","dateModified": "2022-02-20T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -104,7 +110,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Hugo 部落格建置 - 安裝與部署</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/blog/"><i class="far fa-folder fa-fw"></i>blog</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-17">2022-02-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;208 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-17">2022-02-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;211 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -125,14 +131,14 @@
             </div><div class="content" id="content"><p>本篇文章基本上是介紹如何用 Hugo 建置 blog，並部署至 Github pages 上。</p>
 <hr>
 <h2 id="前言">前言</h2>
-<a class="lightgallery" href="../../image/hugo_logo.png" title="../../image/hugo_logo.png" data-thumbnail="../../image/hugo_logo.png">
+<a class="lightgallery" href="./hugo_logo.png" title="./hugo_logo.png" data-thumbnail="./hugo_logo.png">
         <img
             class="lazyload"
             src="/svg/loading.min.svg"
-            data-src="../../image/hugo_logo.png"
-            data-srcset="../../image/hugo_logo.png, ../../image/hugo_logo.png 1.5x, ../../image/hugo_logo.png 2x"
+            data-src="./hugo_logo.png"
+            data-srcset="./hugo_logo.png, ./hugo_logo.png 1.5x, ./hugo_logo.png 2x"
             data-sizes="auto"
-            alt="../../image/hugo_logo.png" width="100%" />
+            alt="./hugo_logo.png" width="100%" />
     </a>
 <p>基本上建置這個部落格是為了紀錄自己的筆記，與自己遇到的問題和如何解決的方式，但從無到有建置一個非常麻煩，又不太想用像是 Medium 之類的網站，會少了一點自由，故想說使用框架產生靜態網頁的方式建置。</p>
 <p>最一開始使用 Vuepress，使用了一陣子之後覺得用起來不是很順手，過了一陣子則有了換框架的想法，於是先換了 Docusaurus，<del>因為小恐龍很可愛</del>，沒想到 Docusaurus 對於自己來說，更難用！不到一天的使用時間，決定再次換框架，使用了 Hugo 建置，雖然搬遷很煩躁，但開始搬遷時第一個反應是：</p>
@@ -166,7 +172,7 @@ $ git clone https://github.com/dillonzq/LoveIt.git themes/LoveIt
 </code></pre></div><hr>
 <h2 id="瀏覽">瀏覽</h2>
 <p>當內容新增完後，使用 hugo server -D，然後在瀏覽器輸入 http://localhost:1313/，就可以瀏覽了。
-我自己會偏好使用 hugo serve -e production，使用生產環境的方式進行預覽，畢竟是要產生靜態網頁部署至 github page 做使用。</p>
+我自己會偏好使用 hugo serve -e production，使用生產環境的方式進行預覽，畢竟是要產生靜態網頁部署至 github page 做使用。只不過當directory 或是 path 更新時，會有一些問題發生，但基本上重新編譯即可。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ hugo server -D
 <span class="c1">### Or</span>
 $ hugo serve -e production
@@ -195,7 +201,7 @@ git push -u origin master
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2022-02-17</span>
+                <span>Updated on 2022-02-20</span>
             </div>
             <div class="post-info-license"></div>
         </div>
