@@ -9,7 +9,7 @@
     <pubDate>Sun, 20 Feb 2022 00:00:00 &#43;0000</pubDate>
     <author>Author</author>
     <guid>http://example.org/posts/blog/blog_algolia/</guid>
-    <description><![CDATA[<p>本篇文章會簡單介紹 algolia search，並且如何在 LoveIt 上啟用 Algolia search。</p>]]></description>
+    <description><![CDATA[<p>本篇文章會簡單介紹 algolia search，並且說明如何在 LoveIt 上啟用 Algolia search。</p>]]></description>
 </item><item>
     <title>Hugo 部落格建置 - 安裝與部署</title>
     <link>http://example.org/posts/blog/blog_build/</link>
