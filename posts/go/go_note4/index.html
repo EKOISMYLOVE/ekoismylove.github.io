@@ -33,7 +33,7 @@
                             "url": "http:\/\/example.org\/posts\/go\/go_note4\/go_header.png",
                             "width":  820 ,
                             "height":  364 
-                        }],"genre": "posts","keywords": "go, golang","wordcount":  748 ,
+                        }],"genre": "posts","keywords": "go, golang","wordcount":  750 ,
         "url": "http:\/\/example.org\/posts\/go\/go_note4\/","datePublished": "2022-02-25T00:00:00+00:00","dateModified": "2022-02-25T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -110,7 +110,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>Go</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-25">2022-02-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;748 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-25">2022-02-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;750 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -343,7 +343,7 @@ local blocks 又分為 explicit local blocks 與 implicit local blocks，基本�
 		<span class="p">}</span>
 	<span class="p">}</span>
 </code></pre></div><h3 id="goto">goto</h3>
-<p>簡單介紹一下就好，如同字面上的意思，會去到程式的某個地方。但因為 goto 接近為所欲為，在撰寫程式、運作與維護頗為麻煩 <del>(自己廢就說)</del>，通常會被用在要跳過程式某些部分或是跳出迴圈、switch 等，並執行程式後面的部分時使用。</p>
+<p>簡單介紹一下就好，如同字面上的意思，會去到程式的某個地方。但因為 goto 接近為所欲為，想去哪就去哪，在撰寫程式、運作與維護頗為麻煩 <del>(自己廢就說)</del>，通常會被用在要跳過程式某些部分或是跳出迴圈、switch 等，並執行程式後面的部分時使用。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">a</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
     <span class="k">for</span> <span class="nx">a</span> <span class="p">&lt;</span> <span class="mi">100</span> <span class="p">{</span>
@@ -358,7 +358,7 @@ local blocks 又分為 explicit local blocks 與 implicit local blocks，基本�
     <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div><blockquote>
-<p>非必要，盡量盡量不要使用 goto。</p>
+<p>tips : 非必要，盡量盡量不要使用 goto。</p>
 </blockquote>
 <hr>
 <p>函式內可以提的內容應該都說明了，這章應該還有些東西可以補充，但可能之後想到比較容易解釋的方式，或是例子，再回來補充。</p>
