@@ -136,10 +136,10 @@
         <li><a href="#if">if</a></li>
         <li><a href="#for">for</a></li>
         <li><a href="#continue">Continue</a></li>
+        <li><a href="#switch">switch</a></li>
+        <li><a href="#goto">goto</a></li>
       </ul>
     </li>
-    <li><a href="#switch">Switch</a></li>
-    <li><a href="#goto">goto</a></li>
     <li><a href="#參考資料reference">參考資料(Reference)</a></li>
   </ul>
 </nav></div>
@@ -306,7 +306,7 @@ local blocks 又分為 explicit local blocks 與 implicit local blocks，基本�
 	<span class="o">...</span> <span class="nx">do</span> <span class="nx">some</span> <span class="nx">other</span> <span class="nx">work</span> <span class="o">...</span>
 <span class="p">}</span>
 </code></pre></div><p>透過這種方式，可以跳出或跳過外部循環的迭代器。<del>聽說這種方法很少用就是了</del></p>
-<h2 id="switch">Switch</h2>
+<h3 id="switch">switch</h3>
 <p><del>Nintendo Switch !!</del> <code>switch</code>也是很常在其他語言中看到的 statement，用法也相似，很多人不喜歡使用 switch (我自己也是)，但 switch 在 go 語言中有一些令人驚訝的地方(?)</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">words</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;cow&#34;</span><span class="p">,</span> <span class="s">&#34;smile&#34;</span><span class="p">,</span> <span class="s">&#34;gopher&#34;</span><span class="p">,</span><span class="s">&#34;octopus&#34;</span><span class="p">,</span> <span class="s">&#34;anthropologist&#34;</span><span class="p">}</span>
 <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">word</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">words</span> <span class="p">{</span>
@@ -342,7 +342,7 @@ local blocks 又分為 explicit local blocks 與 implicit local blocks，基本�
 			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s">&#34;is boring&#34;</span><span class="p">)</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
-</code></pre></div><h2 id="goto">goto</h2>
+</code></pre></div><h3 id="goto">goto</h3>
 <p>簡單介紹一下就好，如同字面上的意思，會去到程式的某個地方。但因為 goto 接近為所欲為，在撰寫程式、運作與維護頗為麻煩 <del>(自己廢就說)</del>，通常會被用在要跳過程式某些部分或是跳出迴圈、switch 等，並執行程式後面的部分時使用。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">a</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
