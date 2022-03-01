@@ -3,7 +3,14 @@
         <title>All Posts - Wei&#39;s Note</title>
         <link>http://example.org/posts/</link>
         <description>All Posts | Wei&#39;s Note</description>
-        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 25 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/posts/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 26 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Golang - 函式(Functions)</title>
+    <link>http://example.org/posts/go/go_note5/</link>
+    <pubDate>Sat, 26 Feb 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/go/go_note5/</guid>
+    <description><![CDATA[<p>本篇文章會說明如何使用 golang 撰寫函式，瞭解傳入值與返回值，介紹匿名函式與defer，並瞭解可以對函式所做的事情。</p>]]></description>
+</item><item>
     <title>Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)</title>
     <link>http://example.org/posts/go/go_note4/</link>
     <pubDate>Fri, 25 Feb 2022 00:00:00 &#43;0000</pubDate>
