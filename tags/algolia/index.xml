@@ -1,14 +1,1 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>algolia - Tag - Wei&#39;s Note</title>
-        <link>http://example.org/tags/algolia/</link>
-        <description>algolia - Tag - Wei&#39;s Note</description>
-        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 20 Feb 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/algolia/" rel="self" type="application/rss+xml" /><item>
-    <title>Hugo 部落格建置 - Algolia search</title>
-    <link>http://example.org/posts/blog/blog_algolia/</link>
-    <pubDate>Sun, 20 Feb 2022 00:00:00 &#43;0000</pubDate>
-    <author>Author</author>
-    <guid>http://example.org/posts/blog/blog_algolia/</guid>
-    <description><![CDATA[<p>本篇文章會簡單介紹 algolia search，並且說明如何在 LoveIt 上啟用 Algolia search。</p>]]></description>
-</item></channel>
-</rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>algolia - Tag - Wei's Note</title><link>http://example.org/tags/algolia/</link><description>algolia - Tag - Wei's Note</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 20 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/tags/algolia/" rel="self" type="application/rss+xml"/><item><title>Hugo 部落格建置 - Algolia search</title><link>http://example.org/posts/blog/blog_algolia/</link><pubDate>Sun, 20 Feb 2022 00:00:00 +0000</pubDate><author>Author</author><guid>http://example.org/posts/blog/blog_algolia/</guid><description>&lt;p>本篇文章會簡單介紹 algolia search，並且說明如何在 LoveIt 上啟用 Algolia search。&lt;/p></description></item></channel></rss>

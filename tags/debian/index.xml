@@ -1,14 +1,1 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>Debian - Tag - Wei&#39;s Note</title>
-        <link>http://example.org/tags/debian/</link>
-        <description>Debian - Tag - Wei&#39;s Note</description>
-        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 29 Dec 2021 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/debian/" rel="self" type="application/rss+xml" /><item>
-    <title>如何從 Debian 10 升級至 Debian 11</title>
-    <link>http://example.org/posts/system/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</link>
-    <pubDate>Wed, 29 Dec 2021 00:00:00 &#43;0000</pubDate>
-    <author>Author</author>
-    <guid>http://example.org/posts/system/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</guid>
-    <description><![CDATA[<p>自己常用的 Linux 是 Debian，從 Debian 6(squeeze) 用到 Debian 10(buster)。Debian 在 2021.08.14 時釋出了 Debian 11(bullseye)，自己以往都是至官方連結下載新版的 ISO 重新安裝，這次則想說透過升級的方式進行更新，且這也是 Debian 著名的功能，故想於這次嘗試之。 <del>(其實是有Service在運作並做一些測試，不想重弄)</del></p>]]></description>
-</item></channel>
-</rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Debian - Tag - Wei's Note</title><link>http://example.org/tags/debian/</link><description>Debian - Tag - Wei's Note</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 29 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/tags/debian/" rel="self" type="application/rss+xml"/><item><title>如何從 Debian 10 升級至 Debian 11</title><link>http://example.org/posts/system/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</link><pubDate>Wed, 29 Dec 2021 00:00:00 +0000</pubDate><author>Author</author><guid>http://example.org/posts/system/%E5%A6%82%E4%BD%95%E5%BE%9E-debian-10-%E5%8D%87%E7%B4%9A%E8%87%B3-debian-11/</guid><description>&lt;p>自己常用的 Linux 是 Debian，從 Debian 6(squeeze) 用到 Debian 10(buster)。Debian 在 2021.08.14 時釋出了 Debian 11(bullseye)，自己以往都是至官方連結下載新版的 ISO 重新安裝，這次則想說透過升級的方式進行更新，且這也是 Debian 著名的功能，故想於這次嘗試之。 &lt;del>(其實是有Service在運作並做一些測試，不想重弄)&lt;/del>&lt;/p></description></item></channel></rss>
