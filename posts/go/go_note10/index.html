@@ -5,7 +5,7 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>Golang - 並發(Concurrency) - Wei's Note</title><meta name=Description content><meta property="og:title" content="Golang - 並發(Concurrency)">
-<meta property="og:description" content="本篇文章將簡單介紹 Concurrency，並說明 goroutines、channels 和 select。">
+<meta property="og:description" content="本篇文章將簡單介紹 Concurrency，並說明 goroutine, channel 和 select。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://ekoismylove.github.io/posts/go/go_note10/"><meta property="og:image" content="http://ekoismylove.github.io/posts/go/go_note10/go_header.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-03-23T00:00:00+00:00">
@@ -13,11 +13,11 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="http://ekoismylove.github.io/posts/go/go_note10/go_header.png">
 <meta name=twitter:title content="Golang - 並發(Concurrency)">
-<meta name=twitter:description content="本篇文章將簡單介紹 Concurrency，並說明 goroutines、channels 和 select。">
+<meta name=twitter:description content="本篇文章將簡單介紹 Concurrency，並說明 goroutine, channel 和 select。">
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/go/go_note10/><link rel=prev href=http://ekoismylove.github.io/posts/go/go_note9/><link rel=next href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang - 並發(Concurrency)","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/go_header.png","width":820,"height":364}],"genre":"posts","keywords":"go, golang","wordcount":460,"url":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/","datePublished":"2022-03-23T00:00:00+00:00","dateModified":"2022-03-24T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/go/go_note10/><link rel=prev href=http://ekoismylove.github.io/posts/go/go_note9/><link rel=next href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang - 並發(Concurrency)","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/go_header.png","width":820,"height":364}],"genre":"posts","keywords":"go, golang","wordcount":461,"url":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/","datePublished":"2022-03-23T00:00:00+00:00","dateModified":"2022-03-24T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Golang - 並發(Concurrency)</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/go/><i class="far fa-folder fa-fw"></i>Go</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-23>2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;460 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-23>2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;461 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -116,7 +116,7 @@ Cancel
 <li><a href=#參考資料reference>參考資料(Reference)</a></li>
 </ul>
 </nav></div>
-</div><div class=content id=content><p>本篇文章將簡單介紹 Concurrency，並說明 goroutines、channels 和 select。</p>
+</div><div class=content id=content><p>本篇文章將簡單介紹 Concurrency，並說明 goroutine, channel 和 select。</p>
 <h2 id=concurrency>Concurrency</h2>
 <p>可能有聽過 “asynchronous”,“Parallelism” 或是 “threaded”，雖然很像但有點不太一樣。
 主要可以解釋成，一個或多個 processes 同時發生的 process，好比說你正在看我的筆記，而其他人正在世界上做自己的事情，這些人同時與您存在。
