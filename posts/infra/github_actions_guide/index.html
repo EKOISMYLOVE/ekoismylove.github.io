@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/github_actions_guide/><link rel=prev href=http://ekoismylove.github.io/posts/misc/learning_go_summary/><link rel=next href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"自己動起來！ Github Actions 極簡單介紹與使用","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/github_actions_header.png","width":1400,"height":378}],"genre":"posts","keywords":"Github Actions","wordcount":462,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/","datePublished":"2022-04-01T00:00:00+00:00","dateModified":"2022-04-01T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/github_actions_guide/><link rel=prev href=http://ekoismylove.github.io/posts/misc/learning_go_summary/><link rel=next href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"自己動起來！ Github Actions 極簡單介紹與使用","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/github_actions_header.png","width":1400,"height":378}],"genre":"posts","keywords":"Github Actions","wordcount":458,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/","datePublished":"2022-04-01T00:00:00+00:00","dateModified":"2022-04-01T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">自己動起來！ Github Actions 極簡單介紹與使用</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-01>2022-04-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;462 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-01>2022-04-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;458 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -121,7 +121,7 @@ Github Actions 也有相關的社群，且能夠透過 Marketplace 取得其他�
 <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
 </div>
 <div class=details-content>
-<div class=admonition-content>Warning : Github Actions 有使用時間與容量限制，使用上請注意。<a href=https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions target=_blank rel="noopener noreffer">(Billing for Github Actions)</a></div>
+<div class=admonition-content>Github Actions 有使用時間與容量限制，使用上請注意。<a href=https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions target=_blank rel="noopener noreffer">(Billing for Github Actions)</a></div>
 </div>
 </div>
 <h2 id=基本使用>基本使用</h2>
@@ -216,7 +216,7 @@ job : 就是我們希望他能幫我們運作的工作，job 可以依序進行�
 <i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
 </div>
 <div class=details-content>
-<div class=admonition-content>Tips : 有些 actions 在 <code>actions/checkout@v3</code> 會發生問題，可以採用 <code>actions/checkout@v2</code> ，或是看用的 actions 是否有釋出新版本來解決這個問題。</div>
+<div class=admonition-content>有些 actions 在 <code>actions/checkout@v3</code> 會發生問題，可以採用 <code>actions/checkout@v2</code> ，或是看用的 actions 是否有釋出新版本來解決這個問題。</div>
 </div>
 </div></p>
 <p>或是自行定義，以 github 提供的範本做說明：</p>
