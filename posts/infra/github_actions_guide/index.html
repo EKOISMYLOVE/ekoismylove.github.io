@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/github_actions_guide/><link rel=prev href=http://ekoismylove.github.io/posts/misc/learning_go_summary/><link rel=next href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"自己動起來！ Github Actions 極簡單介紹與使用","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/github_actions_header.png","width":1400,"height":378}],"genre":"posts","keywords":"Github Actions","wordcount":448,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/","datePublished":"2022-04-01T00:00:00+00:00","dateModified":"2022-04-01T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/github_actions_guide/><link rel=prev href=http://ekoismylove.github.io/posts/misc/learning_go_summary/><link rel=next href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"自己動起來！ Github Actions 極簡單介紹與使用","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/github_actions_header.png","width":1400,"height":378}],"genre":"posts","keywords":"Github Actions","wordcount":459,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/","datePublished":"2022-04-01T00:00:00+00:00","dateModified":"2022-04-01T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">自己動起來！ Github Actions 極簡單介紹與使用</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-01>2022-04-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;448 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-01>2022-04-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;459 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -131,8 +131,7 @@ Github Actions 也有相關的社群，且能夠透過 Marketplace 取得其他�
 <img class=lazyload src=/svg/loading.min.svg data-src=github_1.png data-srcset="/posts/infra/github_actions_guide/github_1.png, github_1.png 1.5x, /posts/infra/github_actions_guide/github_1.png 2x" data-sizes=auto alt=/posts/infra/github_actions_guide/github_1.png width=100%>
 </a><figcaption class=image-caption>修改前的檔案</figcaption>
 </figure>
-<p>Github 會推薦給您一些 Actions，如果有需要的人可以點選去做使用，這邊我們點選上方的 <code>set up a workflow yourself</code>。<br>
-會提供一個範例檔案：</p>
+<p>Github 會推薦給您一些 Actions，如果有需要的人可以點選做使用，就不必再重造一次輪子，但這次是要做個簡單介紹與使用，這邊我們點選上方的 <code>set up a workflow yourself</code>。會提供一個範例檔案：</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=c># This is a basic workflow to help you get started with Actions</span><span class=w>
 </span><span class=w>
 </span><span class=w></span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CI</span><span class=w>
@@ -169,7 +168,8 @@ Github Actions 也有相關的社群，且能夠透過 Marketplace 取得其他�
 </span><span class=w>        </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
 </span><span class=sd>          echo Add other actions to build,
 </span><span class=sd>          echo test, and deploy your project.</span><span class=w>          
-</span></code></pre></div><p>基本上會分成三個部分：</p>
+</span></code></pre></div><p>當滿足 <code>push</code> 或是 <code>pull_request</code> 時，都會在 Github actions 內看到相關的資訊與 <code>echo</code> 出來的文字。</p>
+<p>基本上我會把這個 main.yml 分成三個部分：</p>
 <ul>
 <li>name</li>
 <li>on</li>
