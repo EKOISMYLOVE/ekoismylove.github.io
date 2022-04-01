@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=prev href=http://ekoismylove.github.io/posts/misc/learning_go_summary/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/tawawa.jpeg","width":1280,"height":720}],"genre":"posts","keywords":"Github Actions, Telegram bot, Twitter","wordcount":419,"url":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/","datePublished":"2022-03-14T00:00:00+00:00","dateModified":"2022-03-16T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=prev href=http://ekoismylove.github.io/posts/infra/github_actions_guide/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/tawawa.jpeg","width":1280,"height":720}],"genre":"posts","keywords":"Github Actions, Telegram bot, Twitter","wordcount":416,"url":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/","datePublished":"2022-03-14T00:00:00+00:00","dateModified":"2022-03-16T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/application/><i class="far fa-folder fa-fw"></i>Application</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;419 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;416 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/application/catchtawawa/tawawa.jpeg data-srcset="/posts/application/catchtawawa/tawawa.jpeg, /posts/application/catchtawawa/tawawa.jpeg 1.5x, /posts/application/catchtawawa/tawawa.jpeg 2x" data-sizes=auto alt=/posts/application/catchtawawa/tawawa.jpeg title=/posts/application/catchtawawa/tawawa.jpeg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -157,10 +157,15 @@ Cancel
 <h2 id=建立-twitter-開發專案>建立 Twitter 開發專案</h2>
 <h3 id=sign-up-twitter-developer-platform>Sign up Twitter Developer Platform</h3>
 <p>我們先到<a href=https://developer.twitter.com/en target=_blank rel="noopener noreffer">這裡</a> Sign up，接著應該會導入您剛剛註冊 Twitter 的資訊。並填寫其他資訊。</p>
-<p>關於 What&rsquo;s your use case? 這個問題，因為我們是要製作 bot ，所以選擇 Making a bot 這個選項即可。</p>
-<blockquote>
-<p>tips : 這個選項請不要亂填，若審核沒過，這個帳號以後就不能再申請的樣子。</p>
-</blockquote>
+<p>關於 What&rsquo;s your use case? 這個問題，因為我們是要製作 bot ，所以選擇 Making a bot 這個選項即可。
+<div class="details admonition info open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>這個選項請不要亂填，若審核沒過，這個帳號以後就不能再申請的樣子。</div>
+</div>
+</div></p>
 <p>關於 Will you make Twitter content or derived information available to a government entity or a government affiliated entity? 這個問題，選擇 No 即可。</p>
 <a class=lightgallery href=/posts/application/catchtawawa/twitter1.png title=/posts/application/catchtawawa/twitter1.png data-thumbnail=/posts/application/catchtawawa/twitter1.png>
 <img class=lazyload src=/svg/loading.min.svg data-src=twitter1.png data-srcset="/posts/application/catchtawawa/twitter1.png, twitter1.png 1.5x, /posts/application/catchtawawa/twitter1.png 2x" data-sizes=auto alt=/posts/application/catchtawawa/twitter1.png width=100%>
@@ -170,9 +175,14 @@ Cancel
 <h3 id=建立專案並取得-bearer-token>建立專案並取得 bearer token</h3>
 <p>請到 Developer Portal 並建立 Project 與 APP，建立完成後應該會給您 bearer token 與其他的 token，但我們只需要使用 bearer token 即可
 如果忘記了，進入 APP 後點選 Key and Tokens 的標籤頁，點選 regenerate 後會重新產生一組 bearer token 給您。</p>
-<blockquote>
-<p>tips : token 也一定要保存好不要外流，有這個 token 就可以對你的 APP 做一些壞壞的事。</p>
-</blockquote>
+<div class="details admonition warning open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>token 務必保存好不要外流，有這個 token 就可以對你的 APP 做一些壞壞的事。</div>
+</div>
+</div>
 <figure><a class=lightgallery href=/posts/application/catchtawawa/twitter2.png title=/posts/application/catchtawawa/twitter2.png data-thumbnail=/posts/application/catchtawawa/twitter2.png data-sub-html="<h2>忘記了嗎？點黑底白字的不是點白底黑字的唷</h2>">
 <img class=lazyload src=/svg/loading.min.svg data-src=twitter2.png data-srcset="/posts/application/catchtawawa/twitter2.png, twitter2.png 1.5x, /posts/application/catchtawawa/twitter2.png 2x" data-sizes=auto alt=/posts/application/catchtawawa/twitter2.png width=100%>
 </a><figcaption class=image-caption>忘記了嗎？點黑底白字的不是點白底黑字的唷</figcaption>
@@ -191,15 +201,20 @@ Cancel
 </span></code></pre></div><p>另外，Telegram bot 傳送的部分訊息由該檔案產生，要修改傳送的訊息，請修改這裡與後續 Twitter Stream 使用到的程式碼。</p>
 <h3 id=secrets-and-environments>Secrets and Environments</h3>
 <p>前面提到的 userID(chatID), telegram bot token 與 twitter bearer token，因為這些 token 直接放到 repo 中，就是赤裸裸地給人家看。 Github 提供了 Secret 功能，Secret 是在 repo 中的加密環境變數，可以在 Github Actions 中做使用而不被其他人知道。</p>
-<p>請到專案中的 setting 並點選左方的 Secrets -> Actions，並依照以下名稱建立三個 Repository secrets。</p>
+<p>請到專案中的 setting 並點選左方的 Secrets -> Actions，並依照以下名稱建立三個 secrets。</p>
 <ul>
 <li>TELEGRAM_TO : Your telegram userId or chatId.</li>
 <li>TELEGRAM_TOKEN : Your telegram bot token.</li>
 <li>TWITTER_BEARER_TOKEN : Your twitter bearer_token.</li>
 </ul>
-<blockquote>
-<p>tips: 因為 main.yml 我已經寫好的關係，這裡有要求名稱。使用上是可以更改名稱的，只要 main.yml 內的變數與 Repository secrets 有符合即可。</p>
-</blockquote>
+<div class="details admonition tips open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>因為 main.yml 我已經寫好的關係，這裡有要求名稱。使用上是可以更改名稱的，只要 main.yml 內的變數與 Repository secrets 有符合即可。</div>
+</div>
+</div>
 <h2 id=twitter-stream>Twitter Stream</h2>
 <p>Twitter API 會透過 Stream 的方式，即時地把符合規則的 tweet 經過 stream 送給我們。</p>
 <p>這邊直接提供我的 code 給各位。基本上是以 Twitter 的範例程式做修改。 <a href=https://github.com/EKOISMYLOVE/CatchTawawa/blob/master/tawawa.py target=_blank rel="noopener noreffer">連結</a></p>
@@ -249,7 +264,7 @@ Cancel
 <span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
 </section>
 </div>
-<div class=post-nav><a href=/posts/misc/learning_go_summary/ class=prev rel=prev title="Learning Go 讀後感(Summary)"><i class="fas fa-angle-left fa-fw"></i>Learning Go 讀後感(Summary)</a></div>
+<div class=post-nav><a href=/posts/infra/github_actions_guide/ class=prev rel=prev title="自己動起來！ Github Actions 極簡單介紹與使用"><i class="fas fa-angle-left fa-fw"></i>自己動起來！ Github Actions 極簡單介紹與使用</a></div>
 </div>
 <div id=comments><div id=disqus_thread class=comment></div><noscript>
 Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
