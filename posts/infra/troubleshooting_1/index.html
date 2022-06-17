@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--網路中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/troubleshooting_header.png","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":508,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/","datePublished":"2022-06-11T00:00:00+00:00","dateModified":"2022-06-11T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--網路中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/troubleshooting_header.png","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":509,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/","datePublished":"2022-06-11T00:00:00+00:00","dateModified":"2022-06-11T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">故障排除的工具介紹與使用方式--網路中斷</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>Troubleshooting</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-11>2022-06-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;508 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-11>2022-06-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;509 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -103,6 +103,7 @@ Cancel
 </ul>
 </li>
 <li><a href=#dig-nslookup>dig (nslookup)</a></li>
+<li><a href=#curl>curl</a></li>
 <li><a href=#小結論>小結論</a></li>
 <li><a href=#參考資料>參考資料</a></li>
 </ul>
@@ -238,6 +239,7 @@ example.com.		4502	IN	A	93.184.216.34
 $ dig example.com +trace</div>
 </div>
 </div>
+<h2 id=curl>curl</h2>
 <h2 id=小結論>小結論</h2>
 <p>這篇的工具大部分是我用來驗證，我的 host 是否能到達我想去的目標。<br>
 當我們可以到達目標時，問題大多數會是在 Application Layer 或是 Transport layer 上。<br>
