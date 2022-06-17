@@ -1,0 +1,228 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>故障排除的工具介紹與使用方式--服務中斷 - Wei's Note</title><meta name=Description content><meta property="og:title" content="故障排除的工具介紹與使用方式--服務中斷">
+<meta property="og:description" content="這篇會簡單提一下自己在網路正常卻無法存取服務時，自己會使用的工具與使用方式。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/troubleshooting_2/"><meta property="og:image" content="http://ekoismylove.github.io/posts/infra/troubleshooting_2/troubleshooting_header.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-06-17T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-06-17T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/infra/troubleshooting_2/troubleshooting_header.jpg">
+<meta name=twitter:title content="故障排除的工具介紹與使用方式--服務中斷">
+<meta name=twitter:description content="這篇會簡單提一下自己在網路正常卻無法存取服務時，自己會使用的工具與使用方式。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--服務中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/troubleshooting_header.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":224,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/","datePublished":"2022-06-17T00:00:00+00:00","dateModified":"2022-06-17T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">故障排除的工具介紹與使用方式--服務中斷</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>Troubleshooting</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-17>2022-06-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;224 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/infra/troubleshooting_2/troubleshooting_header.jpg data-srcset="/posts/infra/troubleshooting_2/troubleshooting_header.jpg, /posts/infra/troubleshooting_2/troubleshooting_header.jpg 1.5x, /posts/infra/troubleshooting_2/troubleshooting_header.jpg 2x" data-sizes=auto alt=/posts/infra/troubleshooting_2/troubleshooting_header.jpg title=/posts/infra/troubleshooting_2/troubleshooting_header.jpg></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#netstat>netstat</a>
+<ul>
+<li><a href=#ss>ss</a></li>
+<li><a href=#tcp-states>TCP states</a></li>
+</ul>
+</li>
+<li><a href=#nc-netcat>nc (netcat)</a></li>
+<li><a href=#nmap>nmap</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>這篇會簡單提一下自己在網路正常卻無法存取服務時，自己會使用的工具與使用方式。</p>
+<h2 id=前言>前言</h2>
+<p>上一篇文章基本上是自己在找網路中斷的問題時會用到的工具，但許多時候網路是正常的，問題點則是在伺服器或服務上。<br>
+我通常會看服務是否有啟用，並根據相對應的服務做後續的處理，下面是我在這種情境中，我經常用到的工具。</p>
+<ul>
+<li>netstat(ss)</li>
+<li>nc</li>
+<li>nmap</li>
+</ul>
+<h2 id=netstat>netstat</h2>
+<p>基本上各個作業系統都已預設安裝 netstat，用來顯示目前網路連結的狀態(connetion)。</p>
+<ul>
+<li>-s : 會顯示統計數據。可以在後面加上 t(tcp)或是u(udp) 對於協定做進一步的查詢。</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ netstat -st
+IcmpMsg:
+    InType0: <span class=m>33</span>
+    InType11: <span class=m>319</span>
+    OutType3: <span class=m>7</span>
+    OutType8: <span class=m>352</span>
+Tcp:
+    <span class=m>50</span> active connection openings
+    <span class=m>14</span> passive connection openings
+    <span class=m>0</span> failed connection attempts
+    <span class=m>1</span> connection resets received
+    <span class=m>19</span> connections established
+    <span class=m>7193</span> segments received
+    <span class=m>7100</span> segments sent out
+    <span class=m>0</span> segments retransmitted
+    <span class=m>0</span> bad segments received
+    <span class=m>2</span> resets sent
+UdpLite:
+TcpExt:
+    <span class=m>39</span> TCP sockets finished <span class=nb>time</span> <span class=nb>wait</span> in fast timer
+    <span class=m>31</span> delayed acks sent
+    <span class=m>1818</span> packet headers predicted
+    <span class=m>2219</span> acknowledgments not containing data payload received
+    <span class=m>1497</span> predicted acknowledgments
+    TCPBacklogCoalesce: <span class=m>11</span>
+    TCPRcvCoalesce: <span class=m>293</span>
+    TCPAutoCorking: <span class=m>28</span>
+    TCPOrigDataSent: <span class=m>1900</span>
+    TCPKeepAlive: <span class=m>1830</span>
+    TCPDelivered: <span class=m>1950</span>
+IpExt:
+    InOctets: <span class=m>1865047</span>
+    OutOctets: <span class=m>207989</span>
+    InNoECTPkts: <span class=m>2521</span>
+</code></pre></div><ul>
+<li>-r : 可以顯示目前的路由表(route table)。也可以透過 route指令去顯示。(依據作業系統可能會是 route PRINT 或 route -n)</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ netstat -r
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+default         10.0.2.2        0.0.0.0         UG        <span class=m>0</span> <span class=m>0</span>          <span class=m>0</span> enp0s3
+10.0.2.0        0.0.0.0         255.255.255.0   U         <span class=m>0</span> <span class=m>0</span>          <span class=m>0</span> enp0s3
+</code></pre></div><ul>
+<li>-p : 可以觀察到是哪個 process 在存取。在 Windows 上的會是選擇觀察哪種協定。</li>
+</ul>
+<p>netstat 還有許多參數可以使用，請依據自己遇到的情境挑選適合的參數。</p>
+<h3 id=ss>ss</h3>
+<p>基本上他就是 netstat 的加強版，個人覺得 ss 比較好用，但 netstat 通常會是預設安裝，而 ss 則不是。而且 ss<br>
+ss 目前在 iproute2 中，要使用請安裝 iproute2 :</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo apt-get install iproute2
+</code></pre></div><p>另外使用 ss 時，若要做更詳細的處理，可以用 <code>-i</code> 參數，會提供您許多的資訊。</p>
+<h3 id=tcp-states>TCP states</h3>
+<figure><a class=lightgallery href=/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg title=/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg data-thumbnail=/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg data-sub-html="<h2>如同聖經般的 TCP 狀態圖。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=tcp-state-diagram-v2.svg data-srcset="/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg, tcp-state-diagram-v2.svg 1.5x, /posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg 2x" data-sizes=auto alt=/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg width=100%>
+</a><figcaption class=image-caption>如同聖經般的 TCP 狀態圖。</figcaption>
+</figure>
+<p>之所以會放這張圖是因為，有時候是 Service 在設計上時有問題，又或者是遇到服務被攻擊而造成的 breakdown，此時可以透過狀態來分析並進行後一步的處理。</p>
+<ul>
+<li>好比說我在 Server 上看到許多 <code>SYN_RECV</code> 狀態，可能代表在 3-way handshake 上遇到問題，通常遇到這種情形，可以先懷疑是 TCP SYN FLOOD 攻擊。</li>
+</ul>
+<h2 id=nc-netcat>nc (netcat)</h2>
+<p>TBD</p>
+<h2 id=nmap>nmap</h2>
+<p>TBD</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://docs.microsoft.com/zh-tw/windows-server/administration/windows-commands/netstat target=_blank rel="noopener noreffer">Windows-commands: netstat</a></li>
+<li><a href=https://manpages.debian.org/testing/iproute2/ss.8.en.html target=_blank rel="noopener noreffer">manpages-ss, Debian testing</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-06-17</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/infra/troubleshooting_2/ data-title=故障排除的工具介紹與使用方式--服務中斷 data-via=wiwi571246 data-hashtags=Infra,Troubleshooting><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/infra/troubleshooting_2/ data-hashtag=Infra><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/infra/troubleshooting_2/ data-title=故障排除的工具介紹與使用方式--服務中斷><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/infra/>Infra</a>,&nbsp;<a href=/tags/troubleshooting/>Troubleshooting</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/infra/troubleshooting_1/ class=prev rel=prev title=故障排除的工具介紹與使用方式--網路中斷><i class="fas fa-angle-left fa-fw"></i>故障排除的工具介紹與使用方式--網路中斷</a></div>
+</div>
+<div id=comments><div id=disqus_thread class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=https://ekoismylove.disqus.com/embed.js defer></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:10},comment:{},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"CK53NZPEPH",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"7402eafd3601aa9a11662b4aaa586604",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
