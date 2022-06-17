@@ -7,17 +7,17 @@
 <title>故障排除的工具介紹與使用方式--網路中斷 - Wei's Note</title><meta name=Description content><meta property="og:title" content="故障排除的工具介紹與使用方式--網路中斷">
 <meta property="og:description" content="基本上分享自己在 troubleshooting 時，經常使用到的工具與使用方式。">
 <meta property="og:type" content="article">
-<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/"><meta property="og:image" content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/troubleshooting_header.png"><meta property="article:section" content="posts">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/"><meta property="og:image" content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/troubleshooting_header.jpg"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-06-11T00:00:00+00:00">
 <meta property="article:modified_time" content="2022-06-11T00:00:00+00:00">
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/troubleshooting_header.png">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/troubleshooting_header.jpg">
 <meta name=twitter:title content="故障排除的工具介紹與使用方式--網路中斷">
 <meta name=twitter:description content="基本上分享自己在 troubleshooting 時，經常使用到的工具與使用方式。">
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--網路中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/troubleshooting_header.png","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":509,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/","datePublished":"2022-06-11T00:00:00+00:00","dateModified":"2022-06-11T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--網路中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/troubleshooting_header.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":512,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/","datePublished":"2022-06-11T00:00:00+00:00","dateModified":"2022-06-11T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,9 +85,9 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">故障排除的工具介紹與使用方式--網路中斷</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>Troubleshooting</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-11>2022-06-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;509 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-11>2022-06-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;512 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
-</div><div class="details toc" id=toc-static kept>
+</div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/infra/troubleshooting_1/troubleshooting_header.jpg data-srcset="/posts/infra/troubleshooting_1/troubleshooting_header.jpg, /posts/infra/troubleshooting_1/troubleshooting_header.jpg 1.5x, /posts/infra/troubleshooting_1/troubleshooting_header.jpg 2x" data-sizes=auto alt=/posts/infra/troubleshooting_1/troubleshooting_header.jpg title=/posts/infra/troubleshooting_1/troubleshooting_header.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
 <span>Contents</span>
 <span><i class="details-icon fas fa-angle-right"></i></span>
@@ -129,7 +129,7 @@ Cancel
 <p>我一直以來都是喜歡用 ifconfig ，或是在 Windows 上使用 ipconfig，因為這兩個指令相近，自然而然就會在 Windows 上使用 ifconfig <del>（不要笑）</del><br>
 後來 Debian 改版之後，不再預安裝 <code>net-tools</code>，所以改用 ip addr 這個指令。<br>
 Windows 上的 ipconfig 會建議再加上 <code>-all</code> 一次獲得更多資訊。</p>
-<p>基本上這些指令都可以看網路卡的 IP 資訊，有時是 DHCP Server 故障，或是 IP 設錯等問題，改一下就排除了。</p>
+<p>基本上這些指令都可以看網路卡的 IP 資訊，有時是 DHCP Server 故障沒有取到 IP address，或是 IP address 設錯等問題，改一下就排除了。</p>
 <hr>
 <h2 id=ping>ping</h2>
 <p><code>ping</code> 應該是最常被用到的工具之一，我相信很多人做過這件事：</p>
