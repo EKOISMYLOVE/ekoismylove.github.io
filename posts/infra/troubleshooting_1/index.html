@@ -103,7 +103,6 @@ Cancel
 </ul>
 </li>
 <li><a href=#dig-nslookup>dig (nslookup)</a></li>
-<li><a href=#curl>curl</a></li>
 <li><a href=#小結論>小結論</a></li>
 <li><a href=#參考資料>參考資料</a></li>
 </ul>
@@ -182,10 +181,10 @@ traceroute to 8.8.8.8 <span class=o>(</span>8.8.8.8<span class=o>)</span>, <span
 <p>相較於 traceroute 使用 icmp，這是使用 tcp 去進行 trace 的工具。<br>
 因為在現代網路上，防火牆通常會阻擋 <code>icmp</code> 的封包進入，<br>
 然而我們在瀏覽網頁或是發送信件時，防火牆大都會讓 tcp 封包進入，為了進行 3-way handshake 進行後續的連線建立，client 首先會發送 SYN 封包。<br>
-而 tcptraceroute 就是透過這個 <code>TCP-SYN</code> 封包進行 trace 而實現。</p>
+而 tcptraceroute 就是透過這個 <code>TCP-SYN</code> 封包進行 trace 而實現。<del>讓你可以做更深入的測試?</del></p>
 <p>通常你的電腦內不會有這個工具，必須自己去下載安裝。<br>
 使用方式也很簡單，基本上怎麼用 traceroute 就怎麼使用 tcptraceroute。</p>
-<p>比較常用的方式是在加上 port number 去進行</p>
+<p>比較常用的方式是在加上 port number ，針對你的服務去進行 trace。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=p>&amp;</span> sudo traceroute -p <span class=m>443</span> example.com
 </code></pre></div><div class="details admonition note open">
 <div class="details-summary admonition-title">
@@ -239,7 +238,6 @@ example.com.		4502	IN	A	93.184.216.34
 $ dig example.com +trace</div>
 </div>
 </div>
-<h2 id=curl>curl</h2>
 <h2 id=小結論>小結論</h2>
 <p>這篇的工具大部分是我用來驗證，我的 host 是否能到達我想去的目標。<br>
 當我們可以到達目標時，問題大多數會是在 Application Layer 或是 Transport layer 上。<br>
