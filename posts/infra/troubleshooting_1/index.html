@@ -5,7 +5,7 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>故障排除的工具介紹與使用方式--網路中斷 - Wei's Note</title><meta name=Description content><meta property="og:title" content="故障排除的工具介紹與使用方式--網路中斷">
-<meta property="og:description" content="基本上分享自己在 troubleshooting 時，經常使用到的工具與使用方式。">
+<meta property="og:description" content="基本上分享自己在進行網路中斷的故障排除時，經常使用到的工具與使用方式。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/"><meta property="og:image" content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/troubleshooting_header.jpg"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-06-11T00:00:00+00:00">
@@ -13,11 +13,11 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="http://ekoismylove.github.io/posts/infra/troubleshooting_1/troubleshooting_header.jpg">
 <meta name=twitter:title content="故障排除的工具介紹與使用方式--網路中斷">
-<meta name=twitter:description content="基本上分享自己在 troubleshooting 時，經常使用到的工具與使用方式。">
+<meta name=twitter:description content="基本上分享自己在進行網路中斷的故障排除時，經常使用到的工具與使用方式。">
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=next href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--網路中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/troubleshooting_header.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":512,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/","datePublished":"2022-06-11T00:00:00+00:00","dateModified":"2022-06-11T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=next href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--網路中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/troubleshooting_header.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":511,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_1\/","datePublished":"2022-06-11T00:00:00+00:00","dateModified":"2022-06-11T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">故障排除的工具介紹與使用方式--網路中斷</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>Troubleshooting</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-11>2022-06-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;512 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-11>2022-06-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;511 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/infra/troubleshooting_1/troubleshooting_header.jpg data-srcset="/posts/infra/troubleshooting_1/troubleshooting_header.jpg, /posts/infra/troubleshooting_1/troubleshooting_header.jpg 1.5x, /posts/infra/troubleshooting_1/troubleshooting_header.jpg 2x" data-sizes=auto alt=/posts/infra/troubleshooting_1/troubleshooting_header.jpg title=/posts/infra/troubleshooting_1/troubleshooting_header.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -107,20 +107,20 @@ Cancel
 <li><a href=#參考資料>參考資料</a></li>
 </ul>
 </nav></div>
-</div><div class=content id=content><p>基本上分享自己在 troubleshooting 時，經常使用到的工具與使用方式。</p>
+</div><div class=content id=content><p>基本上分享自己在進行網路中斷的故障排除時，經常使用到的工具與使用方式。</p>
 <h2 id=前言>前言</h2>
 <p>在網路中斷或是緩慢時，總需要有人去處理，緩慢還可以用 Google 大法協助，不過個人認為緩慢比中斷還要難排除。<br>
 這篇會先單純以網路斷線為主題撰寫，分享幾個自己常用的工具。</p>
 <ul>
 <li>ifconfig, ipconfig, ip addr</li>
 <li>ping</li>
-<li>traceroute, tcptraceroute</li>
+<li>traceroute(tracert), tcptraceroute</li>
 <li>dig, nslookup</li>
 <li>mtr</li>
 <li>netstat</li>
 <li>nmap</li>
 <li>nc</li>
-<li>curl</li>
+<li>curl, wget</li>
 <li>tcpdump, wireshark</li>
 </ul>
 <p>這邊基本上會先說明一些工具，來驗證兩地之間的網路是正常連線，還沒考慮到應用層與緩慢的問題。 <br>
