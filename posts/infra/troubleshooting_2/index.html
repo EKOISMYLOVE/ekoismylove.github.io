@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--服務中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/troubleshooting_header.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":520,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/","datePublished":"2022-06-17T00:00:00+00:00","dateModified":"2022-06-20T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--服務中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/troubleshooting_header.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":521,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/","datePublished":"2022-06-17T00:00:00+00:00","dateModified":"2022-06-20T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">故障排除的工具介紹與使用方式--服務中斷</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>Troubleshooting</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-17>2022-06-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;520 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-17>2022-06-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;521 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/infra/troubleshooting_2/troubleshooting_header.jpg data-srcset="/posts/infra/troubleshooting_2/troubleshooting_header.jpg, /posts/infra/troubleshooting_2/troubleshooting_header.jpg 1.5x, /posts/infra/troubleshooting_2/troubleshooting_header.jpg 2x" data-sizes=auto alt=/posts/infra/troubleshooting_2/troubleshooting_header.jpg title=/posts/infra/troubleshooting_2/troubleshooting_header.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -156,7 +156,7 @@ IpExt:
     OutOctets: <span class=m>207989</span>
     InNoECTPkts: <span class=m>2521</span>
 </code></pre></div><ul>
-<li>-r : 可以顯示目前的路由表(route table)。也可以透過 route指令去顯示。(依據作業系統可能會是 route PRINT 或 route -n)</li>
+<li>-r : 可以顯示目前的路由表(routing table)。也可以透過 route 指令去顯示。(依據作業系統可能會是 route PRINT 或 route -n)</li>
 </ul>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ netstat -r
 Kernel IP routing table
@@ -187,6 +187,9 @@ ss 目前在 iproute2 中，要使用請安裝 iproute2 :</p>
 </ul>
 <h2 id=nmap>nmap</h2>
 <p>坦白說他是掃描 port 的工具，是自己以前在接觸 cyber security 時所學到的。<br>
+我會提到 nmap 是因為他可以讓我快速知道遠端機器是否存活，服務是否有掛上。<br>
+除此之外，nmap 也很常使用在網路安全上，並可以透過 script 和微調設定，掃瞄系統並檢查常見的漏洞，或是找到在常用的伺服器上具有的致命設定。(Web, Database and Mail &mldr; etc)<br>
+<del>有點扯太遠了，我還是拿來看 port 有沒有開即可 &mldr;</del></p>
 <div class="details admonition warning open">
 <div class="details-summary admonition-title">
 <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
@@ -194,10 +197,7 @@ ss 目前在 iproute2 中，要使用請安裝 iproute2 :</p>
 <div class=details-content>
 <div class=admonition-content>請不要對某個特定目標執行大量的 nmap，你有可能被 block。</div>
 </div>
-</div></p>
-<p>我會提到 nmap 是因為他可以讓我快速知道遠端機器是否存活，服務是否有掛上。<br>
-除此之外，nmap 也很常使用在網路安全上，並可以透過 script 和微調設定，掃瞄系統並檢查常見的漏洞，或是找到在常用的伺服器上具有的致命設定。(Web, Database and Mail &mldr; etc)<br>
-<del>有點扯太遠了，我還是拿來看 port 有沒有開即可 &mldr;</del></p>
+</div>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># 最常使用的 scan command.</span>
 $ nmap -sS example.com 
 
