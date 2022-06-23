@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--服務中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/troubleshooting_header.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":525,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/","datePublished":"2022-06-17T00:00:00+00:00","dateModified":"2022-06-20T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--服務中斷","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/troubleshooting_header.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":520,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/","datePublished":"2022-06-17T00:00:00+00:00","dateModified":"2022-06-20T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">故障排除的工具介紹與使用方式--服務中斷</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>Troubleshooting</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-17>2022-06-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;525 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-06-17>2022-06-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;520 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/infra/troubleshooting_2/troubleshooting_header.jpg data-srcset="/posts/infra/troubleshooting_2/troubleshooting_header.jpg, /posts/infra/troubleshooting_2/troubleshooting_header.jpg 1.5x, /posts/infra/troubleshooting_2/troubleshooting_header.jpg 2x" data-sizes=auto alt=/posts/infra/troubleshooting_2/troubleshooting_header.jpg title=/posts/infra/troubleshooting_2/troubleshooting_header.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -168,10 +168,12 @@ default         10.0.2.2        0.0.0.0         UG        <span class=m>0</span>
 </ul>
 <p>netstat 還有許多參數可以使用，請依據自己遇到的情境挑選適合的參數。</p>
 <h3 id=ss>ss</h3>
-<p>基本上他就是 netstat 的加強版，參數的部分也跟 netstat 差不多，個人覺得 ss 比較好用，但 netstat 通常會是預設安裝，而 ss 則不是。
+<p>基本上他就是 netstat 的加強版，基本上參數的使用也跟 netstat 差不多，個人覺得 ss 比較好用，看起來比較舒服一點，但 netstat 通常會是預設安裝，而 ss 則不是。
 ss 目前在 iproute2 中，要使用請安裝 iproute2 :</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo apt-get install iproute2
-</code></pre></div><p>另外使用 ss 時，若要做更詳細的處理，可以用 <code>-i</code> 參數，會提供您許多的資訊。</p>
+</code></pre></div><a class=lightgallery href=/posts/infra/troubleshooting_2/ss.JPG title=/posts/infra/troubleshooting_2/ss.JPG data-thumbnail=/posts/infra/troubleshooting_2/ss.JPG>
+<img class=lazyload src=/svg/loading.min.svg data-src=ss.JPG data-srcset="/posts/infra/troubleshooting_2/ss.JPG, ss.JPG 1.5x, /posts/infra/troubleshooting_2/ss.JPG 2x" data-sizes=auto alt=/posts/infra/troubleshooting_2/ss.JPG width=100%>
+</a>
 <h3 id=tcp-states>TCP states</h3>
 <p><strong>請你暫時忍耐一下，關閉夜間模式 !</strong></p>
 <figure><a class=lightgallery href=/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg title=/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg data-thumbnail=/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg data-sub-html="<h2>如同聖經般的 TCP 狀態圖。</h2>">
