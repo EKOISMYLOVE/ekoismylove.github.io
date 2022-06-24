@@ -139,7 +139,7 @@ Cancel
 <span class=c1>// 這兩個 Array 是一樣的。
 </span></code></pre></div><p>在 Go 中只有一維陣列，但可以模擬出多維陣列。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=p>[</span><span class=mi>5</span><span class=p>][</span><span class=mi>10</span><span class=p>]</span><span class=kt>int</span>
-</code></pre></div><p>可以透過內置韓式 <code>len()</code> 得到 Array 的長度。</p>
+</code></pre></div><p>可以透過內置函式 <code>len()</code> 得到 Array 的長度。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=nx>x</span><span class=p>))</span>
 </code></pre></div><p>但在 Go 中，很少使用 Array，因為 Array 的大小會被視為是 Array 類型的一部分，<code>[3]int</code>是一種類型，<code>[4]int</code>是另一種類型。
 因此：</p>
