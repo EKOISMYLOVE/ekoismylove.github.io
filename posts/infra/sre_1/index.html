@@ -16,7 +16,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/sre_1/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_3/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Site Reliability Engineering - Introduction","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/sre_1\/"},"genre":"posts","keywords":"Infra, SRE","wordcount":151,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/sre_1\/","datePublished":"2022-08-30T00:00:00+00:00","dateModified":"2022-08-30T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/sre_1/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_3/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Site Reliability Engineering - Introduction","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/sre_1\/"},"genre":"posts","keywords":"Infra, SRE","wordcount":143,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/sre_1\/","datePublished":"2022-08-30T00:00:00+00:00","dateModified":"2022-08-30T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -84,7 +84,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Site Reliability Engineering - Introduction</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/sre/><i class="far fa-folder fa-fw"></i>SRE</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-08-30>2022-08-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;151 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-08-30>2022-08-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;143 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -133,8 +133,7 @@ Cancel
 <ol>
 <li><strong>Algorithms and data structures</strong> :<br>
 arrays, stacks, linked lists, binary trees, graphs, recursion
-Book: Cracking the Coding Interview, 6th Edition, ISBN 0984782869
-Online coding challenges: Leetcode, codewars, Codechef, HackerRank, GeeksforGeeks</li>
+Book: Cracking the Coding Interview, 6th Edition, ISBN 0984782869</li>
 <li><strong>System design</strong> :<br>
 Book: System Design Interview – An insider&rsquo;s guide, 2nd Edition, ISBN 979-8664653403</li>
 <li><strong>Linux internals</strong> :<br>
@@ -143,8 +142,8 @@ Book: Advanced Programming in the UNIX Environment, 3rd Edition, ISBN 0321637739
 Book: TCP/IP Illustrated, Volume 1: The Protocols, ISBN 0321336313</li>
 </ol>
 <h2 id=sre-宗旨>SRE 宗旨</h2>
-<p>服務的可用性、延遲、性能、效率、變更管理、監控、緊急事項回應與容量規劃。<br>
-作為一名軟體工程師，這就是想要投入時間來完成一組重複性任務的方式。</p>
+<p>負責並專注在服務的可用性、延遲、性能、效率、變更管理、監控、緊急事項回應與容量規劃。<br>
+不僅僅是專注在系統服務環境，還包含開發團隊、測試團隊與使用者等。</p>
 <h2 id=參考資料>參考資料</h2>
 <ol>
 <li><a href=https://sre.google/books/ target=_blank rel="noopener noreffer">SRE-Books</a></li>
