@@ -101,9 +101,9 @@ Cancel
 </ul>
 </nav></div>
 </div><div class=content id=content><h2 id=前言>前言</h2>
-<p>這邊是我自己想寫的廢話，可以 skip 不看。<br>
-基本上現在處於一種 Chaos 的狀態吧，一邊點著 coding 的技能，另一邊又不願意放開 system & networking administration(management) 的技能樹，有一陣子去看了 SRE 的書籍，坦白說可能也不是很適合自己，但仍以學習新知識的角度來學習這項技能(或是知識)。<br>
-參考書籍 Google 已經提供，我有附在後面的參考資料。<br>
+<p>這邊是我自己想寫的廢話，可以 skip 不看。</p>
+<p>基本上現在處於一種 Chaos 的狀態吧，一邊點著 coding 的技能，另一邊又不願意放開 system & networking administration(management) 的技能樹，有一陣子去看了 SRE 的書籍，坦白說可能也不是很適合自己，但仍以學習新知識的角度來學習這項技能(或是知識)。</p>
+<p>參考書籍 Google 已經提供，我有附在後面的參考資料。<br>
 基本上會是以 <strong>Site Reliability Engineering</strong> 這本書來作筆記。(<del>其實是有想起來這本書看了一半，就乾脆把書看完吧</del>)</p>
 <h2 id=tradition>Tradition</h2>
 <p>公司透過系統來提供服務，而這些系統並不會自動運作，歷史上來看會需要雇用系統管理員(Administrator, Admin)來運行或維護系統(IT,MIS)，Admin的任務基本上是做部屬，讓系統之間能協同工作並提供服務，還有在問題發生時進行處理(Update, troubleshooting &mldr;)，由於技能樹點的不同，基本上在大部分的公司中，軟體或服務開發人員，與系統管理員，會分為兩個團隊。</p>
@@ -115,7 +115,7 @@ Cancel
 </ul>
 <p>我自己的經驗真的是這樣，兩個團隊的目標不一樣，之前我在管理團隊中就是不太想去做 patch update，只希望服務能夠穩定提供，甚至是這台伺服器就都不要去動他。但在開發團隊時，又很想趕快做出新功能後，進行更新並提供給使用者做使用。(<del>工讀時兩個團隊都待過。</del>)</p>
 <p>但不可能都不推出新功能阿，只是，為了服務的可靠性，管理團隊會使用許多方式來檢查、驗證或測試新的功能是否有問題，或是會造成其他問題的可能。<br>
-開發團隊也可以透過發布更少的 patch、flag flips、incremental updates 與 cherrypicks 來減緩或降低這些事情發生的次數。<br>
+開發團隊也可以透過發布更少的 patch、flag flips、incremental updates 與 cherrypicks 來減緩或降低這些事情發生的次數。</p>
 <div class="details admonition info open">
 <div class="details-summary admonition-title">
 <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
@@ -123,10 +123,10 @@ Cancel
 <div class=details-content>
 <div class=admonition-content>即使兩個團隊的價值觀不盡相同，但大家都是為了提供更好且穩定的服務，請盡量不要因為目標不同而真的吵起來&mldr;</div>
 </div>
-</div></p>
+</div>
 <h2 id=in-google>In Google</h2>
-<p>基本上在 Google 內部是透過軟體工程師建立系統來運行由系統管理員手動執行的工作。<br>
-這個 SRE 團隊一半是軟體工程師，一半是具備 SRE 技能的工程師，SRE技能基本上是 Linux internals 與 networking(TCP/IP)(但也會軟體工程)。
+<p>基本上在 Google 內部是透過軟體工程師建立系統來運行由系統管理員手動執行的工作。</p>
+<p>這個 SRE 團隊一半是軟體工程師，一半是具備 SRE 技能的工程師，SRE技能基本上是 Linux internals 與 networking(TCP/IP)(但也會軟體工程)。
 基本上是以軟體工程的方式，來處理系統管理的問題，盡可能的使用軟體設計實現自動化以降低手動執行的工作，甚至是獲得自動化的系統，這個系統能夠自動運行並自我修復。</p>
 <p>限定 50% 的時間會用在管理，另外的時間會用於實際開發，一來是可以參與主要工程，了解這次的開發是為了甚麼，是如何運作的，有沒有能再更好的地方，當知道系統怎麼維運時，在進行開發上就會知道那些地方是要注意的，並且這些經驗可以與開發團隊分享，達到提升整體的技能之目的。</p>
 <p>偷渡個 SRE 的技能書 (<del>面試用書</del>)，<strong>但請記得，軟體開發還是主要技能。</strong></p>
