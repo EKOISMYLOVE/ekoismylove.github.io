@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_3/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--Slowly","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_3\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_3\/troubleshooting_header_content.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":584,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_3\/","datePublished":"2022-07-28T00:00:00+00:00","dateModified":"2022-08-12T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/troubleshooting_3/><link rel=prev href=http://ekoismylove.github.io/posts/infra/troubleshooting_2/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"故障排除的工具介紹與使用方式--Slowly","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_3\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_3\/troubleshooting_header_content.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting","wordcount":587,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_3\/","datePublished":"2022-07-28T00:00:00+00:00","dateModified":"2022-08-12T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">故障排除的工具介紹與使用方式--Slowly</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>Troubleshooting</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-07-28>2022-07-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;584 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-07-28>2022-07-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;587 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/infra/troubleshooting_3/troubleshooting_header_content.jpg data-srcset="/posts/infra/troubleshooting_3/troubleshooting_header_content.jpg, /posts/infra/troubleshooting_3/troubleshooting_header_content.jpg 1.5x, /posts/infra/troubleshooting_3/troubleshooting_header_content.jpg 2x" data-sizes=auto alt=/posts/infra/troubleshooting_3/troubleshooting_header_content.jpg title=/posts/infra/troubleshooting_3/troubleshooting_header_content.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -103,12 +103,12 @@ Cancel
 </nav></div>
 </div><div class=content id=content><p>簡單提一下網路緩慢時的處理方式與工具。</p>
 <h2 id=前言>前言</h2>
-<p>自己在處理這個問題的經驗並不多，但基本上自己會先往幾個方向去思考問題點在哪：</p>
+<p>自己在處理網路緩慢的問題經驗並不多，但基本上自己會先往幾個方向去思考問題點在哪：</p>
 <ul>
-<li>普遍來說是延遲太高（High Latency），想一想我們前面提到 3 way handshake 時，假設一來一往，每一個步驟都要花 1000ms，建立一個連線要 3 秒鐘，這樣當然會慢啦。</li>
-<li>使用較小的 MSS，意味著在同樣的時間內所輸的資料較少，理所當然會感覺比較慢。</li>
+<li>高延遲（High Latency），想一想我們前面提到 3 way handshake 時，假設一來一往，每一個步驟都要花 1000ms，建立一個連線要 3 秒鐘，這樣當然會慢啦。</li>
+<li>使用較小的 MSS，意味著在同樣的時間內所輸的資料較少，這樣也會感覺慢慢的。</li>
 <li>太多人使用，壅塞了！</li>
-<li><del>其他我可能沒想到的原因</del></li>
+<li><del>其他我可能沒想到的原因。</del></li>
 </ul>
 <p>因為緩慢可能會有很多原因，可以透過一些工具來幫助自己釐清這些問題。<br>
 以下會對這些工具做一些簡單的介紹。</p>
@@ -150,11 +150,11 @@ $ mtr --udp 8.8.8.8
 可以透過更改封包的大小來觀察網路使用狀況。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ mtr -s <span class=o>[</span>PACKETSIZE<span class=o>]</span> 8.8.8.8
 </code></pre></div><p>最後，可以透過 <code>-r</code> 這個參數做紀錄。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1>### 預設會送10次做觀察。</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1>### 預設會送 10 次做觀察。</span>
 $ mtr -r 8.8.8.8 &gt; <span class=o>[</span>filename<span class=o>]</span> 
 <span class=c1>### 透過 -c 調整次數，這樣他就會送 100 次。</span>
 $ mtr -r -c <span class=m>100</span> 8.8.8.8 &gt; <span class=o>[</span>filename<span class=o>]</span> 
-<span class=c1>### 這樣他就會在背景送 1000次，然後你可以去喝咖啡。</span>
+<span class=c1>### 這樣他就會在背景送 1000 次，然後你可以去喝咖啡。</span>
 $ mtr -r -c <span class=m>1000</span> 8.8.8.8 &gt; <span class=o>[</span>filename<span class=o>]</span> <span class=p>&amp;</span> 
 </code></pre></div><h2 id=tcpdump-wireshark>tcpdump, Wireshark</h2>
 <p>tcpdump 是一個功能強大的，而且也是使用最廣泛的 sniffer 與分析工具，用來捕捉或過濾在特定介面上接收或傳輸的 TCP/IP packet。<br>
