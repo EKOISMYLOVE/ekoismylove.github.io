@@ -5,7 +5,8 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>Ansible - Playbook - Wei's Note</title><meta name=Description content><meta property="og:title" content="Ansible - Playbook">
-<meta property="og:description" content="使用 ansible 第一步就是編寫 playbook，本篇文章會簡單介紹 playbook。">
+<meta property="og:description" content="使用 ansible 第一步就是編寫 playbook，本篇文章會簡單介紹 playbook。
+會以設定一台主機，並透過 nginx 運作一個簡單的 HTTP 伺服器作為範例。運作完成後再進行介紹。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/ansible_note02/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/ansible_note02/ansible-logo.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-05-02T00:00:00+00:00">
@@ -13,11 +14,12 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/ansible_note02/ansible-logo.png">
 <meta name=twitter:title content="Ansible - Playbook">
-<meta name=twitter:description content="使用 ansible 第一步就是編寫 playbook，本篇文章會簡單介紹 playbook。">
+<meta name=twitter:description content="使用 ansible 第一步就是編寫 playbook，本篇文章會簡單介紹 playbook。
+會以設定一台主機，並透過 nginx 運作一個簡單的 HTTP 伺服器作為範例。運作完成後再進行介紹。">
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/ansible_note02/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=next href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Playbook","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra","wordcount":490,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/","datePublished":"2022-05-02T00:00:00+00:00","dateModified":"2022-10-21T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/ansible_note02/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=next href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Playbook","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra","wordcount":567,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/","datePublished":"2022-05-02T00:00:00+00:00","dateModified":"2022-10-21T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +87,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Playbook</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-05-02>2022-05-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;490 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-05-02>2022-05-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;567 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -94,16 +96,24 @@ Cancel
 </div>
 <div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
 <ul>
-<li><a href=#前言>前言</a></li>
 <li><a href=#事前準備--安裝-virtualbox-vagrant>事前準備 : 安裝 VirtualBox, Vagrant</a></li>
 <li><a href=#初體驗>初體驗</a></li>
-<li><a href=#playbooks>playbooks</a></li>
+<li><a href=#yaml>YAML</a>
+<ul>
+<li><a href=#開頭結尾>開頭、結尾</a></li>
+<li><a href=#註解>註解</a></li>
+<li><a href=#縮排>縮排</a></li>
+<li><a href=#字串>字串</a></li>
+<li><a href=#布林值>布林值</a></li>
+<li><a href=#清單list>清單（list）</a></li>
+<li><a href=#字典-dictionary>字典 (Dictionary)</a></li>
+</ul>
+</li>
 <li><a href=#參考資料>參考資料</a></li>
 </ul>
 </nav></div>
-</div><div class=content id=content><p>使用 ansible 第一步就是編寫 playbook，本篇文章會簡單介紹 playbook。</p>
-<h2 id=前言>前言</h2>
-<p>會以設定一台主機，並透過 nginx 運作一個簡單的 HTTP 伺服器作為範例。運作完成後再進行介紹。</p>
+</div><div class=content id=content><p>使用 ansible 第一步就是編寫 playbook，本篇文章會簡單介紹 playbook。<br>
+會以設定一台主機，並透過 nginx 運作一個簡單的 HTTP 伺服器作為範例。運作完成後再進行介紹。</p>
 <h2 id=事前準備--安裝-virtualbox-vagrant>事前準備 : 安裝 VirtualBox, Vagrant</h2>
 <p>雖然沒提到，但前一篇文章我是使用 VMware workstation 並建立虛擬機做測試，後來因為某些原因，我自己的電腦出了問題而無法使用，直到最近才重新弄回來，想說要重新建環境，那試試看新的方式好了。</p>
 <p>VirtualBox 的安裝很簡單，到官網直接下載就好！！ <a href=https://www.virtualbox.org/ target=_blank rel="noopener noreffer">VirtualBox</a><br>
@@ -259,9 +269,42 @@ callback_enabled = timer
 <img class=lazyload src=/svg/loading.min.svg data-src=example.png data-srcset="/posts/ansible/ansible_note02/example.png, example.png 1.5x, /posts/ansible/ansible_note02/example.png 2x" data-sizes=auto alt=/posts/ansible/ansible_note02/example.png width=50%>
 </a><figcaption class=image-caption>順利完成啦～ 觀察一下 templates 內的 inventory_hostname 在哪</figcaption>
 </figure></p>
-<h2 id=playbooks>playbooks</h2>
-<p>（還沒寫完）</p>
-<h2 id=參考資料>參考資料</h2>
+<h2 id=yaml>YAML</h2>
+<h3 id=開頭結尾>開頭、結尾</h3>
+<p>YAML 會以 <code>---</code>跟<code>...</code>作為開頭與結尾，每一個 Ansible flie 都只會有一個 YAML document。<br>
+習慣上會以這兩個作為開頭與結尾，但就算沒有使用，在 Ansible 中是不會出問題的。</p>
+<h3 id=註解>註解</h3>
+<p>註解的方式與許多程式語言相識，使用 <code>#</code> 開頭作為註解。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-YAML data-lang=YAML><span class=c># This is comment</span><span class=w>
+</span></code></pre></div><h3 id=縮排>縮排</h3>
+<p>經常使用兩個空格（space） 做縮排，而不常使用 tab。</p>
+<h3 id=字串>字串</h3>
+<p>與許多程式語言不同，字串不需要特別加上單引號或是雙引號。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-YAML data-lang=YAML><span class=l>This is STRING</span><span class=w>
+</span></code></pre></div><p>但在 Ansible 的環境中，某些情況下會建議替字串加上引號，後面將會對這些內容進行說明。</p>
+<h3 id=布林值>布林值</h3>
+<p>在 YAML 中， Boolean 有許多種表示方法，使用上非常靈活。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-YAML data-lang=YAML><span class=c># These are true</span><span class=w>
+</span><span class=w></span><span class=kc>true</span><span class=p>,</span><span class=w> </span><span class=kc>True</span><span class=p>,</span><span class=w> </span><span class=kc>TRUE</span><span class=p>,</span><span class=w> </span><span class=kc>yes</span><span class=p>,</span><span class=w> </span><span class=kc>Yes</span><span class=p>,</span><span class=w> </span><span class=kc>YES</span><span class=p>,</span><span class=w> </span><span class=kc>on</span><span class=p>,</span><span class=w> </span><span class=kc>On</span><span class=p>,</span><span class=w> </span><span class=kc>ON</span><span class=w>
+</span><span class=w></span><span class=c># These are false</span><span class=w>
+</span><span class=w></span><span class=kc>false</span><span class=p>,</span><span class=w> </span><span class=kc>False</span><span class=p>,</span><span class=w> </span><span class=kc>FALSE</span><span class=p>,</span><span class=w> </span><span class=kc>no</span><span class=p>,</span><span class=w> </span><span class=kc>No</span><span class=p>,</span><span class=w> </span><span class=kc>NO</span><span class=p>,</span><span class=w> </span><span class=kc>off</span><span class=p>,</span><span class=w> </span><span class=kc>Off</span><span class=p>,</span><span class=w> </span><span class=kc>OFF</span><span class=w>
+</span></code></pre></div><h3 id=清單list>清單（list）</h3>
+<p>他其實就像陣列，或是 python 的 list，基本上會用縮排與 <code>-</code> 做分隔，而名稱的後面會加上分號：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-YAML data-lang=YAML><span class=nt>Dinner</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=l>Hamburger</span><span class=w>
+</span><span class=w>  </span>- <span class=l>French fries</span><span class=w>
+</span><span class=w>  </span>- <span class=l>Cola</span><span class=w>
+</span></code></pre></div><p>也可以用這種表示方式：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-YAML data-lang=YAML><span class=nt>Dinner</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=l>Hamburger, French fries, Cola]</span><span class=w>
+</span></code></pre></div><h3 id=字典-dictionary>字典 (Dictionary)</h3>
+<p>基本上就像 hashes 或是其他程式語言的 dictionary。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-YAML data-lang=YAML><span class=nt>Dinner</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>main </span><span class=p>:</span><span class=w> </span><span class=l>Hamburger</span><span class=w>
+</span><span class=w>  </span><span class=nt>side dish </span><span class=p>:</span><span class=w> </span><span class=l>French fries</span><span class=w>
+</span><span class=w>  </span><span class=nt>drink </span><span class=p>:</span><span class=w> </span><span class=l>Cola</span><span class=w>
+</span></code></pre></div><p>或是這種表示方法：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-YAML data-lang=YAML><span class=nt>Dinner</span><span class=p>:</span><span class=w> </span>{<span class=w> </span><span class=nt>main : Hamburger , side dish : French fries, drink </span><span class=p>:</span><span class=w> </span><span class=l>Cola}</span><span class=w>
+</span></code></pre></div><h2 id=參考資料>參考資料</h2>
 <ol>
 <li><a href=https://www.amazon.com/Ansible-Automating-Configuration-Management-Deployment/dp/1491979801 target=_blank rel="noopener noreffer">Ansible: Up and Running: Automating Configuration Management and Deployment the Easy Way (3rd edition)</a></li>
 <li><a href=https://www.vagrantup.com/ target=_blank rel="noopener noreffer">Vagrant</a></li>
