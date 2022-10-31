@@ -10,7 +10,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/ansible_note02/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/ansible_note02/ansible-logo.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-05-02T00:00:00+00:00">
-<meta property="article:modified_time" content="2022-10-21T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-10-31T00:00:00+00:00">
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/ansible_note02/ansible-logo.png">
 <meta name=twitter:title content="Ansible - Playbook">
@@ -19,7 +19,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/ansible_note02/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=next href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Playbook","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra","wordcount":618,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/","datePublished":"2022-05-02T00:00:00+00:00","dateModified":"2022-10-21T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/ansible_note02/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note01/><link rel=next href=http://ekoismylove.github.io/posts/infra/troubleshooting_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Playbook","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra","wordcount":815,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/","datePublished":"2022-05-02T00:00:00+00:00","dateModified":"2022-10-31T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -87,8 +87,8 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Playbook</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-05-02>2022-05-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;618 words&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-05-02>2022-05-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;815 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
 <span>Contents</span>
@@ -112,8 +112,12 @@ Cancel
 <li><a href=#anatomy>Anatomy</a>
 <ul>
 <li><a href=#yaml-format>YAML Format</a></li>
+<li><a href=#modules>Modules</a></li>
+<li><a href=#structure>Structure</a></li>
 </ul>
 </li>
+<li><a href=#status>Status</a></li>
+<li><a href=#小結>小結</a></li>
 <li><a href=#參考資料>參考資料</a></li>
 </ul>
 </nav></div>
@@ -354,15 +358,76 @@ callback_enabled = timer
 </span><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
 </span><span class=w>        </span><span class=nt>state</span><span class=p>:</span><span class=w> </span><span class=l>restarted</span><span class=w>
 </span><span class=w></span><span class=nn>...</span><span class=w>
-</span></code></pre></div><h2 id=參考資料>參考資料</h2>
+</span></code></pre></div><p>在這個檔案中，用到了許多 configure，透過這些 configure 來設計我們要在這台 host 上要做的事情。<br>
+這邊先提一下常見的三個參數：</p>
+<ol>
+<li><em>name:</em> 描述這個 play 所做的內容，會建議用大寫字母作為開頭。</li>
+<li><em>become:</em> 如果這個參數為 True，代表要運行 tasks，另外可以用 <code>become_user</code> 來設定為有權限的 user。</li>
+<li><em>vars:</em> 變數或是數值的清單。</li>
+</ol>
+<h3 id=modules>Modules</h3>
+<p>Modules 是隨著 Ansible 在主機上執行某種操作的 script(?)<br>
+不同的 Modules 之間有巨大的差異，以前面的例子來說就用了不少 Modules，也處理不同的事情。</p>
+<ul>
+<li>package : 使用 host 的 package manager 安裝或是刪除 package。</li>
+<li>copy : 把檔案從用作 ansible 的 host 複製到遠端 host</li>
+<li>file : 設置檔案、目錄的屬性</li>
+<li>service : 啟動、停止或重新啟動服務</li>
+<li>template : 從 template 產生檔案，並複製到遠端 host。</li>
+</ul>
+<p>如果想要了解 Module 更深入的使用方式，可以使用 <code>ansible-doc [module name]</code> 來看說明文件並作進一步的使用：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1>## Example :</span>
+$ ansible-doc service
+</code></pre></div><h3 id=structure>Structure</h3>
+<p>playboos 包含一個或多個 play，而 play 將 host 與 Task 做關聯，每個 Task 只與一個 Module 做關聯，如果以圖來表示關係的話，大概會是像下圖這樣子：
+<figure><a class=lightgallery href=/posts/ansible/ansible_note02/structure.png title=/posts/ansible/ansible_note02/structure.png data-thumbnail=/posts/ansible/ansible_note02/structure.png data-sub-html="<h2>關係圖</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=structure.png data-srcset="/posts/ansible/ansible_note02/structure.png, structure.png 1.5x, /posts/ansible/ansible_note02/structure.png 2x" data-sizes=auto alt=/posts/ansible/ansible_note02/structure.png width=50%>
+</a><figcaption class=image-caption>關係圖</figcaption>
+</figure></p>
+<h2 id=status>Status</h2>
+<p>當開始運作 Ansible 時，會發現某些任務有狀態，以稍早我們操作的結果，會看到 ok 與 Change 兩種狀態，在最後也會有一個關於 status 的統計：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook webservers.yml
+
+PLAY <span class=o>[</span>Configure webserver with nginx<span class=o>]</span> ******************************************
+
+TASK <span class=o>[</span>Gathering Facts<span class=o>]</span> *********************************************************
+ok: <span class=o>[</span>testserver<span class=o>]</span>
+
+TASK <span class=o>[</span>Ensure nginx is installed<span class=o>]</span> ***********************************************
+changed: <span class=o>[</span>testserver<span class=o>]</span>
+
+TASK <span class=o>[</span>Copy nginx config file<span class=o>]</span> **************************************************
+changed: <span class=o>[</span>testserver<span class=o>]</span>
+
+TASK <span class=o>[</span>Enable configuration<span class=o>]</span> ****************************************************
+ok: <span class=o>[</span>testserver<span class=o>]</span>
+
+TASK <span class=o>[</span>Copy index.html<span class=o>]</span> *********************************************************
+changed: <span class=o>[</span>testserver<span class=o>]</span>
+
+TASK <span class=o>[</span>Restart nginx<span class=o>]</span> ***********************************************************
+changed: <span class=o>[</span>testserver<span class=o>]</span>
+
+PLAY RECAP *********************************************************************
+testserver                 : <span class=nv>ok</span><span class=o>=</span><span class=m>6</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>4</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>0</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+</code></pre></div><ul>
+<li>ok : 如果遠端主機跟 module 的設置匹配，則不會進行任何操作，會以 ok 來表示。</li>
+<li>change : 與 ok 不同，如果遠端主機跟 module 的設置不匹配， Ansible 會更改遠端主機的狀態，並以 change 來表示。</li>
+</ul>
+<p>另外還有 unreachable、failed、skipped、rescued 和 ignored 等狀態，當錯誤或是特定狀況發生時，會以這些 status 來表示，並提供相對的訊息。<br>
+也因此，ansible 不僅可以更改遠端主機上的配置，也可以透過 status 來觀察遠端主機的配置內容，或是檢查配置內容是否有改變。</p>
+<h2 id=小結>小結</h2>
+<p>基本上透過這個 playbook 與環境設置，應該能夠建立並設定 nginx 來提供服務，下篇文章會再透過 vars 做進一步的介紹。</p>
+<h2 id=參考資料>參考資料</h2>
 <ol>
 <li><a href=https://www.amazon.com/Ansible-Automating-Configuration-Management-Deployment/dp/1491979801 target=_blank rel="noopener noreffer">Ansible: Up and Running: Automating Configuration Management and Deployment the Easy Way (3rd edition)</a></li>
 <li><a href=https://www.vagrantup.com/ target=_blank rel="noopener noreffer">Vagrant</a></li>
+<li><a href=https://www.virtualbox.org/ target=_blank rel="noopener noreffer">VirtualBox</a></li>
 </ol></div><div class=post-footer id=post-footer>
 <div class=post-info>
 <div class=post-info-line>
 <div class=post-info-mod>
-<span>Updated on 2022-10-21</span>
+<span>Updated on 2022-10-31</span>
 </div>
 <div class=post-info-license></div>
 </div>
