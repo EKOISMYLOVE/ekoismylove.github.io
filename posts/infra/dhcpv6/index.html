@@ -1,0 +1,213 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>在 Ubuntu/Debian 上進行 DHCPv6 服務建置 - Wei's Note</title><meta name=Description content><meta property="og:title" content="在 Ubuntu/Debian 上進行 DHCPv6 服務建置">
+<meta property="og:description" content="本篇文章將簡單說明，如何在 Ubuntu/Debian 上建置 DHCPv6 伺服器。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/dhcpv6/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-11-30T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-11-30T00:00:00+00:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="在 Ubuntu/Debian 上進行 DHCPv6 服務建置">
+<meta name=twitter:description content="本篇文章將簡單說明，如何在 Ubuntu/Debian 上建置 DHCPv6 伺服器。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/dhcpv6/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note03/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上進行 DHCPv6 服務建置","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/"},"genre":"posts","keywords":"DHCP, DHCPv6","wordcount":236,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2022-11-30T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">在 Ubuntu/Debian 上進行 DHCPv6 服務建置</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-11-30>2022-11-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;236 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#windows-server>Windows Server</a></li>
+<li><a href=#ubuntudebian>Ubuntu/Debian</a></li>
+<li><a href=#install>Install</a></li>
+<li><a href=#configure>Configure</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇文章將簡單說明，如何在 Ubuntu/Debian 上建置 DHCPv6 伺服器。</p>
+<h2 id=前言>前言</h2>
+<p>基本上是因為工作遇到問題，突然要使用 DHCPv6，但網路上的資料有點亂，嘗試了不少來源才試成功，故想紀錄下來供以後做參考。<br>
+如果你進來是想看 config 的，請直接跳到那邊就好了！<br>
+<del>其他相關的參數，以後有空也許會補上並進行說明吧！</del></p>
+<h2 id=windows-server>Windows Server</h2>
+<p>基本上 Windows Server 已經提供良好的 GUI 做設定，應該不會遇到什麼大問題。<br>
+再來最近很紅的 nano server，應該是無法使用 DHCP Service，這邊就不做探討。</p>
+<h2 id=ubuntudebian>Ubuntu/Debian</h2>
+<p>這次選擇在 Ubuntu 上做建置，Debian 上的建置方式也類似，<br>
+這邊會使用 isc-dhcp-server 做建置。
+環境:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ user@ubuntu:~$ lsb_release -a
+No LSB modules are avariable.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.1 LTS
+Release:        22.04
+Codename:       jammy
+</code></pre></div><h2 id=install>Install</h2>
+<p>我們透過 <code>apt</code> 來安裝 <code>isc-dhcp-server</code> 這個套件。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo apt-get install isc-dhcp-server -y
+</code></pre></div><p>因為現在的 Ubuntu 好像預設不會裝 net-tools，這邊也一併裝起來好了。<del>因為習慣了 ifconfig</del><br>
+如果你有其他習慣使用的工具，就不用裝囉！</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo apt-get install net-tools -y
+</code></pre></div><p>因為我們需要指定一個靜態 IP 來作為 DHCPv6 伺服器，故要在我們的介面上設定 IP。<br>
+enp0s3 是我的介面名稱。6666::a/64 是我要設定的 IPv6 address。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo ifconfig enp0s3 inet6 add 6666::a/64
+</code></pre></div><p>大概到這邊，基本的環境已經安裝與設置完成。</p>
+<h2 id=configure>Configure</h2>
+<p>在 <code>/etc/dhcp</code> 底下有一個 <code>dhcpd6.conf</code> 的檔案，這個檔案就做為參考用即可，我們將它備份然後建立一個 <code>dhcpd6.conf</code> .</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ <span class=nb>cd</span> /etc/dhcp
+$ mv dhcpd6.conf dhcpd6.conf.bak
+$ touch dhcpd6.conf
+</code></pre></div><p>接著編輯 dhcpd6.conf，可以參考下面的 config。</p>
+<pre tabindex=0><code>default-lease-time 600;
+max-lease-time 7200;
+log-facility local7;
+subnet6 6666::/64
+{
+    range6 6666::1 6666::9;
+}
+</code></pre><ul>
+<li>default-lease-time : 預設租期時間長度(秒)</li>
+<li>max-lease-time : 最大租期時間長度(秒)</li>
+<li>log-facility : syslog 的功能，透過 log 我們會比較容易紀錄或是除錯。</li>
+</ul>
+<p>接著要讓 dhcpd6 有修改 dhcpd6.leases 的權限，我們使用 <code>chown</code> 來做設定。
+dhcpd6.leases 的路徑在 <code>/var/lib/dhcp</code> 底下。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># 我的環境中是有這個檔案，如果你的環境中沒有，請你用 touch 建立一個！</span>
+$ touch /var/lib/dhcp/dhcpd6.leases
+
+<span class=c1># 設定擁有者跟擁有群組。</span>
+$ chown dhcpd:dhcpd /var/lib/dhcp/dhcpd6.leases 
+
+<span class=c1># Debian 中可能會遇到沒有 dhcpd 這個 user 跟 group，</span>
+<span class=c1># 那就要控制擁有者跟群組對檔案的存取權限，使用 chmod</span>
+$ chmod <span class=m>666</span> /var/lib/dhcp/dhcpd6.leases
+
+</code></pre></div><p>最後我們手動啟動測試，觀察你的設備有沒有取得 IPv6 address 並且是在設定的範圍內，如果沒有問題就接續後面的步驟。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo dhcpd -6 -f -cf /etc/dhcp/dhcpd6.conf enp0s3
+</code></pre></div><p>另外如果有遇到問題，可以使用 <code>journalctl -u isc-dhcp-server -e</code> 來觀察 log ，通常會告訴你哪裡有問題，處理掉該問題即可。</p>
+<p>最後一步，我們要設定哪一個介面來處理 DHCP request。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo vim /etc/default/isc-dhcp-server
+<span class=c1># 編輯最下面的 INTERFACEv6</span>
+<span class=nv>INTERFACEv6</span><span class=o>=</span><span class=s2>&#34;enp0s3&#34;</span>
+
+<span class=c1># 重新啟動吧！</span>
+$ sudo service isc-dhcp-server restart
+</code></pre></div><h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://askubuntu.com/questions/173444/cant-open-var-lib-dhcp-dhcpd6-leases-for-append-during-start-of-isc-dhcp-ip target=_blank rel="noopener noreffer">&ldquo;Can&rsquo;t open /var/lib/dhcp/dhcpd6.leases for append.&rdquo; during start of ISC DHCP IPv6 Server</a></li>
+<li><a href=https://documentation.suse.com/zh-tw/sles/12-SP5/html/SLES-all/cha-journalctl.html target=_blank rel="noopener noreffer">SUSE - journalctl</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-11-30</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/infra/dhcpv6/ data-title="在 Ubuntu/Debian 上進行 DHCPv6 服務建置" data-via=wiwi571246 data-hashtags=DHCP,DHCPv6><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/infra/dhcpv6/ data-hashtag=DHCP><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/infra/dhcpv6/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/infra/dhcpv6/ data-title="在 Ubuntu/Debian 上進行 DHCPv6 服務建置"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/dhcp/>DHCP</a>,&nbsp;<a href=/tags/dhcpv6/>DHCPv6</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/ansible/ansible_note03/ class=prev rel=prev title="Ansible - Playbook(下)"><i class="fas fa-angle-left fa-fw"></i>Ansible - Playbook(下)</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"CK53NZPEPH",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"7402eafd3601aa9a11662b4aaa586604",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
