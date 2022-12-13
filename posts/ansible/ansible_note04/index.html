@@ -1,0 +1,304 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Ansible - Inventory(上) - Wei's Note</title><meta name=Description content><meta property="og:title" content="Ansible - Inventory(上)">
+<meta property="og:description" content="簡單介紹 inventory，我們先前是管理一台主機(hosts)，而多個主機的集合在 Ansible 中會被稱為 inventory。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/ansible_note04/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/ansible_note04/ansible-logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-12-06T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-12-06T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/ansible_note04/ansible-logo.png">
+<meta name=twitter:title content="Ansible - Inventory(上)">
+<meta name=twitter:description content="簡單介紹 inventory，我們先前是管理一台主機(hosts)，而多個主機的集合在 Ansible 中會被稱為 inventory。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/ansible_note04/><link rel=prev href=http://ekoismylove.github.io/posts/infra/dhcpv6/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Inventory(上)","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note04\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note04\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra","wordcount":380,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note04\/","datePublished":"2022-12-06T00:00:00+00:00","dateModified":"2022-12-06T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Inventory(上)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-12-06>2022-12-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;380 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#事前準備>事前準備</a>
+<ul>
+<li><a href=#ansiblecfg>ansible.cfg</a></li>
+<li><a href=#ｍultiple-vagrant-machines>Ｍultiple Vagrant Machines</a></li>
+</ul>
+</li>
+<li><a href=#inventory-parameters>Inventory parameters</a></li>
+<li><a href=#groups>Groups</a>
+<ul>
+<li><a href=#all>all</a></li>
+<li><a href=#使用-groups>使用 groups</a></li>
+</ul>
+</li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>簡單介紹 inventory，我們先前是管理一台主機(hosts)，而多個主機的集合在 Ansible 中會被稱為 inventory。</p>
+<h2 id=事前準備>事前準備</h2>
+<h3 id=ansiblecfg>ansible.cfg</h3>
+<p>我們先編輯 ansible.cfg，並啟用所有的 plugin。</p>
+<pre tabindex=0><code>[defaults]
+inventory = inventory
+
+[inventory]
+enable_plugins = host_list, script, auto, yaml, ini, toml
+</code></pre><p>Ansible invertory 是一個非常靈活的物件，它可以是一個 file，一個 directory，甚至是 executable。<br>
+inventory 可以跟 playbook 分開儲存，意味著我們可以在本地端設計 inventory，並在遠端機器上運行，像是 EC2, GCP 等等。</p>
+<h3 id=ｍultiple-vagrant-machines>Ｍultiple Vagrant Machines</h3>
+<p>前面也提到了，我們會管理多台主機，那我們就要先弄出多台主機！<br>
+在這裡我們會配置 Vagrant 來啟動三台主機(你要弄更多台也可以)。</p>
+<p>在這之前，我們先把先前使用的虛擬機摧毀掉(destory)：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ vagrant destory <span class=o>[</span>--force<span class=o>]</span>
+<span class=c1># 如果沒有使用 --force，則會提示並請確認是否要刪除列出的虛擬機。</span>
+</code></pre></div><p>接下來建立新的 Vagrantfile，以建立三台虛擬機：</p>
+<pre tabindex=0><code>VAGRANTFILE_API_VERSION = &quot;2&quot;
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Use the same key for each machine
+  config.ssh.insert_key = false
+
+  config.vm.define &quot;vagrant1&quot; do |vagrant1|
+    vagrant1.vm.box = &quot;ubuntu/focal64&quot;
+    vagrant1.vm.network &quot;forwarded_port&quot;, guest: 80, host: 8080
+    vagrant1.vm.network &quot;forwarded_port&quot;, guest: 443, host: 8443
+  end
+  config.vm.define &quot;vagrant2&quot; do |vagrant2|
+    vagrant2.vm.box = &quot;ubuntu/focal64&quot;
+    vagrant2.vm.network &quot;forwarded_port&quot;, guest: 80, host: 8081
+    vagrant2.vm.network &quot;forwarded_port&quot;, guest: 443, host: 8444
+  end
+  config.vm.define &quot;vagrant3&quot; do |vagrant3|
+    vagrant3.vm.box = &quot;centos/stream8&quot;
+    vagrant3.vm.network &quot;forwarded_port&quot;, guest: 80, host: 8082
+    vagrant3.vm.network &quot;forwarded_port&quot;, guest: 443, host: 8445
+  end
+end
+
+`config.ssh.insert_key = false` 這行設定讓我們可以透過一組 key 連線多個虛擬機。
+
+</code></pre><div class="details admonition question open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-question-circle fa-fw"></i>Question<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>既然開啟了 80 跟 443 port，所以這三台主機有很大的機率是&mldr;?</div>
+</div>
+</div>
+<p>設定完成後我們就啟動吧，UP !!!<br>
+這次有一台機器是 CentOS，也需要一點時間下載。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ vagrant up
+</code></pre></div><p>然後我們要知道，要使用哪些 port 才可以連線到 VM。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ vagrant ssh-config
+</code></pre></div><p>在預設情況下，Ansible 會使用 local SSH client，我們可以編輯 ssh config 讓我們更容易存取。<br>
+雖然這個範例中只有三台，而且 config 要新增的有點多，但如果遇到 300,3000 台呢？<br>
+編輯 ~/.ssh/config :</p>
+<pre tabindex=0><code>Host vagrant*
+  Hostname 127.0.0.1
+  User vagrant
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile ~/.vagrant.d/insecure_private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+</code></pre><p>接著我們新增 hosts 在 inventory 底下 (inventory/hosts)，port number 請依照前面觀察到的填寫。</p>
+<pre tabindex=0><code>vagrant1 ansible_port=2222
+vagrant2 ansible_port=2200
+vagrant3 ansible_port=2201
+</code></pre><p>最後我們要確認能不能存取這些虛擬機，我們可以透過取得網卡資訊來確認：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible vagrant1 -a <span class=s2>&#34;ip addr&#34;</span>
+</code></pre></div><p>這邊提供目前的 tree 做參考。如果你是用前面用到的目錄來做也沒關係，只要確保三台虛擬機有正確新增，並且能觀察到網卡資訊即可。</p>
+<pre tabindex=0><code>.
+├── Vagrantfile
+├── ansible.cfg
+└── inventory
+    └── hosts
+</code></pre><p>到這邊我們的事前準備已經完成。<del>先休息吧</del></p>
+<h2 id=inventory-parameters>Inventory parameters</h2>
+<p>我們在設定 Inventory 時，有使用 ansible_port 作為參數，在前面的文章也有用到其他的參數。<br>
+如果我們想要覆蓋一些預設值時，可以使用下列的參數。</p>
+<ul>
+<li><code>ansible_host</code> : 主機名稱，代表我們要透過 SSH 連接到的主機名稱(或是 IP address)。</li>
+<li><code>ansible_port</code> : port number，代表我們要透過哪個 port 來連線。</li>
+<li><code>ansible_user</code> : 使用者名稱，透過 SSH 連線時所使用的使用者名稱。</li>
+<li><code>ansible_password</code> : 密碼，用於身份驗證時的密碼。</li>
+<li><code>ansible_connection</code> : 連線方式，ansible 也可以使用 SSH 以外的連線方式。</li>
+<li><code>ansible_ssh_private_key_file</code> : key，用於身份驗證時所使用的 SSH private key。</li>
+<li><code>ansible_shell_type</code> : shell，決定 shell 的種類。</li>
+<li><code>ansible_python_interpreter</code> : python_interpreter，決定在該 host 上的 python interpreter。</li>
+</ul>
+<p>另外可以透過對應的變數，在 ansible.cfg 中覆蓋特定的預設值。</p>
+<table>
+<thead>
+<tr>
+<th><em>Inventory parameters</em></th>
+<th><em>ansible.cfg</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ansible_port</code></td>
+<td><code>remote_port</code></td>
+</tr>
+<tr>
+<td><code>ansible_user</code></td>
+<td><code>remote_user</code></td>
+</tr>
+<tr>
+<td><code>ansible_ssh_private_key_file</code></td>
+<td><code>ssh_private_key_file</code></td>
+</tr>
+<tr>
+<td><code>ansible_shell_type</code></td>
+<td><code>executable</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id=groups>Groups</h2>
+<p><em>所以我說要怎麼一次管多台？？</em></p>
+<p>我們可以透過 <code>all</code> 或是將 inventory 裡的 hosts 做 group 來進行多台主機的同時管理。</p>
+<h3 id=all>all</h3>
+<p>直接給他用 <code>all</code> 就對了！</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible all -a <span class=s2>&#34;date&#34;</span>
+
+<span class=c1>### 也可以用這種方式</span>
+$ ansible <span class=s1>&#39;*&#39;</span> -a <span class=s2>&#34;date&#34;</span>
+</code></pre></div><h3 id=使用-groups>使用 groups</h3>
+<p>我們編輯 inventory/hosts：</p>
+<pre tabindex=0><code>[vagrant]
+vagrant1 ansible_port=2222
+vagrant2 ansible_port=2200
+vagrant3 ansible_port=2201
+</code></pre><p>也可以先設定主機的資訊，後面再做 group :</p>
+<pre tabindex=0><code>vagrant1 ansible_port=2222
+vagrant2 ansible_port=2200
+vagrant3 ansible_port=2201
+
+[vagrant]
+vagrant1
+vagrant2
+vagrant3
+</code></pre><p>那假如我們有 vagrant999，這樣我建 group 不就要弄很多次？<br>
+Ansible 支援 mumeric patterns：</p>
+<pre tabindex=0><code>[vagrant]
+vagrant[1:3]
+</code></pre><p>接著我們使用 Group name，應該就會有管理多台主機的效果。<br>
+怎麼樣編輯 group 就依照自己的喜好或是需求編輯即可。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible vagrant -a <span class=s2>&#34;date&#34;</span>
+</code></pre></div><h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://www.amazon.com/Ansible-Automating-Configuration-Management-Deployment/dp/1491979801 target=_blank rel="noopener noreffer">Ansible: Up and Running: Automating Configuration Management and Deployment the Easy Way (3rd edition)</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-12-06</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/ansible/ansible_note04/ data-title="Ansible - Inventory(上)" data-via=wiwi571246 data-hashtags=Ansible,Infra><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/ansible/ansible_note04/ data-hashtag=Ansible><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/ansible/ansible_note04/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/ansible/ansible_note04/ data-title="Ansible - Inventory(上)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/ansible/>Ansible</a>,&nbsp;<a href=/tags/infra/>Infra</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/infra/dhcpv6/ class=prev rel=prev title="在 Ubuntu/Debian 上進行 DHCPv6 服務建置"><i class="fas fa-angle-left fa-fw"></i>在 Ubuntu/Debian 上進行 DHCPv6 服務建置</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"CK53NZPEPH",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"7402eafd3601aa9a11662b4aaa586604",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
