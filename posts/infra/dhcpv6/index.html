@@ -16,7 +16,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/dhcpv6/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note03/><link rel=next href=http://ekoismylove.github.io/posts/ansible/ansible_note04/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上進行 DHCPv6 服務建置","inLanguage":"zh-tw","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/"},"genre":"posts","keywords":"DHCP, DHCPv6, DHCP Server, DHCPv6 Server","wordcount":236,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2022-11-30T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/dhcpv6/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note03/><link rel=next href=http://ekoismylove.github.io/posts/ansible/ansible_note04/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上進行 DHCPv6 服務建置","inLanguage":"zh-tw","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/"},"genre":"posts","keywords":"DHCP, DHCPv6, DHCP Server, DHCPv6 Server","wordcount":242,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2022-11-30T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -84,7 +84,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">在 Ubuntu/Debian 上進行 DHCPv6 服務建置</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-11-30>2022-11-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;236 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-11-30>2022-11-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;242 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -94,10 +94,10 @@ Cancel
 <div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
 <ul>
 <li><a href=#前言>前言</a></li>
-<li><a href=#windows-server>Windows Server</a></li>
-<li><a href=#ubuntudebian>Ubuntu/Debian</a></li>
+<li><a href=#environment>Environment</a></li>
 <li><a href=#install>Install</a></li>
 <li><a href=#configure>Configure</a></li>
+<li><a href=#小節>小節</a></li>
 <li><a href=#參考資料>參考資料</a></li>
 </ul>
 </nav></div>
@@ -106,10 +106,9 @@ Cancel
 <p>基本上是因為工作遇到問題，突然要使用 DHCPv6，但網路上的資料有點亂，嘗試了不少來源才試成功，故想紀錄下來供以後做參考。<br>
 如果你進來是想看 config 的，請直接跳到那邊就好了！<br>
 <del>其他相關的參數，以後有空再說明吧！</del></p>
-<h2 id=windows-server>Windows Server</h2>
-<p>基本上 Windows Server 已經提供良好的 GUI 做設定，應該不會遇到什麼大問題。<br>
-再來最近很紅的 nano server，應該是無法使用 DHCP Service，這邊就不做探討。</p>
-<h2 id=ubuntudebian>Ubuntu/Debian</h2>
+<p>其實原先是想在 Windows 上面做，因為用 GUI 可以輕鬆解決，<br>
+但因為手邊硬體關係，不太能使用虛擬機器來做，於是選擇在 Ubuntu/Debian 做囉！</p>
+<h2 id=environment>Environment</h2>
 <p>這次選擇在 Ubuntu 上做建置，Debian 上的建置方式也類似，<br>
 這邊會使用 isc-dhcp-server 做建置。
 環境:</p>
@@ -126,11 +125,13 @@ Codename:       jammy
 如果你有其他習慣使用的工具，就不用裝囉！</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo apt-get install net-tools -y
 </code></pre></div><p>因為我們需要指定一個靜態 IP 來作為 DHCPv6 伺服器，故要在我們的介面上設定 IP。<br>
-enp0s3 是我的介面名稱。6666::a/64 是我要設定的 IPv6 address。</p>
+enp0s3 是我的介面名稱。6666::a/64 是我要設定的 IPv6 address。<br>
+當然，你要依據你的環境來做適當的設定。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo ifconfig enp0s3 inet6 add 6666::a/64
 </code></pre></div><p>大概到這邊，基本的環境已經安裝與設置完成。</p>
 <h2 id=configure>Configure</h2>
-<p>在 <code>/etc/dhcp</code> 底下有一個 <code>dhcpd6.conf</code> 的檔案，這個檔案就做為參考用即可，我們將它備份然後建立一個 <code>dhcpd6.conf</code> .</p>
+<p>在 <code>/etc/dhcp</code> 底下有一個 <code>dhcpd6.conf</code> 的檔案，這個檔案就做為參考用即可，我們將它備份然後建立一個 <code>dhcpd6.conf</code>，
+我喜歡在備份的檔案後面加上 <code>.bak</code>。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ <span class=nb>cd</span> /etc/dhcp
 $ mv dhcpd6.conf dhcpd6.conf.bak
 $ touch dhcpd6.conf
@@ -169,7 +170,10 @@ $ chmod <span class=m>666</span> /var/lib/dhcp/dhcpd6.leases
 
 <span class=c1># 重新啟動吧！</span>
 $ sudo service isc-dhcp-server restart
-</code></pre></div><h2 id=參考資料>參考資料</h2>
+</code></pre></div><h2 id=小節>小節</h2>
+<p>其實以前就建置過 DHCPv6 Server，但是在較舊版本的 Debian 上，當時所做的筆記用到現在卻不能用。<br>
+另外也有一些沒用過的系統管理工具(systemctl, journalctl)，也藉著這個機會學習。<del>以前都是傻傻的看 syslog，很累的</del></p>
+<h2 id=參考資料>參考資料</h2>
 <ol>
 <li><a href=https://askubuntu.com/questions/173444/cant-open-var-lib-dhcp-dhcpd6-leases-for-append-during-start-of-isc-dhcp-ip target=_blank rel="noopener noreffer">&ldquo;Can&rsquo;t open /var/lib/dhcp/dhcpd6.leases for append.&rdquo; during start of ISC DHCP IPv6 Server</a></li>
 <li><a href=https://documentation.suse.com/zh-tw/sles/12-SP5/html/SLES-all/cha-journalctl.html target=_blank rel="noopener noreffer">SUSE - journalctl</a></li>
