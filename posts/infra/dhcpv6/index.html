@@ -130,7 +130,7 @@ enp0s3 是我的介面名稱。6666::a/64 是我要設定的 IPv6 address。<br>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo ifconfig enp0s3 inet6 add 6666::a/64
 </code></pre></div><p>大概到這邊，基本的環境已經安裝與設置完成。</p>
 <h2 id=configure>Configure</h2>
-<p>在 <code>/etc/dhcp</code> 底下有一個 <code>dhcpd6.conf</code> 的檔案，這個檔案就做為參考用即可，我們將它備份然後建立一個 <code>dhcpd6.conf</code>，
+<p>在 <code>/etc/dhcpd</code> 底下有一個 <code>dhcpd6.conf</code> 的檔案，這個檔案就做為參考用即可，我們將它備份然後建立一個 <code>dhcpd6.conf</code>，
 我喜歡在備份的檔案後面加上 <code>.bak</code>。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ <span class=nb>cd</span> /etc/dhcp
 $ mv dhcpd6.conf dhcpd6.conf.bak
