@@ -1,0 +1,358 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Ansible - Inventory(下) - Wei's Note</title><meta name=Description content><meta property="og:title" content="Ansible - Inventory(下)">
+<meta property="og:description" content="接續上篇 Invertory 做後續的介紹。大致上會介紹動態清單(Dynamic Inventory)跟一些相關指令。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/ansible_note05/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/ansible_note05/ansible-logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-01-26T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-01-26T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/ansible_note05/ansible-logo.png">
+<meta name=twitter:title content="Ansible - Inventory(下)">
+<meta name=twitter:description content="接續上篇 Invertory 做後續的介紹。大致上會介紹動態清單(Dynamic Inventory)跟一些相關指令。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/ansible_note05/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note04/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Inventory(下)","inLanguage":"zh-tw","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note05\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note05\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra","wordcount":623,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note05\/","datePublished":"2023-01-26T00:00:00+00:00","dateModified":"2023-01-26T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Inventory(下)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-01-26>2023-01-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;623 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#簡介>簡介</a></li>
+<li><a href=#格式>格式</a></li>
+<li><a href=#範例>範例</a></li>
+</ul>
+<ul>
+<li><a href=#add_host>add_host</a></li>
+<li><a href=#group_by>group_by</a></li>
+<li><a href=#結論>結論</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>接續上篇 Invertory 做後續的介紹。大致上會介紹動態清單(Dynamic Inventory)跟一些相關指令。</p>
+<h1 id=前言>前言</h1>
+<p>因為這個月事情比較多，又剛好遇到過年想休息，這篇文章的內容可能會少一點。<del>(一直都很少)</del></p>
+<h1 id=dynamic-inventory>Dynamic Inventory</h1>
+<h2 id=簡介>簡介</h2>
+<p>先前都是在 <code>inventory/hosts</code> 中直接指定 hosts 跟 Group，Dynamic Inventory 通常是指可以透過 Script 獲得的 Inventory ，且這個 Inventory 也是符合 ansible 所需格式的。<br>
+由於一些系統資源會是動態的進行增減，像是目前眾所皆知的 Cloud，我們可以透過 Script 與相關的 API 來取得 Inventory。</p>
+<h2 id=格式>格式</h2>
+<p>ansible 所需格式是 json，那格式長什麼樣子呢？<br>
+我們可以透過一些指令來取得：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-inventory -i inventory/hosts --list
+</code></pre></div><p>你會獲得一個 json 格式的輸出：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+    <span class=nt>&#34;_meta&#34;</span><span class=p>:</span> <span class=p>{</span>
+        <span class=nt>&#34;hostvars&#34;</span><span class=p>:</span> <span class=p>{</span>
+            <span class=nt>&#34;vagrant1&#34;</span><span class=p>:</span> <span class=p>{</span>
+                <span class=nt>&#34;ansible_port&#34;</span><span class=p>:</span> <span class=mi>2222</span>
+            <span class=p>},</span>
+            <span class=nt>&#34;vagrant2&#34;</span><span class=p>:</span> <span class=p>{</span>
+                <span class=nt>&#34;ansible_port&#34;</span><span class=p>:</span> <span class=mi>2200</span>
+            <span class=p>},</span>
+            <span class=nt>&#34;vagrant3&#34;</span><span class=p>:</span> <span class=p>{</span>
+                <span class=nt>&#34;ansible_port&#34;</span><span class=p>:</span> <span class=mi>2201</span>
+            <span class=p>}</span>
+        <span class=p>}</span>
+    <span class=p>},</span>
+    <span class=nt>&#34;all&#34;</span><span class=p>:</span> <span class=p>{</span>
+        <span class=nt>&#34;children&#34;</span><span class=p>:</span> <span class=p>[</span>
+            <span class=s2>&#34;ungrouped&#34;</span><span class=p>,</span>
+            <span class=s2>&#34;vagrant&#34;</span>
+        <span class=p>]</span>
+    <span class=p>},</span>
+    <span class=nt>&#34;vagrant&#34;</span><span class=p>:</span> <span class=p>{</span>
+        <span class=nt>&#34;hosts&#34;</span><span class=p>:</span> <span class=p>[</span>
+            <span class=s2>&#34;vagrant1&#34;</span><span class=p>,</span>
+            <span class=s2>&#34;vagrant2&#34;</span><span class=p>,</span>
+            <span class=s2>&#34;vagrant3&#34;</span>
+        <span class=p>]</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><p><code>_meta</code> 這邊會包含所有 host 的資訊。<br>
+如果你只想觀察單台 host ，可以使用 <code>--host</code> 這個參數：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-inventory -i inventory/hosts --host<span class=o>=</span>vagrant3
+<span class=o>{</span>
+    <span class=s2>&#34;ansible_port&#34;</span>: <span class=m>2201</span>
+<span class=o>}</span>
+</code></pre></div><h2 id=範例>範例</h2>
+<p>因為我們使用的環境是 vagrant，我們可以透過 vagrant 的指令取得一些資訊，以利後面的 Dynamic Inventory 做使用。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ vagrant status
+Current machine states:
+
+vagrant1                  running <span class=o>(</span>virtualbox<span class=o>)</span>
+vagrant2                  running <span class=o>(</span>virtualbox<span class=o>)</span>
+vagrant3                  running <span class=o>(</span>virtualbox<span class=o>)</span>
+
+This environment represents multiple VMs. The VMs are all listed
+above with their current state. For more information about a specific
+VM, run <span class=sb>`</span>vagrant status NAME<span class=sb>`</span>.
+
+<span class=c1># 用這個指令也會取得許多資訊，因資訊量蠻多的，就不附上 Output。</span>
+$ vagrant status --machine-readable
+</code></pre></div><p>接著我們建立一個 .py 檔，使用網路上大佬已經寫好的 Script。<a href=https://charlesreid1.com/wiki/Ansible/Vagrant/Dynamic_Inventory target=_blank rel="noopener noreffer">來源</a></p>
+<p>你可以透過執行這個 Script，來觀察 ansible 的格式。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ python test.py --list
+<span class=c1># 或是</span>
+$ python test.py --host<span class=o>=</span>vagrant
+</code></pre></div><p>建立完之後，我們需要使用 <code>-i</code> 這個 flag 來傳遞這個 Script，<br>
+跟上一篇文章一樣，我想看 vagrant 這個群組內的 hosts 時間是否一致？</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible -i test.py vagrant -a <span class=s2>&#34;date&#34;</span>
+<span class=o>[</span>WARNING<span class=o>]</span>:  * Failed to parse /U/cant/see/mypath/playbook/test.py with script plugin:
+problem running /U/cant/see/mypath/playbook/test.py --list <span class=o>([</span>Errno 13<span class=o>]</span> Permission
+denied: <span class=s1>&#39;/U/cant/see/mypath/playbook/test.py&#39;</span><span class=o>)</span>
+<span class=o>[</span>WARNING<span class=o>]</span>:  * Failed to parse /U/cant/see/mypath/playbook/test.py with ini plugin:
+/U/cant/see/mypath/playbook/test.py:6: Expected <span class=nv>key</span><span class=o>=</span>value host variable assignment,
+got: argparse
+<span class=o>[</span>WARNING<span class=o>]</span>: Unable to parse /U/cant/see/mypath/playbook/test.py as an inventory <span class=nb>source</span>
+<span class=o>[</span>WARNING<span class=o>]</span>: No inventory was parsed, only implicit localhost is available
+<span class=o>[</span>WARNING<span class=o>]</span>: Could not match supplied host pattern, ignoring: vagrant
+<span class=o>[</span>WARNING<span class=o>]</span>: No hosts matched, nothing to <span class=k>do</span>
+</code></pre></div><p>發生了什麼？？？別慌張，權限不足而已。
+讓我們更改一下，<del>發現有一台壞孩子！</del></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ chmod <span class=m>755</span> test.py
+$
+$ ansible -i test.py vagrant -a <span class=s2>&#34;date&#34;</span>
+vagrant3 <span class=p>|</span> CHANGED <span class=p>|</span> <span class=nv>rc</span><span class=o>=</span><span class=m>0</span> &gt;&gt;
+Fri Jan <span class=m>27</span> 12:45:33 UTC <span class=m>2023</span>
+vagrant2 <span class=p>|</span> CHANGED <span class=p>|</span> <span class=nv>rc</span><span class=o>=</span><span class=m>0</span> &gt;&gt;
+Sat Jan <span class=m>28</span> 11:35:43 UTC <span class=m>2023</span>
+vagrant1 <span class=p>|</span> CHANGED <span class=p>|</span> <span class=nv>rc</span><span class=o>=</span><span class=m>0</span> &gt;&gt;
+Sat Jan <span class=m>28</span> 11:35:43 UTC <span class=m>2023</span>
+
+</code></pre></div><p>這樣當我們往後新增或刪除主機時，透過 Dynamic Inventory 可以減少一些工作量，但就是先前準備要比較辛苦。<br>
+另外在 EC2, GCP, Azure 或我們需要的地方做使用。</p>
+<div class="details admonition question open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-question-circle fa-fw"></i>Question<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>如果你還留著說明 playbook 時的環境，<br>
+試一下或猜一下 <code>$ ansible-playbook -i test.py webservers.yml</code>，會有什麼結果？</div>
+</div>
+</div>
+<h1 id=add_host-group_by>add_host, group_by</h1>
+<p>有的時候我們在運作 playbook 時，有新的 host 上線了，即使我們使用 Dynamic Inventory 也不會偵測到這台 host，因為 Dynamic Inventory 是在 playbook 運作前執行的。</p>
+<h2 id=add_host>add_host</h2>
+<p>add_host 可以指定 Group 跟一些自定義變數：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yml data-lang=yml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Add the vagrant machine to the inventory</span><span class=w>
+</span><span class=w>      </span><span class=nt>add_host</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>default</span><span class=w>
+</span><span class=w>        </span><span class=nt>group</span><span class=p>:</span><span class=w> </span><span class=l>web</span><span class=w>
+</span><span class=w>        </span><span class=nt>ansible_host</span><span class=p>:</span><span class=w> </span><span class=m>127.0.0.1</span><span class=w>
+</span><span class=w>        </span><span class=nt>ansible_port</span><span class=p>:</span><span class=w> </span><span class=m>2222</span><span class=w>
+</span><span class=w>        </span><span class=nt>ansible_user</span><span class=p>:</span><span class=w> </span><span class=l>vagrant</span><span class=w>
+</span><span class=w>        </span><span class=nt>ansible_private_key_file</span><span class=p>:</span><span class=w> </span><span class=p>&gt;</span><span class=sd>
+</span><span class=sd>          </span><span class=w>          </span><span class=l>.vagrant/machines/default/virtualbox/private_key</span><span class=w>
+</span></code></pre></div><p>如果運作成功，這之後你就可以使用 <code>hosts: default</code> 這台 host 做後續的工作了。</p>
+<h2 id=group_by>group_by</h2>
+<p>一樣的，我們也可以在運作 playbook 時建立新的 Group。<br>
+像是作業系統的位元(x86, 64)，或是作業系統版本之類的(Ubuntu, CentOS)。</p>
+<p>以我們現在的例子來說，有 Ubuntu 跟 CentOS，就可以試試看用作業系統來建立群組：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yml data-lang=yml><span class=nn>---</span><span class=w>
+</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Group hosts by distribution</span><span class=w>
+</span><span class=w>  </span><span class=nt>hosts</span><span class=p>:</span><span class=w> </span><span class=l>all</span><span class=w>
+</span><span class=w>  </span><span class=nt>gather_facts</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>  </span><span class=nt>tasks</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Create groups based on distro</span><span class=w>
+</span><span class=w>      </span><span class=nt>group_by</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;{{ ansible_facts.distribution }}&#34;</span><span class=w>
+</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Do something to Ubuntu hosts</span><span class=w>
+</span><span class=w>  </span><span class=nt>hosts</span><span class=p>:</span><span class=w> </span><span class=l>Ubuntu</span><span class=w>
+</span><span class=w>  </span><span class=nt>become</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>  </span><span class=nt>tasks</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Say I am Ubuntu</span><span class=w>
+</span><span class=w>      </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=l>echo &#34;I am Ubuntu.&#34;</span><span class=w>
+</span><span class=w>      </span><span class=nt>register</span><span class=p>:</span><span class=w> </span><span class=l>result</span><span class=w>
+</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>print stdout</span><span class=w>
+</span><span class=w>      </span><span class=nt>debug</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>msg</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;{{ result.stdout }}&#34;</span><span class=w>
+</span><span class=w>      
+</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Do something else to CentOS hosts</span><span class=w>
+</span><span class=w>  </span><span class=nt>hosts</span><span class=p>:</span><span class=w> </span><span class=l>CentOS</span><span class=w>
+</span><span class=w>  </span><span class=nt>become</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>  </span><span class=nt>tasks</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Say I am CentOS</span><span class=w>
+</span><span class=w>      </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=l>echo &#34;I am CentOS.&#34;</span><span class=w>
+</span><span class=w>      </span><span class=nt>register</span><span class=p>:</span><span class=w> </span><span class=l>result</span><span class=w>
+</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>print stdout</span><span class=w>
+</span><span class=w>      </span><span class=nt>debug</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>msg</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;{{ result.stdout }}&#34;</span><span class=w>
+</span><span class=w>
+</span></code></pre></div><p>如果上面的 Question 你不想試，那就用下面的吧。<br>
+如果順利的話，你應該會看到 vagrant1,2 跟 vagrant3 會有不一樣的訊息，因為他們已經被用版本分成不一樣的 Group。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook -i test.py distribution.yml
+PLAY <span class=o>[</span>Group hosts by distribution<span class=o>]</span> ******************************************************
+
+TASK <span class=o>[</span>Gathering Facts<span class=o>]</span> ******************************************************************
+ok: <span class=o>[</span>vagrant3<span class=o>]</span>
+ok: <span class=o>[</span>vagrant2<span class=o>]</span>
+ok: <span class=o>[</span>vagrant1<span class=o>]</span>
+
+TASK <span class=o>[</span>Create groups based on distro<span class=o>]</span> ****************************************************
+changed: <span class=o>[</span>vagrant1<span class=o>]</span>
+changed: <span class=o>[</span>vagrant2<span class=o>]</span>
+changed: <span class=o>[</span>vagrant3<span class=o>]</span>
+
+PLAY <span class=o>[</span>Do something to Ubuntu hosts<span class=o>]</span> *****************************************************
+
+TASK <span class=o>[</span>Gathering Facts<span class=o>]</span> ******************************************************************
+ok: <span class=o>[</span>vagrant2<span class=o>]</span>
+ok: <span class=o>[</span>vagrant1<span class=o>]</span>
+
+TASK <span class=o>[</span>Say I am Ubuntu<span class=o>]</span> ******************************************************************
+changed: <span class=o>[</span>vagrant2<span class=o>]</span>
+changed: <span class=o>[</span>vagrant1<span class=o>]</span>
+
+TASK <span class=o>[</span>print stdout<span class=o>]</span> *********************************************************************
+ok: <span class=o>[</span>vagrant1<span class=o>]</span> <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;I am Ubuntu.&#34;</span>
+<span class=o>}</span>
+ok: <span class=o>[</span>vagrant2<span class=o>]</span> <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;I am Ubuntu.&#34;</span>
+<span class=o>}</span>
+
+PLAY <span class=o>[</span>Do something <span class=k>else</span> to CentOS hosts<span class=o>]</span> ************************************************
+
+TASK <span class=o>[</span>Gathering Facts<span class=o>]</span> ******************************************************************
+ok: <span class=o>[</span>vagrant3<span class=o>]</span>
+
+TASK <span class=o>[</span>Say I am CentOS<span class=o>]</span> ******************************************************************
+changed: <span class=o>[</span>vagrant3<span class=o>]</span>
+
+TASK <span class=o>[</span>print stdout<span class=o>]</span> *********************************************************************
+ok: <span class=o>[</span>vagrant3<span class=o>]</span> <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;I am CentOS.&#34;</span>
+<span class=o>}</span>
+
+PLAY RECAP ******************************************************************************
+vagrant1                   : <span class=nv>ok</span><span class=o>=</span><span class=m>5</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>2</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>0</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+vagrant2                   : <span class=nv>ok</span><span class=o>=</span><span class=m>5</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>2</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>0</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+vagrant3                   : <span class=nv>ok</span><span class=o>=</span><span class=m>5</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>2</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>0</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+</code></pre></div><h2 id=結論>結論</h2>
+<p>這篇文章簡單介紹了 Dynamic Inventory 跟 add_host, group_by 兩個指令。<br>
+透過 Dynamic Inventory 可以減少在 hosts 增減時的工作量，add_host, group_by 這兩個指令可以更靈活的使用 playbook。</p>
+<p>下一篇文章會介紹 Variable 跟 facts，關於 playbook 的使用跟運作 ansible-playbook 所回饋的結果。</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://www.amazon.com/Ansible-Automating-Configuration-Management-Deployment/dp/1491979801 target=_blank rel="noopener noreffer">Ansible: Up and Running: Automating Configuration Management and Deployment the Easy Way (3rd edition)</a></li>
+<li><a href=https://charlesreid1.com/wiki/Ansible/Vagrant/Dynamic_Inventory target=_blank rel="noopener noreffer">Dynamic Inventory by charlesreid1</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2023-01-26</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/ansible/ansible_note05/ data-title="Ansible - Inventory(下)" data-via=wiwi571246 data-hashtags=Ansible,Infra><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/ansible/ansible_note05/ data-hashtag=Ansible><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/ansible/ansible_note05/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/ansible/ansible_note05/ data-title="Ansible - Inventory(下)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/ansible/>Ansible</a>,&nbsp;<a href=/tags/infra/>Infra</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/ansible/ansible_note04/ class=prev rel=prev title="Ansible - Inventory(上)"><i class="fas fa-angle-left fa-fw"></i>Ansible - Inventory(上)</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"CK53NZPEPH",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"7402eafd3601aa9a11662b4aaa586604",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
