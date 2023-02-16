@@ -121,7 +121,7 @@ Codename:       jammy
 </code></pre></div><h2 id=install>Install</h2>
 <p>我們透過 <code>apt</code> 來安裝 <code>isc-dhcp-server</code> 這個套件。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo apt-get install isc-dhcp-server -y
-</code></pre></div><p>因為現在的 Ubuntu 好像預設不會裝 net-tools，這邊也一併裝起來好了。主要是因為我們後續要在介面上設定一個 static IP address。<del>其實因為習慣了 ifconfig</del><br>
+</code></pre></div><p>因為現在的 Ubuntu 好像預設不會裝 net-tools，這邊也一併裝起來好了。主要是因為我們後續要在介面上設定一個 static IP address。<del>其實因為習慣了 ifconfig。</del><br>
 如果你有其他習慣使用的工具，你可以跳過這一步！</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo apt-get install net-tools -y
 </code></pre></div><p>接著在介面上設定 static IP address。<br>
