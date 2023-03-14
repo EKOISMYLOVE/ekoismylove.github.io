@@ -16,7 +16,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/dhcpv6/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note03/><link rel=next href=http://ekoismylove.github.io/posts/ansible/ansible_note04/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上架設 DHCPv6 服務","inLanguage":"zh-tw","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/"},"genre":"posts","keywords":"DHCP, DHCPv6, DHCP Server, DHCPv6 Server","wordcount":268,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2023-02-16T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/dhcpv6/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note03/><link rel=next href=http://ekoismylove.github.io/posts/ansible/ansible_note04/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上架設 DHCPv6 服務","inLanguage":"zh-tw","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/"},"genre":"posts","keywords":"DHCP, DHCPv6, DHCP Server, DHCPv6 Server","wordcount":272,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2023-02-16T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -84,7 +84,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">在 Ubuntu/Debian 上架設 DHCPv6 服務</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-11-30>2022-11-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;268 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-11-30>2022-11-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;272 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -107,7 +107,8 @@ Cancel
 如果你進來是想看 configure 的，請直接跳到那邊就好了！<br>
 <del>其他相關的參數，以後有空再說明吧！</del></p>
 <p>其實原先是想建一台 Windows Server 的虛擬機器，然後在虛擬機上面做 DHCPv6 Server，因為用 GUI 可以輕鬆解決，<br>
-但因為手邊硬體關係，不太能使用 Windows Server 來做，於是選擇在 Ubuntu/Debian 做囉！<del>（我也沒買 Windows Server &mldr;）</del></p>
+但因為手邊硬體關係，不太能使用 Windows Server 來做，於是選擇在 Ubuntu 上建置！<del>（我也沒買 Windows Server &mldr;）</del><br>
+但因為自己順手的還是 Debian，故也有在 Debian 上架設一次，設定上並沒有差很多。</p>
 <h2 id=environment>Environment</h2>
 <p>這邊選擇在 Ubuntu 上做建置，不過我後來有試過，在 Debian 上的建置方式也類似，<br>
 這邊會使用 isc-dhcp-server 做建置。
