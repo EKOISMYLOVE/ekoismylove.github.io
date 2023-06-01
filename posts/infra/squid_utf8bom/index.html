@@ -168,7 +168,7 @@ Switch 192.168.0.1 &lt;&mdash;> Squid 192.168.0.111 &lt;&mdash;> Client 192.168.
 </figure>
 <p>到這邊就確定是 BOM 在搞事，影響了 header，重新編碼有問題的網頁後，這個問題就解決了。</p>
 <figure><a class=lightgallery href=/posts/infra/squid_utf8bom/diff.jpeg title=/posts/infra/squid_utf8bom/diff.jpeg data-thumbnail=/posts/infra/squid_utf8bom/diff.jpeg data-sub-html="<h2>Code review 時還花了一堆時間解釋&mldr;</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=diff.jpeg data-srcset="/posts/infra/squid_utf8bom/diff.jpeg, diff.jpeg 1.5x, /posts/infra/squid_utf8bom/diff.jpeg 2x" data-sizes=auto alt=/posts/infra/squid_utf8bom/diff.jpeg width=100%>
+<img class=lazyload src=/svg/loading.min.svg data-src=diff.jpeg data-srcset="/posts/infra/squid_utf8bom/diff.jpeg, diff.jpeg 1.5x, /posts/infra/squid_utf8bom/diff.jpeg 2x" data-sizes=auto alt=/posts/infra/squid_utf8bom/diff.jpeg width=50%>
 </a><figcaption class=image-caption>Code review 時還花了一堆時間解釋&mldr;</figcaption>
 </figure>
 <p>雖然還有個問題，是要找出哪些網頁也是用這個編碼方式儲存，但這個屬於小問題好解決啦～</p>
