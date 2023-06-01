@@ -4,15 +4,15 @@
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
-<title>【TroubleShooting】Invalid Response on Squid(Duo to BOM) - Wei's Note</title><meta name=Description content="關於我遇到 Squid 跟 BOM 而導致 Invalid Response 的問題。"><meta name=keywords content="Infra,squid,encoding,UTF-8,UTF-8 with BOM,UTF8BOM"><meta property="og:title" content="【TroubleShooting】Invalid Response on Squid(Duo to BOM)">
-<meta property="og:description" content="關於我遇到 Squid 跟 BOM 而導致 Invalid Response 的問題。">
+<title>【TroubleShooting】Invalid Response on Squid(Duo to BOM) - Wei's Note</title><meta name=Description content="關於我遇到 Squid 因為 UTF8-BOM 而導致 Invalid Response 的問題。"><meta name=keywords content="Infra,squid,encoding,UTF-8,UTF-8 with BOM,UTF8BOM"><meta property="og:title" content="【TroubleShooting】Invalid Response on Squid(Duo to BOM)">
+<meta property="og:description" content="關於我遇到 Squid 因為 UTF8-BOM 而導致 Invalid Response 的問題。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://ekoismylove.github.io/posts/infra/squid_utf8bom/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2023-06-01T00:00:00+00:00">
 <meta property="article:modified_time" content="2023-06-01T00:00:00+00:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="【TroubleShooting】Invalid Response on Squid(Duo to BOM)">
-<meta name=twitter:description content="關於我遇到 Squid 跟 BOM 而導致 Invalid Response 的問題。">
+<meta name=twitter:description content="關於我遇到 Squid 因為 UTF8-BOM 而導致 Invalid Response 的問題。">
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
@@ -110,7 +110,7 @@ Cancel
 <li><a href=#參考資料>參考資料</a></li>
 </ul>
 </nav></div>
-</div><div class=content id=content><p>關於我遇到 Squid 跟 BOM 而導致 Invalid Response 的問題。</p>
+</div><div class=content id=content><p>關於我遇到 Squid 因為 UTF8-BOM 而導致 Invalid Response 的問題。</p>
 <h2 id=問題>問題</h2>
 <p>客戶端使用 Squid 作為 proxy server 並連線到一台帶有網頁管理介面的 Layer3 Switch，發生了錯誤導致網頁無法瀏覽。<br>
 但是，不透過 Squid，直接連線到設備時，網頁又正常運作。<br>
