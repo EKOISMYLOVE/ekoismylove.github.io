@@ -126,11 +126,11 @@ Switch 192.168.0.1 &lt;&mdash;> Squid 192.168.0.111 &lt;&mdash;> Client 192.168.
 <h3 id=log>Log</h3>
 <p>因為看到錯誤訊息是 Invalid Response，在想應該是 Squid 跟 設備之間有傳輸問題，先看了一下 <code>/var/log/squid/access.log</code> 跟 <code>var/log/squid/cache.log</code><br>
 (這邊我會調整一下資訊，會與我真實遇到的情況不同，但我盡可能保留原本的樣子。)</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ sudo tail -f /var/log/squid/access.log
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo tail -f /var/log/squid/access.log
 1685583425.309     <span class=m>89</span> 192.168.0.10 TCP_REFRESH_IGNORED/200 <span class=m>10211</span> GET http://192.168.0.1/login.lsp - HIER_DIRECT/192.168.0.1 text/html
 1685583433.755     <span class=m>97</span> 192.168.0.10 TCP_MISS/200 <span class=m>563</span> POST http://192.168.0.1/login.lua - HIER_DIRECT/192.168.0.1 application/json
 1685583433.871    <span class=m>103</span> 192.168.0.10 TCP_REFRESH_FAIL_ERR/502 <span class=m>5077</span> GET http://192.168.0.1/main.lsp - HIER_DIRECT/192.168.0.1 text/html
-</code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ sudo tail -f /var/log/squid/cache.log
+</code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo tail -f /var/log/squid/cache.log
 2023/05/31 09:38:12 kid1<span class=p>|</span> WARNING: HTTP: Invalid Response: Bad header encountered from http://192.168.0.1/main.lsp AKA http://192.168.0.1/main.lsp
 </code></pre></div><p>在觀察到 <code>access.log</code> 產生 502 錯誤時， <code>cache.log</code> 也紀錄了一筆警告資訊，遇到錯誤的 header。</p>
 <blockquote>
