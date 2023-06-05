@@ -16,7 +16,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/troubleshooting/squid_utf8bom/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note07/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"【TroubleShooting】Invalid Response on Squid(Duo to BOM)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/squid_utf8bom\/"},"genre":"posts","keywords":"Infra, squid, encoding, UTF-8, UTF-8 with BOM, UTF8BOM","wordcount":448,"url":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/squid_utf8bom\/","datePublished":"2023-06-01T00:00:00+00:00","dateModified":"2023-06-01T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/troubleshooting/squid_utf8bom/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note07/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"【TroubleShooting】Invalid Response on Squid(Duo to BOM)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/squid_utf8bom\/"},"genre":"posts","keywords":"Infra, squid, encoding, UTF-8, UTF-8 with BOM, UTF8BOM","wordcount":471,"url":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/squid_utf8bom\/","datePublished":"2023-06-01T00:00:00+00:00","dateModified":"2023-06-01T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -84,7 +84,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">【TroubleShooting】Invalid Response on Squid(Duo to BOM)</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>TroubleShooting</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-06-01>2023-06-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;448 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-06-01>2023-06-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;471 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -105,6 +105,12 @@ Cancel
 <ul>
 <li><a href=#簡介>簡介</a></li>
 <li><a href=#建議>建議</a></li>
+</ul>
+</li>
+<li><a href=#wireshark>Wireshark</a>
+<ul>
+<li><a href=#allow-subdissector-to-reassemble-tcp-streams>Allow subdissector to reassemble tcp streams</a></li>
+<li><a href=#follow>Follow</a></li>
 </ul>
 </li>
 <li><a href=#參考資料>參考資料</a></li>
@@ -202,6 +208,21 @@ Switch 192.168.0.1 &lt;&mdash;> Squid 192.168.0.111 &lt;&mdash;> Client 192.168.
 <li>注意編輯器的編碼方式，<del>據說 notepad 常常使用 UTF-8 with BOM。</del></li>
 <li>如果有發現使用錯誤的編碼方式，可以透過編輯器用別的編碼方式再儲存一次，但要記得編碼後作驗證，避免有其他問題發生。</li>
 </ol>
+<h2 id=wireshark>Wireshark</h2>
+<p>因應這次的問題，請教了朋友，朋友也給了一些建議，故紀錄：</p>
+<h3 id=allow-subdissector-to-reassemble-tcp-streams>Allow subdissector to reassemble tcp streams</h3>
+<p><figure><a class=lightgallery href=/posts/troubleshooting/squid_utf8bom/unAllow.png title=/posts/troubleshooting/squid_utf8bom/unAllow.png data-thumbnail=/posts/troubleshooting/squid_utf8bom/unAllow.png data-sub-html="<h2>這個預設是開啟的。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=unAllow.png data-srcset="/posts/troubleshooting/squid_utf8bom/unAllow.png, unAllow.png 1.5x, /posts/troubleshooting/squid_utf8bom/unAllow.png 2x" data-sizes=auto alt=/posts/troubleshooting/squid_utf8bom/unAllow.png width=100%>
+</a><figcaption class=image-caption>這個預設是開啟的。</figcaption>
+</figure>
+在傳輸時，往往會因為資料大於 MTU、MSS 的關係而分段傳輸。<br>
+Wireshark 會將屬於同一個 PDU 的封包集合起來，關閉這個功能可以呈現較真實的傳輸情形。</p>
+<h3 id=follow>Follow</h3>
+<p><figure><a class=lightgallery href=/posts/troubleshooting/squid_utf8bom/unAllow.png title=/posts/troubleshooting/squid_utf8bom/unAllow.png data-thumbnail=/posts/troubleshooting/squid_utf8bom/unAllow.png data-sub-html="<h2>追蹤。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=unAllow.png data-srcset="/posts/troubleshooting/squid_utf8bom/unAllow.png, unAllow.png 1.5x, /posts/troubleshooting/squid_utf8bom/unAllow.png 2x" data-sizes=auto alt=/posts/troubleshooting/squid_utf8bom/unAllow.png width=100%>
+</a><figcaption class=image-caption>追蹤。</figcaption>
+</figure>
+透過這個功能，可以較容易觀察該 stream 收發了什麼資料。</p>
 <h2 id=參考資料>參考資料</h2>
 <ol>
 <li>我的神朋友 Oscar.</li>
