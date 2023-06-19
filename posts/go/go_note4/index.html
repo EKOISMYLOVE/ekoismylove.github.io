@@ -1,126 +1,151 @@
-<!doctype html><html lang=zh-tw>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=robots content="noodp">
-<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
-<title>Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures) - Wei's Note</title><meta name=Description content="本篇文章將介紹 Block 與 Shadows，接著會說明控制結構（if、for、goto）等。"><meta name=keywords content="go,golang"><meta property="og:title" content="Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)">
-<meta property="og:description" content="本篇文章將介紹 Block 與 Shadows，接著會說明控制結構（if、for、goto）等。">
-<meta property="og:type" content="article">
-<meta property="og:url" content="http://ekoismylove.github.io/posts/go/go_note4/"><meta property="og:image" content="http://ekoismylove.github.io/posts/go/go_note4/go_header.png"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2022-02-25T00:00:00+00:00">
-<meta property="article:modified_time" content="2022-02-25T00:00:00+00:00">
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="http://ekoismylove.github.io/posts/go/go_note4/go_header.png">
-<meta name=twitter:title content="Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)">
-<meta name=twitter:description content="本篇文章將介紹 Block 與 Shadows，接著會說明控制結構（if、for、goto）等。">
-<meta name=application-name content="Wei's Note">
-<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/go/go_note4/><link rel=prev href=http://ekoismylove.github.io/posts/blog/blog_algolia/><link rel=next href=http://ekoismylove.github.io/posts/go/go_note5/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note4\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note4\/go_header.png","width":820,"height":364}],"genre":"posts","keywords":"go, golang","wordcount":750,"url":"http:\/\/ekoismylove.github.io\/posts\/go\/go_note4\/","datePublished":"2022-02-25T00:00:00+00:00","dateModified":"2022-02-25T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
-<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
-<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
-<div class=header-wrapper>
-<div class=header-title>
-<a href=/ title="Wei's Note">Wei's Note</a>
-</div>
-<div class=menu>
-<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
-<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
-<i class="fas fa-search fa-fw"></i>
-</a>
-<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
-<i class="fas fa-times-circle fa-fw"></i>
-</a>
-<span class="search-button search-loading" id=search-loading-desktop>
-<i class="fas fa-spinner fa-fw fa-spin"></i>
-</span>
-</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw"></i>
-</a>
-</div>
-</div>
-</div>
-</header><header class=mobile id=header-mobile>
-<div class=header-container>
-<div class=header-wrapper>
-<div class=header-title>
-<a href=/ title="Wei's Note">Wei's Note</a>
-</div>
-<div class=menu-toggle id=menu-toggle-mobile>
-<span></span><span></span><span></span>
-</div>
-</div>
-<div class=menu id=menu-mobile><div class=search-wrapper>
-<div class="search mobile" id=search-mobile>
-<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
-<i class="fas fa-search fa-fw"></i>
-</a>
-<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
-<i class="fas fa-times-circle fa-fw"></i>
-</a>
-<span class="search-button search-loading" id=search-loading-mobile>
-<i class="fas fa-spinner fa-fw fa-spin"></i>
-</span>
-</div>
-<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
-Cancel
-</a>
-</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw"></i>
-</a></div>
-</div>
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures) - Wei&#39;s Note</title><meta name="Description" content="本篇文章將介紹 Block 與 Shadows，接著會說明控制結構（if、for、goto）等。"><meta name="keywords" content='go, golang' /><meta property="og:title" content="Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)" />
+<meta property="og:description" content="本篇文章將介紹 Block 與 Shadows，接著會說明控制結構（if、for、goto）等。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/go_note4/" /><meta property="og:image" content="http://ekoismylove.github.io/posts/go/go_note4/go_header.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-25T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-02-25T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://ekoismylove.github.io/posts/go/go_note4/go_header.png"/>
+<meta name="twitter:title" content="Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)"/>
+<meta name="twitter:description" content="本篇文章將介紹 Block 與 Shadows，接著會說明控制結構（if、for、goto）等。"/>
+<meta name="application-name" content="Wei&#39;s Note">
+<meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://ekoismylove.github.io/posts/go/go_note4/" /><link rel="prev" href="http://ekoismylove.github.io/posts/blog/blog_algolia/" /><link rel="next" href="http://ekoismylove.github.io/posts/go/go_note5/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note4\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note4\/go_header.png",
+                            "width":  820 ,
+                            "height":  364 
+                        }],"genre": "posts","keywords": "go, golang","wordcount":  750 ,
+        "url": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note4\/","datePublished": "2022-02-25T00:00:00+00:00","dateModified": "2022-02-25T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "Wei","logo": "http:\/\/ekoismylove.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Wei"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
 </header>
 <div class="search-dropdown desktop">
-<div id=search-dropdown-desktop></div>
+    <div id="search-dropdown-desktop"></div>
 </div>
 <div class="search-dropdown mobile">
-<div id=search-dropdown-mobile></div>
+    <div id="search-dropdown-mobile"></div>
 </div>
-<main class=main>
-<div class=container><div class=toc id=toc-auto>
-<h2 class=toc-title>Contents</h2>
-<div class=toc-content id=toc-content-auto></div>
-</div><article class="page single"><h1 class="single-title animated flipInX">Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)</h1><div class=post-meta>
-<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/go/><i class="far fa-folder fa-fw"></i>Go</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-02-25>2022-02-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;750 words&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
-</div><div class="details toc" id=toc-static kept>
-<div class="details-summary toc-title">
-<span>Contents</span>
-<span><i class="details-icon fas fa-angle-right"></i></span>
-</div>
-<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
-<ul>
-<li><a href=#code-blocks>Code Blocks</a>
-<ul>
-<li><a href=#types-of-blocks>Types of blocks</a></li>
-<li><a href=#hierarchies>Hierarchies</a></li>
-</ul>
-</li>
-<li><a href=#shadows>Shadows</a>
-<ul>
-<li><a href=#shadowing-variables>Shadowing variables</a></li>
-<li><a href=#detect>Detect</a></li>
-</ul>
-</li>
-<li><a href=#control-structures>Control Structures</a>
-<ul>
-<li><a href=#if>if</a></li>
-<li><a href=#for>for</a></li>
-<li><a href=#continue>Continue</a></li>
-<li><a href=#switch>switch</a></li>
-<li><a href=#goto>goto</a></li>
-</ul>
-</li>
-<li><a href=#參考資料reference>參考資料(Reference)</a></li>
-</ul>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-25">2022-02-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;750 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#code-blocks">Code Blocks</a>
+      <ul>
+        <li><a href="#types-of-blocks">Types of blocks</a></li>
+        <li><a href="#hierarchies">Hierarchies</a></li>
+      </ul>
+    </li>
+    <li><a href="#shadows">Shadows</a>
+      <ul>
+        <li><a href="#shadowing-variables">Shadowing variables</a></li>
+        <li><a href="#detect">Detect</a></li>
+      </ul>
+    </li>
+    <li><a href="#control-structures">Control Structures</a>
+      <ul>
+        <li><a href="#if">if</a></li>
+        <li><a href="#for">for</a></li>
+        <li><a href="#continue">Continue</a></li>
+        <li><a href="#switch">switch</a></li>
+        <li><a href="#goto">goto</a></li>
+      </ul>
+    </li>
+    <li><a href="#參考資料reference">參考資料(Reference)</a></li>
+  </ul>
 </nav></div>
-</div><div class=content id=content><p>本篇文章將介紹 Block 與 Shadows，接著會說明控制結構（if、for、goto）等。</p>
-<h2 id=code-blocks>Code Blocks</h2>
-<h3 id=types-of-blocks>Types of blocks</h3>
+            </div><div class="content" id="content"><p>本篇文章將介紹 Block 與 Shadows，接著會說明控制結構（if、for、goto）等。</p>
+<h2 id="code-blocks">Code Blocks</h2>
+<h3 id="types-of-blocks">Types of blocks</h3>
 <p>其實用 blocks 作為關鍵字去尋找相關資訊並不太好找，反倒是以 Code Blocks 會比較容易些，基本上有聲明的地方，都會被稱為 blocks，在任何函數以外聲明的常數、變數、類型與函數都是放在 package block 內。而使用 import 內的時statement時，這些名稱則是放在 file block。</p>
 <p>在 golang 中，有四種 blocks：</p>
 <ul>
@@ -130,65 +155,72 @@ Cancel
 <li>local blocks，基本上，在一個函數中，每一個大括弧 <code>{}</code> 都定義了一個 block。
 local blocks 又分為 explicit local blocks 與 implicit local blocks，基本上要由 {} 與控制結構識別。</li>
 </ul>
-<h3 id=hierarchies>Hierarchies</h3>
+<h3 id="hierarchies">Hierarchies</h3>
 <p>透過圖片，會更了解 block 之間的層次結構。
-<img class=lazyload src=/svg/loading.min.svg data-src=./blocks.png data-srcset="./blocks.png, ./blocks.png 1.5x, ./blocks.png 2x" data-sizes=auto alt=./blocks.png title=./blocks.png></p>
-<h2 id=shadows>Shadows</h2>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="./blocks.png"
+        data-srcset="./blocks.png, ./blocks.png 1.5x, ./blocks.png 2x"
+        data-sizes="auto"
+        alt="./blocks.png"
+        title="./blocks.png" /></p>
+<h2 id="shadows">Shadows</h2>
 <p>我們隨時可以從內部 block 訪問外部 block 的 identifer，如果內部與外部有相同的 identifer 時，會發生什麼事呢？</p>
-<h3 id=shadowing-variables>Shadowing variables</h3>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
-    <span class=nx>x</span> <span class=o>:=</span> <span class=mi>10</span>
-    <span class=k>if</span> <span class=nx>x</span> <span class=p>&gt;</span> <span class=mi>5</span> <span class=p>{</span>
-        <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>x</span><span class=p>)</span>
-        <span class=nx>x</span> <span class=o>:=</span> <span class=mi>5</span>
-        <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>x</span><span class=p>)</span>
-    <span class=p>}</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>x</span><span class=p>)</span>
-<span class=p>}</span>
+<h3 id="shadowing-variables">Shadowing variables</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">x</span> <span class="o">:=</span> <span class="mi">10</span>
+    <span class="k">if</span> <span class="nx">x</span> <span class="p">&gt;</span> <span class="mi">5</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+        <span class="nx">x</span> <span class="o">:=</span> <span class="mi">5</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div><p>可以先想一下這個函式的 blocks，再來想一下這個程式會印出什麼。在這個函式中發生了內部與外部的 identifer 相同的情況，此時外部的 identifer 會被隱藏。印出來的結果會是：</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=mi>10</span>
-<span class=mi>5</span>
-<span class=mi>10</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="mi">10</span>
+<span class="mi">5</span>
+<span class="mi">10</span>
 </code></pre></div><p>Shadowing Variable 是指在 package block 中的 variable 相同名稱的 variable，只要 Shadowsing variables 存在，就不能由外部訪問 Shadowing variables。該函式首先定義了 x 為 10，後來有一個 if statement，並遇到了大括號，記得前面說的每一個大括弧會是一個 block，這個 statement 內的 x 則是 shadowing variable，當離開這個 statement 時，這個 shadowing variable 就不能被訪問，故最後的 <code>fmt.Println()</code> 會是訪問頂部的 x 。</p>
 <p>若善用 shadowing variables 在測試<del>或是懶得想變數</del>時會很方便，但記得使用的 identifer，若使用不慎可是會出問題的。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
-    <span class=nx>x</span> <span class=o>:=</span> <span class=mi>10</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>x</span><span class=p>)</span>
-    <span class=nx>fmt</span> <span class=o>:=</span> <span class=s>&#34;oops&#34;</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>fmt</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=c1>// Output
-</span><span class=c1></span><span class=nx>fmt</span><span class=p>.</span><span class=nx>Println</span> <span class=nf>undefined</span> <span class=p>(</span><span class=kd>type</span> <span class=kt>string</span> <span class=nx>has</span> <span class=nx>no</span> <span class=nx>field</span> <span class=nx>or</span> <span class=nx>method</span> <span class=nx>Println</span><span class=p>)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">x</span> <span class="o">:=</span> <span class="mi">10</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+    <span class="nx">fmt</span> <span class="o">:=</span> <span class="s">&#34;oops&#34;</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// Output
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span> <span class="nf">undefined</span> <span class="p">(</span><span class="kd">type</span> <span class="kt">string</span> <span class="nx">has</span> <span class="nx">no</span> <span class="nx">field</span> <span class="nx">or</span> <span class="nx">method</span> <span class="nx">Println</span><span class="p">)</span>
 </code></pre></div><p>這個例子中，fmt 被聲明為 local variable，故會隱藏原先 fmt 所擁有的函式，也因此會有錯個錯誤發生。</p>
 <blockquote>
 <p>個人認爲在測試內使用 shadowing variable 即可，開發的專案就不建議。</p>
 </blockquote>
-<h3 id=detect>Detect</h3>
-<p>還記得在第一章提到的 vet 與 lint 可以做檢測用，但是 go vet 與 golangci-lint 是沒有檢測 shadow 的功能的(寫這篇文章時應該是沒有吧&mldr;)，但的確是有 shadow detect 工具可以使用的。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow@latest
-</code></pre></div><h2 id=control-structures>Control Structures</h2>
+<h3 id="detect">Detect</h3>
+<p>還記得在第一章提到的 vet 與 lint 可以做檢測用，但是 go vet 與 golangci-lint 是沒有檢測 shadow 的功能的(寫這篇文章時應該是沒有吧&hellip;)，但的確是有 shadow detect 工具可以使用的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow@latest
+</code></pre></div><h2 id="control-structures">Control Structures</h2>
 <p>Control Structures 其實跟許多語言的用法極為相似，但 golang 有一個與眾不同的 <code>goto</code> 可以使用。</p>
-<h3 id=if>if</h3>
+<h3 id="if">if</h3>
 <p>if 的用法也與其他語言的用法相似 <del>(很懶得寫)</del>， if 的 condition 不用括號刮起來。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>n</span> <span class=o>:=</span> <span class=nx>rand</span><span class=p>.</span><span class=nf>Intn</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span>
-<span class=k>if</span> <span class=nx>n</span> <span class=o>==</span> <span class=mi>0</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;That&#39;s too low&#34;</span><span class=p>)</span>
-<span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=nx>n</span> <span class=p>&gt;</span> <span class=mi>5</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;That&#39;s too big:&#34;</span><span class=p>,</span> <span class=nx>n</span><span class=p>)</span>
-<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;That&#39;s a good number:&#34;</span><span class=p>,</span> <span class=nx>n</span><span class=p>)</span>
-<span class=p>}</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">n</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;That&#39;s too low&#34;</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">n</span> <span class="p">&gt;</span> <span class="mi">5</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;That&#39;s too big:&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;That&#39;s a good number:&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div><p>主要提一點是，條件式內可以宣告變數的。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=k>if</span> <span class=nx>n</span> <span class=o>:=</span> <span class=nx>rand</span><span class=p>.</span><span class=nf>Intn</span><span class=p>(</span><span class=mi>10</span><span class=p>);</span> <span class=nx>n</span> <span class=o>==</span> <span class=mi>0</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;That&#39;s too low&#34;</span><span class=p>)</span>
-<span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=nx>n</span> <span class=p>&gt;</span> <span class=mi>5</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;That&#39;s too big:&#34;</span><span class=p>,</span> <span class=nx>n</span><span class=p>)</span>
-<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;That&#39;s a good number:&#34;</span><span class=p>,</span> <span class=nx>n</span><span class=p>)</span>
-<span class=p>}</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="nx">n</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="nx">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;That&#39;s too low&#34;</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">n</span> <span class="p">&gt;</span> <span class="mi">5</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;That&#39;s too big:&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;That&#39;s a good number:&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div><p>在第一句的部分，我們新宣告了一個變數，後續的條件式則可以直接透過這個新的變數進行判斷。在某些場合會很好用。</p>
 <p>但使用 if/else 時，請盡量將條件簡單化，另外是在 if statement 中宣告的變數，也是 shadowing variables，注意聲明的名稱與使用方式。</p>
-<h3 id=for>for</h3>
+<h3 id="for">for</h3>
 <p>for 基本上也與其他語言一樣，作為循環使用，在 golang 中，for 有四種使用方式</p>
 <ul>
 <li>標準型 for</li>
@@ -197,98 +229,98 @@ local blocks 又分為 explicit local blocks 與 implicit local blocks，基本�
 <li>for-range</li>
 </ul>
 <hr>
-<h4 id=標準型-for>標準型 for</h4>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=k>for</span> <span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=p>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>i</span><span class=p>)</span>
-<span class=p>}</span>
+<h4 id="標準型-for">標準型 for</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div><p>這就像許多語言的用法一樣，有一個初始值，一個需要滿足的條件式，跟一個會遞增或遞減的行為，這個行為會在每一次的迴圈結束後進行。</p>
-<h4 id=條件型-for>條件型 for</h4>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span>
-<span class=k>for</span> <span class=nx>i</span> <span class=p>&lt;</span> <span class=mi>100</span> <span class=p>{</span>
-        <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>i</span><span class=p>)</span>
-        <span class=nx>i</span> <span class=p>=</span> <span class=nx>i</span> <span class=o>+</span> <span class=mi>1</span>
-<span class=p>}</span>
+<h4 id="條件型-for">條件型 for</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">100</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="nx">i</span> <span class="p">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="p">}</span>
 </code></pre></div><p>條件型的 for 省略了初始值與行為，但仍須保留條件式。</p>
-<h4 id=無窮型-for>無窮型 for</h4>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=k>for</span><span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Hello!&#34;</span><span class=p>)</span>
-<span class=p>}</span>
+<h4 id="無窮型-for">無窮型 for</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span><span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Hello!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div><p>取消了條件，亦同這個 for 會一直滿足且運作下去，當然也可以使用標準型或是條件型 for 達到相同的目的。如果要程式運作時需要結束這個無窮型迴圈，設計時可以使用條件式與 <code>break</code> 跳出這個 for。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span>
-<span class=k>for</span><span class=p>{</span>
-    <span class=nx>i</span> <span class=p>=</span> <span class=nx>i</span> <span class=o>+</span> <span class=mi>1</span>
-    <span class=k>if</span> <span class=nx>i</span> <span class=p>&gt;</span> <span class=mi>10</span> <span class=p>{</span>
-        <span class=k>break</span>
-    <span class=p>}</span>
-<span class=p>}</span>
-</code></pre></div><h4 id=for-range>for-range</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span>
+<span class="k">for</span><span class="p">{</span>
+    <span class="nx">i</span> <span class="p">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="nx">i</span> <span class="p">&gt;</span> <span class="mi">10</span> <span class="p">{</span>
+        <span class="k">break</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h4 id="for-range">for-range</h4>
 <p>通常像其他語言的迭代器(iterator) <del>我以前學不好的部分</del>， for-range 常用在 string, array, slice 和 map 上。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>evenVals</span> <span class=o>:=</span> <span class=p>[]</span><span class=kt>int</span><span class=p>{</span><span class=mi>2</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>6</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=mi>10</span><span class=p>,</span> <span class=mi>12</span><span class=p>}</span>
-<span class=k>for</span> <span class=nx>i</span><span class=p>,</span> <span class=nx>v</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>evenVals</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>i</span><span class=p>,</span> <span class=nx>v</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=c1>// Output
-</span><span class=c1></span><span class=mi>0</span> <span class=mi>2</span> 
-<span class=mi>1</span> <span class=mi>4</span> 
-<span class=mi>2</span> <span class=mi>6</span> 
-<span class=mi>3</span> <span class=mi>8</span> 
-<span class=mi>4</span> <span class=mi>10</span> 
-<span class=mi>5</span> <span class=mi>12</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">evenVals</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">}</span>
+<span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">evenVals</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// Output
+</span><span class="c1"></span><span class="mi">0</span> <span class="mi">2</span> 
+<span class="mi">1</span> <span class="mi">4</span> 
+<span class="mi">2</span> <span class="mi">6</span> 
+<span class="mi">3</span> <span class="mi">8</span> 
+<span class="mi">4</span> <span class="mi">10</span> 
+<span class="mi">5</span> <span class="mi">12</span>
 </code></pre></div><p>用 for-range 會得到兩個變量，一個通常被稱為index或是key，我在這邊稱為位置，另一個則是該位置的數值。</p>
 <p>如果不需要位置時，可以使用下底線進行隱藏。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>evenVals</span> <span class=o>:=</span> <span class=p>[]</span><span class=kt>int</span><span class=p>{</span><span class=mi>2</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>6</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=mi>10</span><span class=p>,</span> <span class=mi>12</span><span class=p>}</span>
-<span class=k>for</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>v</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>evenVals</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>v</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=c1>// Output
-</span><span class=c1></span><span class=mi>2</span> 
-<span class=mi>4</span> 
-<span class=mi>6</span> 
-<span class=mi>8</span> 
-<span class=mi>10</span> 
-<span class=mi>12</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">evenVals</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">}</span>
+<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">evenVals</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// Output
+</span><span class="c1"></span><span class="mi">2</span> 
+<span class="mi">4</span> 
+<span class="mi">6</span> 
+<span class="mi">8</span> 
+<span class="mi">10</span> 
+<span class="mi">12</span>
 </code></pre></div><p>如果需要位置而不需要值時，使用下底線嗎？也可以，但可以直接省略。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>evenVals</span> <span class=o>:=</span> <span class=p>[]</span><span class=kt>int</span><span class=p>{</span><span class=mi>2</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>6</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=mi>10</span><span class=p>,</span> <span class=mi>12</span><span class=p>}</span>
-<span class=k>for</span> <span class=nx>i</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>evenVals</span> <span class=p>{</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>i</span><span class=p>)</span>
-<span class=p>}</span>
-<span class=c1>// Output
-</span><span class=c1></span><span class=mi>0</span>
-<span class=mi>1</span>
-<span class=mi>2</span>
-<span class=mi>3</span>
-<span class=mi>4</span>
-<span class=mi>5</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">evenVals</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">}</span>
+<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">evenVals</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// Output
+</span><span class="c1"></span><span class="mi">0</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
+<span class="mi">4</span>
+<span class="mi">5</span>
 </code></pre></div><p>for-range 在遍歷 map 上會有特別的地方，會有每一次遍歷的順序結果不同的情形，這是 go 語言為了安全的設計，每一次的 for-range 迭代在遍歷 map 會有不同的結果。</p>
 <p>for-range 所遍歷的會是一個副本而不是原變數的值，故在這個副本內修改的，並不會影響到原本的數值。</p>
-<h3 id=continue>Continue</h3>
+<h3 id="continue">Continue</h3>
 <p><code>continue</code> 是用來跳過剩餘的部分，並進行下一次的迭代。用起來也與其他語言相似，但有一個特別的用法，透過 OUTER 標籤進行的 for。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>OUTER</span><span class=p>:</span>
-<span class=k>for</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>item</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>list</span><span class=p>.</span><span class=nx>Items</span> <span class=p>{</span>
-	<span class=k>for</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>reserved</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>reserved</span><span class=p>.</span><span class=nx>Items</span> <span class=p>{</span>
-		<span class=k>if</span> <span class=nx>reserved</span><span class=p>.</span><span class=nx>ID</span> <span class=o>==</span> <span class=nx>item</span><span class=p>.</span><span class=nx>ID</span> <span class=p>{</span>
-			<span class=k>continue</span> <span class=nx>OUTER</span>
-		<span class=p>}</span>
-		<span class=o>...</span> <span class=nx>do</span> <span class=nx>some</span> <span class=nx>other</span> <span class=nx>work</span> <span class=o>...</span>
-	<span class=p>}</span>
-	<span class=o>...</span> <span class=nx>do</span> <span class=nx>some</span> <span class=nx>other</span> <span class=nx>work</span> <span class=o>...</span>
-<span class=p>}</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">OUTER</span><span class="p">:</span>
+<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">item</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">list</span><span class="p">.</span><span class="nx">Items</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">reserved</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">reserved</span><span class="p">.</span><span class="nx">Items</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">reserved</span><span class="p">.</span><span class="nx">ID</span> <span class="o">==</span> <span class="nx">item</span><span class="p">.</span><span class="nx">ID</span> <span class="p">{</span>
+			<span class="k">continue</span> <span class="nx">OUTER</span>
+		<span class="p">}</span>
+		<span class="o">...</span> <span class="nx">do</span> <span class="nx">some</span> <span class="nx">other</span> <span class="nx">work</span> <span class="o">...</span>
+	<span class="p">}</span>
+	<span class="o">...</span> <span class="nx">do</span> <span class="nx">some</span> <span class="nx">other</span> <span class="nx">work</span> <span class="o">...</span>
+<span class="p">}</span>
 </code></pre></div><p>透過這種方式，可以跳出或跳過外部循環的迭代器。<del>聽說這種方法很少用就是了</del></p>
-<h3 id=switch>switch</h3>
+<h3 id="switch">switch</h3>
 <p><del>Nintendo Switch !!</del> <code>switch</code>也是很常在其他語言中看到的 statement，用法也相似，很多人不喜歡使用 switch (我自己也是)，但 switch 在 go 語言中有一些令人驚訝的地方(?)</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>words</span> <span class=o>:=</span> <span class=p>[]</span><span class=kt>string</span><span class=p>{</span><span class=s>&#34;a&#34;</span><span class=p>,</span> <span class=s>&#34;cow&#34;</span><span class=p>,</span> <span class=s>&#34;smile&#34;</span><span class=p>,</span> <span class=s>&#34;gopher&#34;</span><span class=p>,</span><span class=s>&#34;octopus&#34;</span><span class=p>,</span> <span class=s>&#34;anthropologist&#34;</span><span class=p>}</span>
-<span class=k>for</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>word</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>words</span> <span class=p>{</span>
-    <span class=k>switch</span> <span class=nx>size</span> <span class=o>:=</span> <span class=nb>len</span><span class=p>(</span><span class=nx>word</span><span class=p>);</span> <span class=nx>size</span> <span class=p>{</span>
-    <span class=k>case</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>:</span>
-        <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>word</span><span class=p>,</span> <span class=s>&#34;is a short word!&#34;</span><span class=p>)</span>
-    <span class=k>case</span> <span class=mi>5</span><span class=p>:</span>
-        <span class=nx>wordLen</span> <span class=o>:=</span> <span class=nb>len</span><span class=p>(</span><span class=nx>word</span><span class=p>)</span>
-        <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>word</span><span class=p>,</span> <span class=s>&#34;is exactly the right length:&#34;</span><span class=p>,</span> <span class=nx>wordLen</span><span class=p>)</span>
-    <span class=k>case</span> <span class=mi>6</span><span class=p>,</span> <span class=mi>7</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=mi>9</span><span class=p>:</span>
-    <span class=k>default</span><span class=p>:</span>
-        <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>word</span><span class=p>,</span> <span class=s>&#34;is a long word!&#34;</span><span class=p>)</span>
-    <span class=p>}</span>
-<span class=p>}</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">words</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;cow&#34;</span><span class="p">,</span> <span class="s">&#34;smile&#34;</span><span class="p">,</span> <span class="s">&#34;gopher&#34;</span><span class="p">,</span><span class="s">&#34;octopus&#34;</span><span class="p">,</span> <span class="s">&#34;anthropologist&#34;</span><span class="p">}</span>
+<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">word</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">words</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="nx">size</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">word</span><span class="p">);</span> <span class="nx">size</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">word</span><span class="p">,</span> <span class="s">&#34;is a short word!&#34;</span><span class="p">)</span>
+    <span class="k">case</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="nx">wordLen</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">word</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">word</span><span class="p">,</span> <span class="s">&#34;is exactly the right length:&#34;</span><span class="p">,</span> <span class="nx">wordLen</span><span class="p">)</span>
+    <span class="k">case</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">word</span><span class="p">,</span> <span class="s">&#34;is a long word!&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div><ul>
 <li>多個 case 要進行相同的邏輯，可以在同一個 case 寫多個條件。</li>
 <li>每一個 case 都會是一個 block，像是 case 5 的 wordLen 是一個新的 variable，只能在這邊使用。</li>
@@ -296,82 +328,85 @@ local blocks 又分為 explicit local blocks 與 implicit local blocks，基本�
 <li>如果沒有滿足 case，不會發生任何事。或是使用 default 決定沒有滿足 case 時需要做什麼。</li>
 </ul>
 <p>通常使用 break 代表要跳出這次的 switch。但與其他語言不同，在 case 底下使用 break，go 只會認為你想跳出該 case 而不是 switch，若需要跳出 switch 需搭配 label 做使用。使用方式如下列的程式碼：</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>loop</span><span class=p>:</span>
-	<span class=k>for</span> <span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=p>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span> <span class=p>{</span>
-		<span class=k>switch</span> <span class=p>{</span>
-		<span class=k>case</span> <span class=nx>i</span><span class=o>%</span><span class=mi>2</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
-			<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>i</span><span class=p>,</span> <span class=s>&#34;is even&#34;</span><span class=p>)</span>
-		<span class=k>case</span> <span class=nx>i</span><span class=o>%</span><span class=mi>3</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
-			<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>i</span><span class=p>,</span> <span class=s>&#34;is divisible by 3 but not 2&#34;</span><span class=p>)</span>
-		<span class=k>case</span> <span class=nx>i</span><span class=o>%</span><span class=mi>7</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
-			<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;exit the loop!&#34;</span><span class=p>)</span>
-			<span class=k>break</span> <span class=nx>loop</span>
-		<span class=k>default</span><span class=p>:</span>
-			<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>i</span><span class=p>,</span> <span class=s>&#34;is boring&#34;</span><span class=p>)</span>
-		<span class=p>}</span>
-	<span class=p>}</span>
-</code></pre></div><h3 id=goto>goto</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">loop</span><span class="p">:</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">switch</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="nx">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s">&#34;is even&#34;</span><span class="p">)</span>
+		<span class="k">case</span> <span class="nx">i</span><span class="o">%</span><span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s">&#34;is divisible by 3 but not 2&#34;</span><span class="p">)</span>
+		<span class="k">case</span> <span class="nx">i</span><span class="o">%</span><span class="mi">7</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;exit the loop!&#34;</span><span class="p">)</span>
+			<span class="k">break</span> <span class="nx">loop</span>
+		<span class="k">default</span><span class="p">:</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s">&#34;is boring&#34;</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+</code></pre></div><h3 id="goto">goto</h3>
 <p>簡單介紹一下就好，如同字面上的意思，會去到程式的某個地方。但因為 goto 接近為所欲為，想去哪就去哪，在撰寫程式、運作與維護頗為麻煩 <del>(自己廢就說)</del>，通常會被用在要跳過程式某些部分或是跳出迴圈、switch 等，並執行程式後面的部分時使用。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
-    <span class=nx>a</span> <span class=o>:=</span> <span class=nx>rand</span><span class=p>.</span><span class=nf>Intn</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span>
-    <span class=k>for</span> <span class=nx>a</span> <span class=p>&lt;</span> <span class=mi>100</span> <span class=p>{</span>
-        <span class=k>if</span> <span class=nx>a</span><span class=o>%</span><span class=mi>5</span> <span class=o>==</span> <span class=mi>0</span> <span class=p>{</span>
-            <span class=k>goto</span> <span class=nx>done</span>
-        <span class=p>}</span>
-        <span class=nx>a</span> <span class=p>=</span> <span class=nx>a</span><span class=o>*</span><span class=mi>2</span> <span class=o>+</span> <span class=mi>1</span>
-    <span class=p>}</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;do something when the loop completes normally&#34;</span><span class=p>)</span>
-<span class=nx>done</span><span class=p>:</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;do complicated stuff no matter why we left the loop&#34;</span><span class=p>)</span>
-    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>a</span><span class=p>)</span>
-<span class=p>}</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">a</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">a</span> <span class="p">&lt;</span> <span class="mi">100</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">a</span><span class="o">%</span><span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="k">goto</span> <span class="nx">done</span>
+        <span class="p">}</span>
+        <span class="nx">a</span> <span class="p">=</span> <span class="nx">a</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;do something when the loop completes normally&#34;</span><span class="p">)</span>
+<span class="nx">done</span><span class="p">:</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;do complicated stuff no matter why we left the loop&#34;</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div><blockquote>
 <p>tips : 非必要，盡量盡量不要使用 goto。</p>
 </blockquote>
 <hr>
 <p>函式內可以提的內容應該都說明了，這章應該還有些東西可以補充，但可能之後想到比較容易解釋的方式，或是例子，再回來補充。</p>
-<h2 id=參考資料reference>參考資料(Reference)</h2>
+<h2 id="參考資料reference">參考資料(Reference)</h2>
 <ol>
-<li><a href=https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216 target=_blank rel="noopener noreffer">Learning Go</a> (書籍)</li>
-<li><a href=https://go101.org/article/blocks-and-scopes.html target=_blank rel="noopener noreffer">Code Blocks and Identifier Scopes</a></li>
-<li><a href=https://relistan.com/continue-statement-with-labels-in-go target=_blank rel="noopener noreffer">Continue statements with Labels in Go (golang)</a></li>
-<li><a href=https://matthung0807.blogspot.com/2021/06/go-switch-case.html target=_blank rel="noopener noreffer">Golang switch case 用法</a></li>
-</ol></div><div class=post-footer id=post-footer>
-<div class=post-info>
-<div class=post-info-line>
-<div class=post-info-mod>
-<span>Updated on 2022-02-25</span>
+<li><a href="https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216" target="_blank" rel="noopener noreffer">Learning Go</a> (書籍)</li>
+<li><a href="https://go101.org/article/blocks-and-scopes.html" target="_blank" rel="noopener noreffer">Code Blocks and Identifier Scopes</a></li>
+<li><a href="https://relistan.com/continue-statement-with-labels-in-go" target="_blank" rel="noopener noreffer">Continue statements with Labels in Go (golang)</a></li>
+<li><a href="https://matthung0807.blogspot.com/2021/06/go-switch-case.html" target="_blank" rel="noopener noreffer">Golang switch case 用法</a></li>
+</ol></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-02-25</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://ekoismylove.github.io/posts/go/go_note4/" data-title="Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)" data-via="wiwi571246" data-hashtags="go,golang"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://ekoismylove.github.io/posts/go/go_note4/" data-hashtag="go"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://ekoismylove.github.io/posts/go/go_note4/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://ekoismylove.github.io/posts/go/go_note4/" data-title="Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">go</a>,&nbsp;<a href="/tags/golang/">golang</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/blog/blog_algolia/" class="prev" rel="prev" title="Hugo 部落格建置 - Algolia search"><i class="fas fa-angle-left fa-fw"></i>Hugo 部落格建置 - Algolia search</a>
+            <a href="/posts/go/go_note5/" class="next" rel="next" title="Golang - 函式(Functions)">Golang - 函式(Functions)<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-<div class=post-info-license></div>
-</div>
-<div class=post-info-line>
-<div class=post-info-md></div>
-<div class=post-info-share>
-<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/go/go_note4/ data-title="Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)" data-via=wiwi571246 data-hashtags=go,golang><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/go/go_note4/ data-hashtag=go><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/go/go_note4/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/go/go_note4/ data-title="Golang - 代碼塊、陰影與控制結構(Code Blocks, Shadows, and Control Structures)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
-</div>
-</div>
-</div>
-<div class=post-info-more>
-<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>go</a>,&nbsp;<a href=/tags/golang/>golang</a></section>
-<section>
-<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
-</section>
-</div>
-<div class=post-nav><a href=/posts/blog/blog_algolia/ class=prev rel=prev title="Hugo 部落格建置 - Algolia search"><i class="fas fa-angle-left fa-fw"></i>Hugo 部落格建置 - Algolia search</a>
-<a href=/posts/go/go_note5/ class=next rel=next title="Golang - 函式(Functions)">Golang - 函式(Functions)<i class="fas fa-angle-right fa-fw"></i></a></div>
-</div>
-<div id=comments><div id=utterances></div><noscript>
-Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
-</noscript></div></article></div>
-</main><footer class=footer>
-<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
-</div>
-</footer></div>
-<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
-<i class="fas fa-arrow-up fa-fw"></i>
-</a><a href=# id=view-comments class=fixed-button title="View Comments">
-<i class="fas fa-comment fa-fw"></i>
-</a>
-</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+<div id="comments"><div id="utterances"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span>&nbsp;|&nbsp;<span class="license"><a href = "https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script src="/dayjs.min.js"></script><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":200},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"EKOISMYLOVE/blog_comment"}},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"V23NTWV8MR","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"ecc9ae3d4e27fdfec35503cae9c6b716","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

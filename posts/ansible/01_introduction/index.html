@@ -1,0 +1,294 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Ansible - Intro - Wei's Note</title><meta name=Description content="本篇文章會簡單介紹 ansible 在做什麼與他的優勢，並介紹安裝方式與環境架設。"><meta name=keywords content="Ansible,Infra"><meta property="og:title" content="Ansible - Intro">
+<meta property="og:description" content="本篇文章會簡單介紹 ansible 在做什麼與他的優勢，並介紹安裝方式與環境架設。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/01_introduction/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/01_introduction/ansible-logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-04-19T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-04-19T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/01_introduction/ansible-logo.png">
+<meta name=twitter:title content="Ansible - Intro">
+<meta name=twitter:description content="本篇文章會簡單介紹 ansible 在做什麼與他的優勢，並介紹安裝方式與環境架設。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/01_introduction/><link rel=prev href=http://ekoismylove.github.io/posts/infra/github_actions_guide/><link rel=next href=http://ekoismylove.github.io/posts/troubleshooting/tools_1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Intro","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/01_introduction\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/01_introduction\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra","wordcount":348,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/01_introduction\/","datePublished":"2022-04-19T00:00:00+00:00","dateModified":"2022-04-19T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Intro</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-19>2022-04-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;348 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#簡介>簡介</a></li>
+<li><a href=#工作原理>工作原理</a></li>
+<li><a href=#優勢>優勢</a>
+<ul>
+<li><a href=#heading></a></li>
+</ul>
+</li>
+<li><a href=#需要的基本技能>需要的基本技能</a></li>
+<li><a href=#安裝>安裝</a></li>
+<li><a href=#inventory>inventory</a></li>
+<li><a href=#ansiblecfg>ansible.cfg</a></li>
+<li><a href=#一些參數>一些參數</a></li>
+<li><a href=#小結論>小結論</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇文章會簡單介紹 ansible 在做什麼與他的優勢，並介紹安裝方式與環境架設。</p>
+<h2 id=前言>前言</h2>
+<p>基本上會看 ansible 是因為以前接觸過，但沒有深入去研究，不過 ansible 仍然為自己想學習的技能之一，故這次想透過這本書做進一步的學習。<br>
+這系列的文章應該會更新的很慢，因為手邊還有一些事情要處理，並不像之前更新 Go 系列，有較頻繁的更新頻率。 <del>（ 而且 Go 系列到後面都在亂寫&mldr;）</del></p>
+<p>基本上因為雲的高擴展性與容易性（相較容易使用），許多服務逐漸放上雲去運作，包含常見的 Web server、應用程式伺服器與資料庫等，基本上 IT 人員要負責這些服務的運作，監控與紀錄並進一步分析，甚至要安排冗餘，使得故障時，服務能不受大影響。</p>
+<p>為了維護這些服務，可以手動處理，但手動設定這些服務非常耗時，而且容易出錯，同樣的事情可能做個三次四次就會覺得煩躁，如果遇到困難的任務或是設定，可能還沒弄好，心情先差到極點。</p>
+<p>透過 ansible，我們可以降低配置服務時的時間，降低出錯的機率，並且這是自動化的，只要一開始願意花時間配置 ansible，後面就會多一些時間喝咖啡（但不要灑出來）</p>
+<p><div class="details admonition note open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>我們要效能。</div>
+</div>
+</div>
+<figure><a class=lightgallery href=/posts/ansible/01_introduction/performance.png title=/posts/ansible/01_introduction/performance.png data-thumbnail=/posts/ansible/01_introduction/performance.png data-sub-html="<h2>看看就好</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=performance.png data-srcset="/posts/ansible/01_introduction/performance.png, performance.png 1.5x, /posts/ansible/01_introduction/performance.png 2x" data-sizes=auto alt=/posts/ansible/01_introduction/performance.png width=50%>
+</a><figcaption class=image-caption>看看就好</figcaption>
+</figure></p>
+<h2 id=簡介>簡介</h2>
+<p>Ansible 通常被稱為 <strong>配置管理工具</strong> (configuration management tool)，通常在談論配置管理時，代表我們會替伺服器編寫特定的狀態描述，並以工具使伺服器確實處在該狀態。<br>
+Ansible 也能幫助我們進行部署的工作，像是開發時產生的編譯檔，將這個編譯檔部署至伺服器上並運行。<br>
+另外也經常用來配置新的伺服器，簡單來說我需要一台安裝好 python 並且已經設定好 vim 參數的虛擬機，可以透過 ansible 協助我們產生這樣的虛擬機。另外也可以配置關於雲的服務等（包括 EC2、Azure、Digital Ocean、Google Compute Engine、Linode 和 Rackspace，以及任何支持 OpenStack API 的雲。）</p>
+<h2 id=工作原理>工作原理</h2>
+<p>舉個例子：<br>
+有個使用者需要透過 ansible，在三台 Ubuntu 上安裝 nginx，三台分別稱為 web1, web2 與 web3，使用者編寫了一個名為 webservers.yml 的 Ansible 腳本。在 Ansible 中，腳本稱為 <strong>playbook</strong>。playbook 描述了要配置的主機（Ansible 稱之為遠端伺服器），以及要在這些主機上執行的任務的有序列表。</p>
+<p>webservers.yml 的內容會在後面提到，這邊只是單純說明原理。使用者寫好 webservers.yml 後會透過 <code>ansible-playbook</code> 運行 playbook：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ ansible-playbook webservers.yml
+</code></pre></div><p>基本上任務會像這樣：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Install nginx</span><span class=w>
+</span><span class=w>  </span><span class=nt>package</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></code></pre></div><p>Ansible 將執行以下操作：</p>
+<ul>
+<li>生成安裝 Nginx package 的 Python 腳本</li>
+<li>將腳本複製到 web1、web2 和 web3</li>
+<li>在 web1、web2 和 web3 上執行腳本</li>
+<li>等待腳本在所有主機上完成執行</li>
+</ul>
+<div class="details admonition tips open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content><p>注意以下幾點：</p>
+<ul>
+<li>Ansible 在所有主機上並行運行每個任務。</li>
+<li>Ansible 會等到所有主機都完成一個任務，然後再移動到下一個任務。</li>
+<li>Ansible 按照您指定的順序運行任務。</li>
+</ul>
+</div>
+</div>
+</div>
+<h2 id=優勢>優勢</h2>
+<ul>
+<li>相較於其他配置管理工具， ansible 學習起來較容易些。</li>
+<li>ansible 使用 yaml 與 Jinja2 模板，兩者都很容易上手。 yaml 我在使用 github actions 就有經驗了，非常的直觀。</li>
+<li>可以透過多種方式檢查 ansible playbook，例如列出所有涉及操作的主機。如果要測試 playbook，可以使用 <code>ansible-playbook --check</code> 來測試，並且有 log 可以觀察誰在哪裡做了什麼。</li>
+<li>遠端伺服器也不需要預先安裝許多服務，在 Linux 上只需要安裝 SSH 與 python，而在 Windows 上需要啟用 WinRM。</li>
+<li>可以在 Raspberry Pi 或是舊電腦上運作，不需要很好的硬體資源。</li>
+<li>有社群可以分享自己的 playbook ，或是參考別人的 playbook。</li>
+<li>使用抽象的方式運作：<br>
+e.g. 使用 shell 建立目錄並設定權限：</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>mkdir -p /etc/skel/.ssh 
+chown root:root /etc/skel/.ssh 
+chmod go-wrx /etc/skel/.ssh
+</code></pre></div><p>透過 ansible 運作：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Create .ssh directory in user skeleton</span><span class=w>
+</span><span class=w>  </span><span class=nt>file</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/etc/skel/.ssh</span><span class=w>
+</span><span class=w>    </span><span class=nt>mode</span><span class=p>:</span><span class=w> </span><span class=m>0700</span><span class=w>
+</span><span class=w>    </span><span class=nt>owner</span><span class=p>:</span><span class=w> </span><span class=l>root</span><span class=w>
+</span><span class=w>    </span><span class=nt>group</span><span class=p>:</span><span class=w> </span><span class=l>root</span><span class=w>
+</span><span class=w>    </span><span class=nt>state</span><span class=p>:</span><span class=w> </span><span class=l>directory</span><span class=w>
+</span></code></pre></div><h3 id=heading></h3>
+<h2 id=需要的基本技能>需要的基本技能</h2>
+<p>基本上要熟悉至少一種 Linux ，像是 Ubuntu, CentOS 等，並了解以下技能或資訊：</p>
+<ul>
+<li>使用 SSH 連接到遠端設備</li>
+<li>Bash ,shell 交互（pipes and redirection）</li>
+<li>安裝 package</li>
+<li>sudo</li>
+<li>檢查和設置文件權限</li>
+<li>啟動和停止服務(service)</li>
+<li>設置環境變數(env)</li>
+<li>編寫 script</li>
+</ul>
+<h2 id=安裝>安裝</h2>
+<p>基本上安裝相當簡單：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1>## macOS</span>
+$ brew install ansible
+</code></pre></div><p>或是使用 <code>pip</code> 進行安裝：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1>## Unix/Linux/macOS</span>
+$ python -m pip install --user ansible
+</code></pre></div><p>雖然 ansible 可以管理 windows，但不能在 windows 上運行 ansible。</p>
+<h2 id=inventory>inventory</h2>
+<p>基本上我們會建立一個 inventory 目錄來存放遠端設備的相關資訊。<br>
+並依據不同的設備名稱，儲存不同的資訊：</p>
+<pre tabindex=0><code>### inventory/webserver.ini
+[webservers]
+testserver ansible_port=2222
+
+[webservers:vars]
+ansible_host = 192.168.0.1
+ansible_user = user
+ansible_private_key_file = /path/of/private_key
+</code></pre><div class="details admonition note open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>ansible 支援 ssh-agent，所以我們不需要明確指定密鑰。</div>
+</div>
+</div>
+<p>接著我們就可以進行測試，像是連結到遠端伺服器並使用 <code>ping</code>：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ ansible testserver -i inventory/vagrant.ini -m ping
+</code></pre></div><h2 id=ansiblecfg>ansible.cfg</h2>
+<p>然而在上一節最後的部分，那個指令還是太長了，我們還是要記一些參數才能使用。<br>
+透過預先設定好的 ansible.cfg，我們在往後使用時可以更加快速。<br>
+ansible.cfg 通常會建議與 <code>playbook</code> 放在一起，這樣做版本控制時較好管理。</p>
+<pre tabindex=0><code>[defaults]
+inventory = inventory/webserver.ini
+host_key_checking = False
+stdout_callback = yaml
+callback_enabled = timer
+</code></pre><p>接著我們就可以用這個方式連結到遠端伺服器並使用 <code>ping</code>：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ ansible testserver -m ping
+</code></pre></div><h2 id=一些參數>一些參數</h2>
+<p>透過 <code>command</code>，我們可以在遠端設備上執行指令：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1>### 這樣遠端設備上會執行 uptime</span>
+$ ansible testserver -m <span class=nb>command</span> -a uptime
+</code></pre></div><p>如果說我們的指令有空格，請使用雙引號傳送整個字串：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ ansible testserver -m <span class=nb>command</span> -a <span class=s2>&#34;tail /var/log/syslog&#34;</span>
+</code></pre></div><p>如果說這個指令需要 root 權限，請加上 <code>-b</code></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ ansible testserver -m <span class=nb>command</span> -b -a <span class=s2>&#34;tail /var/log/syslog&#34;</span>
+</code></pre></div><h2 id=小結論>小結論</h2>
+<p>基本上介紹了 Ansible 的基本概念，包括它如何與遠端設備連線以及它與其他配置管理工具的不同之處。<br>
+剛開始都先確保環境沒問題之後，進行 1 對 1 的連線測試，完成後再進行後續的學習。</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://www.amazon.com/Ansible-Automating-Configuration-Management-Deployment/dp/1491979801 target=_blank rel="noopener noreffer">Ansible: Up and Running: Automating Configuration Management and Deployment the Easy Way (3rd edition)</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-04-19</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/ansible/01_introduction/ data-title="Ansible - Intro" data-via=wiwi571246 data-hashtags=Ansible,Infra><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/ansible/01_introduction/ data-hashtag=Ansible><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/ansible/01_introduction/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/ansible/01_introduction/ data-title="Ansible - Intro"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/ansible/>Ansible</a>,&nbsp;<a href=/tags/infra/>Infra</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/infra/github_actions_guide/ class=prev rel=prev title="自己動起來！ Github Actions 極簡單介紹與使用"><i class="fas fa-angle-left fa-fw"></i>自己動起來！ Github Actions 極簡單介紹與使用</a>
+<a href=/posts/troubleshooting/tools_1/ class=next rel=next title=【TroubleShooting】故障排除的工具介紹與使用方式--網路中斷>【TroubleShooting】故障排除的工具介紹與使用方式--網路中斷<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

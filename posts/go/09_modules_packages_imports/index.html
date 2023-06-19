@@ -1,0 +1,246 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Golang - 模組、包與導入(Modules, Packages, and Imports) - Wei's Note</title><meta name=Description content="本篇文章會介紹如何使用 module 與 package 組織程式碼，並如何 import。"><meta name=keywords content="go,golang"><meta property="og:title" content="Golang - 模組、包與導入(Modules, Packages, and Imports)">
+<meta property="og:description" content="本篇文章會介紹如何使用 module 與 package 組織程式碼，並如何 import。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/09_modules_packages_imports/"><meta property="og:image" content="http://ekoismylove.github.io/posts/go/09_modules_packages_imports/go_header.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-03-23T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-03-23T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/go/09_modules_packages_imports/go_header.png">
+<meta name=twitter:title content="Golang - 模組、包與導入(Modules, Packages, and Imports)">
+<meta name=twitter:description content="本篇文章會介紹如何使用 module 與 package 組織程式碼，並如何 import。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/go/09_modules_packages_imports/><link rel=prev href=http://ekoismylove.github.io/posts/go/08_error/><link rel=next href=http://ekoismylove.github.io/posts/go/10_concurrency/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang - 模組、包與導入(Modules, Packages, and Imports)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/go\/09_modules_packages_imports\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/go\/09_modules_packages_imports\/go_header.png","width":820,"height":364}],"genre":"posts","keywords":"go, golang","wordcount":258,"url":"http:\/\/ekoismylove.github.io\/posts\/go\/09_modules_packages_imports\/","datePublished":"2022-03-23T00:00:00+00:00","dateModified":"2022-03-23T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Golang - 模組、包與導入(Modules, Packages, and Imports)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/go/><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-23>2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;258 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#repositories-modules-and-packages>Repositories, Modules, and Packages</a></li>
+<li><a href=#import>Import</a></li>
+<li><a href=#package>Package</a>
+<ul>
+<li><a href=#create-package>Create Package</a></li>
+<li><a href=#access-package>Access Package</a></li>
+<li><a href=#重複-import>重複 import</a></li>
+<li><a href=#godoc>godoc</a></li>
+</ul>
+</li>
+<li><a href=#modules>Modules</a>
+<ul>
+<li><a href=#版本控制>版本控制</a></li>
+<li><a href=#vendoring>Vendoring</a></li>
+</ul>
+</li>
+<li><a href=#補充>補充</a></li>
+<li><a href=#參考資料reference>參考資料(Reference)</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇文章會介紹如何使用 module 與 package 組織程式碼，並如何 import。</p>
+<h2 id=repositories-modules-and-packages>Repositories, Modules, and Packages</h2>
+<p>Repo 大家應該都很熟悉，版本控制中儲存程式碼的地方。<br>
+Modules 像是程式碼或應用程式的根目錄，包括一個或多個 package ，存放在 Repo 中。<br>
+如果這個根目錄有 go.mod，則代表這些程式碼的集合為一個 module，這個檔案請由指令去形成：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ go mod init &lt;MODULE_PATH&gt;
+</code></pre></div><p>裡面則會有 module 的名稱， go 的版本，需要哪些 module 等等的資訊。</p>
+<h2 id=import>Import</h2>
+<p>import 可以讓我們使用另一個 package 的 constants, variables, functions 與 types，另外 identifier 是大寫開頭的才能由外部存取，如果是小寫開頭的則只能於內部進行存取，我們很常用的 <code>fmt.Println()</code> 就是一個好例子。</p>
+<h2 id=package>Package</h2>
+<h3 id=create-package>Create Package</h3>
+<p>透過 package clause 實現，package clause 都會在檔案的第一行，且是非空白的非注釋行。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>test</span>
+
+<span class=kd>func</span> <span class=nf>Plus</span><span class=p>(</span><span class=nx>a</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>b</span> <span class=kt>int</span><span class=p>)</span> <span class=kt>int</span> <span class=p>{</span>
+    <span class=k>return</span> <span class=nx>a</span><span class=o>+</span><span class=nx>b</span>
+<span class=p>}</span>
+</code></pre></div><h3 id=access-package>Access Package</h3>
+<p>當我們需要使用自己建立的 package 時，透過前面提到的 import 做使用，如果你不是使用 standard library 內的 package，使用時要注意 package 的 path。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+
+<span class=kn>import</span> <span class=p>{</span>
+    <span class=s>&#34;fmt&#34;</span>
+    <span class=s>&#34;example/plus&#34;</span>
+<span class=p>}</span>
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=nx>num</span> <span class=p>=</span> <span class=nx>test</span><span class=p>.</span><span class=nf>Plus</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>)</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>num</span><span class=p>)</span>
+<span class=p>}</span>
+<span class=c1>// Output
+</span><span class=c1></span><span class=mi>3</span>
+</code></pre></div><p>另外有一些規則要注意：</p>
+<ul>
+<li>import 是要使用路徑，而不是 import package clause，我自己的話會想說把 package clause 與檔案名稱一致會比較好管理。除了某些情況是不需要一致的。</li>
+<li>不要用 main 做 import， main 是程式運作的起點。</li>
+<li>不要用一些特別的字元在 path 上。</li>
+</ul>
+<h3 id=重複-import>重複 import</h3>
+<p>有時候會有 import 相同 package clause 的情形發生，例如 <code>crypto/rand</code> 與 <code>math/rand</code>，這樣我們使用 rand 時會有問題。<br>
+Go 可以讓我們 import 的 package 有別的名稱，但在維護上可能會有些問題，因為要去了解他是用別名的方式，還是直接 import 進來的。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+
+<span class=kn>import</span><span class=p>{</span>
+    <span class=nx>crand</span> <span class=s>&#34;crypto/rand&#34;</span>
+    <span class=s>&#34;math/rand&#34;</span>
+<span class=p>}</span>
+<span class=kd>func</span> <span class=nf>main</span><span class=p>(){</span>
+    <span class=c1>// Use crand ...
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></div><h3 id=godoc>godoc</h3>
+<p>作為 package 的文件使用，其實就很像在 linux 有疑問時會用 <code>man</code> 或是 <code>-H, --help</code> 一樣。<br>
+基本上是程式的註解，沒有特殊的格式與符號。<br>
+但有一些規則要注意一下：</p>
+<ul>
+<li>將註解放在對象的前面(上一行)，之間並沒有空白行。</li>
+<li>以兩個雙斜線開頭，後面要先放對象的名稱。</li>
+<li>透過空白行分段。</li>
+<li>透過縮排進行註解的格式化。</li>
+<li>package clause 則是要以 package clause 作為開頭，<br>
+function 與 struct 則以名稱開頭即可。</li>
+</ul>
+<p>可以實際觀察看看註解要如何撰寫。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ go doc fmt
+</code></pre></div><p>另外。在第一篇提到的 <code>golangci-lint</code> 可以幫助找出缺失註解的地方。</p>
+<h2 id=modules>Modules</h2>
+<p>透過前面提到的 <code>go mod</code>，我們會得到一個 go.mod 的檔案，裡面可能會紀錄 package 的版本資訊。另外編譯過後，會有一個 go.sum 的檔案，裡面記錄了依賴 package 的 hash。</p>
+<h3 id=版本控制>版本控制</h3>
+<p>我們可以透過 <code>go list</code> ，觀察 module 的版本，並透過 <code>go get</code> 取得較舊的版本。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ go list -m -versions github.com/learning-go-book/simpletax
+github.com/learning-go-book/simpletax v1.0.0 v1.1.0
+<span class=o>[</span>!<span class=o>]</span> 有v1.0.0 與 v.1.1.0，我想用舊版本...
+
+$ go get github.com/learning-go-book/simpletax@v1.0.0
+<span class=o>[</span>!<span class=o>]</span> 此時回去看 go.mod 會發現版本已經改變了。
+</code></pre></div><div class="details admonition tips open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-pencil-alt fa-fw"></i>Hint<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>版本號的規則：major.minor.patch<br>
+修復錯誤時，patch 更新，增加新功能時，minor 更新並將 patch 歸零。</div>
+</div>
+</div>
+<h3 id=vendoring>Vendoring</h3>
+<p>為了確保從頭到尾都能使用相同的依賴項開發，透過 <code>go mod vendor</code> 可以產生一個目錄，保存所有依賴項的副本。<br>
+如果又增加了新的依賴項，或是升級了依賴項，都要再執行一次 <code>go mod vendor</code>，否則會無法編譯。</p>
+<h2 id=補充>補充</h2>
+<p><a href=https://pkg.go.dev target=_blank rel="noopener noreffer">pkg.go.dev</a> 會自動索引開源的 Go project。</p>
+<h2 id=參考資料reference>參考資料(Reference)</h2>
+<ol>
+<li><a href=https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216 target=_blank rel="noopener noreffer">Learning Go</a> (書籍)</li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-03-23</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/go/09_modules_packages_imports/ data-title="Golang - 模組、包與導入(Modules, Packages, and Imports)" data-via=wiwi571246 data-hashtags=go,golang><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/go/09_modules_packages_imports/ data-hashtag=go><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/go/09_modules_packages_imports/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/go/09_modules_packages_imports/ data-title="Golang - 模組、包與導入(Modules, Packages, and Imports)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>go</a>,&nbsp;<a href=/tags/golang/>golang</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/go/08_error/ class=prev rel=prev title="Golang - 錯誤(Error)"><i class="fas fa-angle-left fa-fw"></i>Golang - 錯誤(Error)</a>
+<a href=/posts/go/10_concurrency/ class=next rel=next title="Golang - 並發(Concurrency)">Golang - 並發(Concurrency)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

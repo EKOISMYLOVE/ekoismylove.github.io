@@ -1,0 +1,388 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Golang - 標準函式庫(Standard Library) - Wei's Note</title><meta name=Description content="本篇文章將簡單介紹 Standard Library 內的幾個較重要的 package，像是io, time, encoding/json, net/http。"><meta name=keywords content="go,golang"><meta property="og:title" content="Golang - 標準函式庫(Standard Library)">
+<meta property="og:description" content="本篇文章將簡單介紹 Standard Library 內的幾個較重要的 package，像是io, time, encoding/json, net/http。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/11_standardlib/"><meta property="og:image" content="http://ekoismylove.github.io/posts/go/11_standardlib/go_header.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-03-24T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-03-24T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/go/11_standardlib/go_header.png">
+<meta name=twitter:title content="Golang - 標準函式庫(Standard Library)">
+<meta name=twitter:description content="本篇文章將簡單介紹 Standard Library 內的幾個較重要的 package，像是io, time, encoding/json, net/http。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/go/11_standardlib/><link rel=prev href=http://ekoismylove.github.io/posts/go/10_concurrency/><link rel=next href=http://ekoismylove.github.io/posts/go/12_tests/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang - 標準函式庫(Standard Library)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/go\/11_standardlib\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/go\/11_standardlib\/go_header.png","width":820,"height":364}],"genre":"posts","keywords":"go, golang","wordcount":669,"url":"http:\/\/ekoismylove.github.io\/posts\/go\/11_standardlib\/","datePublished":"2022-03-24T00:00:00+00:00","dateModified":"2022-03-24T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Golang - 標準函式庫(Standard Library)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/go/><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-24>2022-03-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;669 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#io>io</a>
+<ul>
+<li><a href=#ioutil>ioutil</a></li>
+</ul>
+</li>
+<li><a href=#time>time</a>
+<ul>
+<li><a href=#timer-and-ticker>Timer and Ticker</a></li>
+</ul>
+</li>
+<li><a href=#encodingjson>encoding/json</a>
+<ul>
+<li><a href=#編碼與解碼>編碼與解碼</a></li>
+</ul>
+</li>
+<li><a href=#nethttp>net/http</a>
+<ul>
+<li><a href=#client>Client</a></li>
+<li><a href=#server>Server</a></li>
+</ul>
+</li>
+<li><a href=#補充>補充</a></li>
+<li><a href=#參考資料reference>參考資料(Reference)</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇文章將簡單介紹 Standard Library 內的幾個較重要的 package，像是io, time, encoding/json, net/http。</p>
+<h2 id=io>io</h2>
+<p>io 是個很常被使用的 package，尤其是 <code>io.Reader</code> 與 <code>io.Writer</code>。
+看到 er 結尾了嗎？所以他應該是&mldr; interface ?</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>type</span> <span class=nx>Reader</span> <span class=kd>interface</span> <span class=p>{</span>
+    <span class=nf>Read</span><span class=p>(</span><span class=nx>p</span> <span class=p>[]</span><span class=kt>byte</span><span class=p>)</span> <span class=p>(</span><span class=nx>n</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>err</span> <span class=kt>error</span><span class=p>)</span>
+<span class=p>}</span>
+
+<span class=kd>type</span> <span class=nx>Writer</span> <span class=kd>interface</span> <span class=p>{</span>
+    <span class=nf>Write</span><span class=p>(</span><span class=nx>p</span> <span class=p>[]</span><span class=kt>byte</span><span class=p>)</span> <span class=p>(</span><span class=nx>n</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>err</span> <span class=kt>error</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><p>Read 會將資料讀入 p，一個 byte 類型的 slice，並傳回讀取的 byte 數量，也就是 n，另外還會返回遇到的錯誤。<br>
+Write 則會將 p 輸出並回傳寫入的 byte 數量與遇到的錯誤。</p>
+<p><code>io.reader</code> 表示 data stream 的讀取端，標準函式庫已經有許多包含此 interface 的 implement。當 stream 結束時會返回 <code>io.EOF</code> 的錯誤。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+
+<span class=kn>import</span> <span class=p>(</span>
+	<span class=s>&#34;fmt&#34;</span>
+	<span class=s>&#34;io&#34;</span>
+	<span class=s>&#34;strings&#34;</span>
+<span class=p>)</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+	<span class=nx>r</span> <span class=o>:=</span> <span class=nx>strings</span><span class=p>.</span><span class=nf>NewReader</span><span class=p>(</span><span class=s>&#34;Hello, Reader!&#34;</span><span class=p>)</span>
+
+	<span class=nx>b</span> <span class=o>:=</span> <span class=nb>make</span><span class=p>([]</span><span class=kt>byte</span><span class=p>,</span> <span class=mi>8</span><span class=p>)</span>
+	<span class=k>for</span> <span class=p>{</span>
+		<span class=nx>n</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>r</span><span class=p>.</span><span class=nf>Read</span><span class=p>(</span><span class=nx>b</span><span class=p>)</span>
+		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;n = %v err = %v b = %v\n&#34;</span><span class=p>,</span> <span class=nx>n</span><span class=p>,</span> <span class=nx>err</span><span class=p>,</span> <span class=nx>b</span><span class=p>)</span>
+		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;b[:n] = %q\n&#34;</span><span class=p>,</span> <span class=nx>b</span><span class=p>[:</span><span class=nx>n</span><span class=p>])</span>
+		<span class=k>if</span> <span class=nx>err</span> <span class=o>==</span> <span class=nx>io</span><span class=p>.</span><span class=nx>EOF</span> <span class=p>{</span>
+			<span class=k>break</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><p><code>io.writer</code> 則是反過來，把 data 寫進 stream。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+
+<span class=kn>import</span> <span class=p>(</span>
+	<span class=s>&#34;fmt&#34;</span>
+	<span class=s>&#34;os&#34;</span>
+<span class=p>)</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=nx>f</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>os</span><span class=p>.</span><span class=nf>OpenFile</span><span class=p>(</span><span class=s>&#34;/tmp/123.txt&#34;</span><span class=p>,</span> <span class=nx>os</span><span class=p>.</span><span class=nx>O_WRONLY</span><span class=p>|</span><span class=nx>os</span><span class=p>.</span><span class=nx>O_CREATE</span><span class=p>|</span><span class=nx>os</span><span class=p>.</span><span class=nx>O_APPEND</span><span class=p>,</span> <span class=mo>0600</span><span class=p>)</span>
+    <span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+        <span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span>
+    <span class=p>}</span>
+    <span class=k>defer</span> <span class=nx>f</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span>
+    <span class=c1>// Here
+</span><span class=c1></span>    <span class=nx>n</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>f</span><span class=p>.</span><span class=nf>Write</span><span class=p>([]</span><span class=nb>byte</span><span class=p>(</span><span class=s>&#34;writing some data into a file&#34;</span><span class=p>))</span>
+    <span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+        <span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span>
+    <span class=p>}</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;wrote %d bytes&#34;</span><span class=p>,</span> <span class=nx>n</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><p>另外，io 還有一些像是 <code>io.Closer</code>, <code>io.seeker</code> 等 interface。使用上其實都很容易。</p>
+<h3 id=ioutil>ioutil</h3>
+<p><code>ioutil</code> 則實現了更多更方便的函數。</p>
+<ul>
+<li>ReadAll : 一次性讀取 <code>io.reader</code> 內的數據。</li>
+<li>ReadDir : 讀取目錄底下所有的文件與子資料夾名稱。</li>
+<li>ReadFile : 讀取檔案。</li>
+<li>WriteFile : 寫入檔案。</li>
+</ul>
+<p>還有一些像是 <code>TempDir</code>, <code>TempFile</code> 等函數，有興趣的可以用 <code>go doc ioutil</code> 觀看。</p>
+<h2 id=time>time</h2>
+<p>基本上有兩種類型表示時間：</p>
+<ul>
+<li><code>time.Duration</code></li>
+<li><code>time.Time</code></li>
+</ul>
+<p><code>time.Duration</code> 用來表示一段時間，基於 <code>int64</code> 實現的，也可以使用 <code>time.ParseDuration</code>，用字串來表示時間。
+例如我寫這篇文章花費了五小時又三十分鐘：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>cost</span> <span class=o>:=</span> <span class=mi>5</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Hour</span> <span class=o>+</span> <span class=mi>30</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Minute</span>
+<span class=nx>costStr</span><span class=p>,</span> <span class=nx>_</span> <span class=o>:=</span> <span class=nx>time</span><span class=p>.</span><span class=nf>ParseDuration</span><span class=p>(</span><span class=s>&#34;5h30m&#34;</span><span class=p>)</span>
+</code></pre></div><p>另外，<code>time.Duration</code> 已經滿足了 <code>fmt.Stringer</code>，所以會返回一個格式化過的字串。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>cost</span><span class=p>)</span>
+<span class=c1>// Output
+</span><span class=c1></span><span class=mi>5</span><span class=nx>H30M0S</span>
+</code></pre></div><p><code>time.Time</code>，可以用使用 <code>time.Now</code> 取得現在時間，或是填入想設定的時間</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>type</span> <span class=nx>Time</span> <span class=kd>struct</span><span class=p>{</span> <span class=o>...</span> <span class=p>}</span>
+    <span class=kd>func</span> <span class=nf>Date</span><span class=p>(</span><span class=nx>year</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>month</span> <span class=nx>Month</span><span class=p>,</span> <span class=nx>day</span><span class=p>,</span> <span class=nx>hour</span><span class=p>,</span> <span class=nx>min</span><span class=p>,</span> <span class=nx>sec</span><span class=p>,</span> <span class=nx>nsec</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>loc</span> <span class=o>*</span><span class=nx>Location</span><span class=p>)</span> <span class=nx>Time</span>
+    <span class=kd>func</span> <span class=nf>Now</span><span class=p>()</span> <span class=nx>Time</span>
+</code></pre></div><p>最後，Go 是使用 monotonic clock 來跟蹤時間的。</p>
+<h3 id=timer-and-ticker>Timer and Ticker</h3>
+<p>Timer 基本上就是計時器，通常用在 select 對於多個 channel 的超時，或是一些讀寫行為的超時情形，他是一次性的，這也是與 Ticker 不同的地方，Ticker 是每隔一段時間就進行一次。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>type</span> <span class=nx>Timer</span> <span class=kd>struct</span><span class=p>{</span> <span class=o>...</span> <span class=p>}</span>
+    <span class=kd>func</span> <span class=nf>AfterFunc</span><span class=p>(</span><span class=nx>d</span> <span class=nx>Duration</span><span class=p>,</span> <span class=nx>f</span> <span class=kd>func</span><span class=p>())</span> <span class=o>*</span><span class=nx>Timer</span>
+    <span class=kd>func</span> <span class=nf>NewTimer</span><span class=p>(</span><span class=nx>d</span> <span class=nx>Duration</span><span class=p>)</span> <span class=o>*</span><span class=nx>Timer</span>
+
+<span class=kd>type</span> <span class=nx>Ticker</span> <span class=kd>struct</span><span class=p>{</span> <span class=o>...</span> <span class=p>}</span>
+    <span class=kd>func</span> <span class=nf>NewTicker</span><span class=p>(</span><span class=nx>d</span> <span class=nx>Duration</span><span class=p>)</span> <span class=o>*</span><span class=nx>Ticker</span>
+</code></pre></div><h2 id=encodingjson>encoding/json</h2>
+<p>RESTful API 讓 json 成為資料傳遞的重要格式，也因此 Go 也支援將 Go 的數據類型轉換成 json，或是由 json 轉換回來。<br>
+假設說我們有筆 json 資料：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+    <span class=nt>&#34;id&#34;</span><span class=p>:</span><span class=s2>&#34;12345&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;date_ordered&#34;</span><span class=p>:</span><span class=s2>&#34;2020-05-01T13:01:02Z&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;customer_id&#34;</span><span class=p>:</span><span class=s2>&#34;3&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;items&#34;</span><span class=p>:[{</span><span class=nt>&#34;id&#34;</span><span class=p>:</span><span class=s2>&#34;xyz123&#34;</span><span class=p>,</span><span class=nt>&#34;name&#34;</span><span class=p>:</span><span class=s2>&#34;Thing 1&#34;</span><span class=p>},{</span><span class=nt>&#34;id&#34;</span><span class=p>:</span><span class=s2>&#34;abc789&#34;</span><span class=p>,</span><span class=nt>&#34;name&#34;</span><span class=p>:</span><span class=s2>&#34;Thing 2&#34;</span><span class=p>}]</span>
+<span class=p>}</span>
+</code></pre></div><p>那我們就需要建立 struct 去對應名稱與類型，進行轉換。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>type</span> <span class=nx>Order</span> <span class=kd>struct</span> <span class=p>{</span>
+    <span class=nx>ID</span>            <span class=kt>string</span>        <span class=s>`json:&#34;id&#34;`</span>
+    <span class=nx>DateOrdered</span>   <span class=nx>time</span><span class=p>.</span><span class=nx>Time</span>     <span class=s>`json:&#34;date_ordered&#34;`</span>
+    <span class=nx>CustomerID</span>    <span class=kt>string</span>        <span class=s>`json:&#34;customer_id&#34;`</span>
+    <span class=nx>Items</span>         <span class=nx>Item</span>          <span class=s>`json:&#34;items&#34;`</span>
+<span class=p>}</span>
+
+<span class=kd>type</span> <span class=nx>Item</span> <span class=kd>struct</span> <span class=p>{</span>
+    <span class=nx>ID</span>   <span class=kt>string</span> <span class=s>`json:&#34;id&#34;`</span>
+    <span class=nx>Name</span> <span class=kt>string</span> <span class=s>`json:&#34;name&#34;`</span>
+<span class=p>}</span>
+</code></pre></div><p>有一些地方要注意的：</p>
+<ol>
+<li>名稱前要加上 json 標籤。</li>
+<li>要使用反引號刮起來。</li>
+<li>如果輸出 json 時，因為某些欄位沒有數值而要忽略某些欄位，請在後方加上 <code>,omitempty</code></li>
+</ol>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>type</span> <span class=nx>Item</span> <span class=kd>struct</span> <span class=p>{</span>
+    <span class=nx>ID</span>   <span class=kt>string</span> <span class=s>`json:&#34;id&#34;`</span>
+    <span class=nx>Name</span> <span class=kt>string</span> <span class=s>`json:&#34;name,omitempty&#34;`</span>
+<span class=p>}</span>
+</code></pre></div><ol start=4>
+<li>使用 <code>,omitempty</code> 要注意到 struct 的 zero value 不是代表空值，所以 <code>,omitempty</code> 仍然會轉換成 json，如果 struct 內部有 struct 類型的資料，又想在沒資料時忽略該欄位，請在 struct 上使用 pointer。</li>
+</ol>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>type</span> <span class=nx>Order</span> <span class=kd>struct</span> <span class=p>{</span>
+    <span class=nx>ID</span>            <span class=kt>string</span>        <span class=s>`json:&#34;id&#34;`</span>
+    <span class=nx>DateOrdered</span>   <span class=nx>time</span><span class=p>.</span><span class=nx>Time</span>     <span class=s>`json:&#34;date_ordered&#34;`</span>
+    <span class=nx>CustomerID</span>    <span class=kt>string</span>        <span class=s>`json:&#34;customer_id&#34;`</span>
+    <span class=nx>Items</span>         <span class=o>*</span><span class=nx>Item</span>         <span class=s>`json:&#34;items&#34;`</span>
+<span class=p>}</span>
+
+<span class=kd>type</span> <span class=nx>Item</span> <span class=kd>struct</span> <span class=p>{</span>
+    <span class=nx>ID</span>   <span class=kt>string</span> <span class=s>`json:&#34;id&#34;`</span>
+    <span class=nx>Name</span> <span class=kt>string</span> <span class=s>`json:&#34;name&#34;`</span>
+<span class=p>}</span>
+</code></pre></div><h3 id=編碼與解碼>編碼與解碼</h3>
+<p>透過 <code>json.Unmarshal</code> 與 <code>json.Marshal</code> 進行 json 與 struct 之間的轉換。<br>
+<code>json.Unmarshal</code> 可以把 json 字串轉成 struct，而 <code>json.Marshal</code> 可以將 struct 轉成 json。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>o</span> <span class=nx>Order</span>
+<span class=nx>err</span> <span class=o>:=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>([]</span><span class=nb>byte</span><span class=p>(</span><span class=nx>data</span><span class=p>),</span> <span class=o>&amp;</span><span class=nx>o</span><span class=p>)</span>
+<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+    <span class=k>return</span> <span class=nx>err</span>
+<span class=p>}</span>
+<span class=nx>out</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Marshal</span><span class=p>(</span><span class=nx>o</span><span class=p>)</span>
+</code></pre></div><p>另外也可以透過 <code>json.Decoder</code> 與 <code>json.Encoder</code> ，對檔案進行解碼與編碼，這樣就可以用 <code>io.Reader</code> 與 <code>io.Writer</code> 進行 io 讀取與寫入的操作。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>err1</span> <span class=p>=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>NewEncoder</span><span class=p>(</span><span class=nx>tmpFile1</span><span class=p>).</span><span class=nf>Encode</span><span class=p>(</span><span class=nx>toFile</span><span class=p>)</span>
+<span class=nx>err2</span> <span class=p>=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>NewDecoder</span><span class=p>(</span><span class=nx>tmpFile2</span><span class=p>).</span><span class=nf>Decode</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>fromFile</span><span class=p>)</span>
+</code></pre></div><h2 id=nethttp>net/http</h2>
+<p>我覺得 go 提供的一個很棒的 package，它可以讓我們開發 http server 與 client 相關的程式！！</p>
+<h3 id=client>Client</h3>
+<p>我們可以建立一個 <code>http.Client</code>，並透過 <code>http.Request</code> 等方式進行用戶端的需求。如果說沒有 context 要傳送的話，請記得使用 <code>nil</code>。<br>
+Method 也有常見的 GET, POST, PATCH 可以使用。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>client</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>http</span><span class=p>.</span><span class=nx>Client</span><span class=p>{</span>
+    <span class=nx>Timeout</span><span class=p>:</span> <span class=mi>30</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>,</span>
+<span class=p>}</span>
+<span class=nx>req</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>http</span><span class=p>.</span><span class=nf>NewRequestWithContext</span><span class=p>(</span><span class=nx>context</span><span class=p>.</span><span class=nf>Background</span><span class=p>(),</span>
+    <span class=nx>http</span><span class=p>.</span><span class=nx>MethodGet</span><span class=p>,</span> <span class=s>&#34;https://google.com&#34;</span><span class=p>,</span> <span class=kc>nil</span><span class=p>)</span>
+<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+    <span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><p>我們也還可以添加一些關於 header 的資訊，添加後使用 Do 去處理，會得到相對的 response：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>req</span><span class=p>.</span><span class=nx>Header</span><span class=p>.</span><span class=nf>Add</span><span class=p>(</span><span class=s>&#34;X-My-Client&#34;</span><span class=p>,</span> <span class=s>&#34;Learning Go&#34;</span><span class=p>)</span>
+<span class=nx>res</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>client</span><span class=p>.</span><span class=nf>Do</span><span class=p>(</span><span class=nx>req</span><span class=p>)</span>
+<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+    <span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><p>Response 則會有許多資料：</p>
+<ul>
+<li>status</li>
+<li>statusCode</li>
+<li>header</li>
+<li>body</li>
+</ul>
+<h3 id=server>Server</h3>
+<p>Server 的用途就是監聽 http 的請求，另外他也支援 tls 與 http/2。<del>好神</del></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+
+<span class=kn>import</span> <span class=p>(</span>
+    <span class=s>&#34;fmt&#34;</span>
+    <span class=s>&#34;net/http&#34;</span>
+<span class=p>)</span>
+
+<span class=kd>func</span> <span class=nf>indexHandler</span><span class=p>(</span><span class=nx>w</span> <span class=nx>http</span><span class=p>.</span><span class=nx>ResponseWriter</span><span class=p>,</span> <span class=nx>r</span> <span class=o>*</span><span class=nx>http</span><span class=p>.</span><span class=nx>Request</span><span class=p>)</span> <span class=p>{</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Fprintf</span><span class=p>(</span><span class=nx>w</span><span class=p>,</span> <span class=s>&#34;hello world&#34;</span><span class=p>)</span>
+<span class=p>}</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=nx>http</span><span class=p>.</span><span class=nf>HandleFunc</span><span class=p>(</span><span class=s>&#34;/&#34;</span><span class=p>,</span> <span class=nx>indexHandler</span><span class=p>)</span>
+    <span class=nx>http</span><span class=p>.</span><span class=nf>ListenAndServe</span><span class=p>(</span><span class=s>&#34;:8080&#34;</span><span class=p>,</span> <span class=kc>nil</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><p>這樣我們會在 &ldquo;/&rdquo; 上面建立一個 indexHandler，當有 Request 時，則會進行 ResponseWriter ，產生 response。</p>
+<p>但這樣子只能處理單個 request，因此標準函式庫內有一個請求路由器 (<code>*http.ServeMux</code>)，並透過 <code>http.NewServeMux</code> 實現，透過ServeMux，我們可以傳入路徑與 handler，當 mux 收到對應的請求時，會根據路徑而使用對應的 handler 進行處理。</p>
+<a class=lightgallery href=/posts/go/11_standardlib/router.png title=/posts/go/11_standardlib/router.png data-thumbnail=/posts/go/11_standardlib/router.png>
+<img class=lazyload src=/svg/loading.min.svg data-src=router.png data-srcset="/posts/go/11_standardlib/router.png, router.png 1.5x, /posts/go/11_standardlib/router.png 2x" data-sizes=auto alt=/posts/go/11_standardlib/router.png width=100%>
+</a>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+
+<span class=kn>import</span> <span class=p>(</span>
+	<span class=s>&#34;net/http&#34;</span>
+<span class=p>)</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+	<span class=nx>cat</span> <span class=o>:=</span> <span class=nx>http</span><span class=p>.</span><span class=nf>NewServeMux</span><span class=p>()</span>
+	<span class=nx>cat</span><span class=p>.</span><span class=nf>HandleFunc</span><span class=p>(</span><span class=s>&#34;/voice&#34;</span><span class=p>,</span> <span class=kd>func</span><span class=p>(</span><span class=nx>w</span> <span class=nx>http</span><span class=p>.</span><span class=nx>ResponseWriter</span><span class=p>,</span> <span class=nx>r</span> <span class=o>*</span><span class=nx>http</span><span class=p>.</span><span class=nx>Request</span><span class=p>)</span> <span class=p>{</span>
+		<span class=nx>w</span><span class=p>.</span><span class=nf>Write</span><span class=p>([]</span><span class=nb>byte</span><span class=p>(</span><span class=s>&#34;meow!\n&#34;</span><span class=p>))</span>
+	<span class=p>})</span>
+	<span class=nx>dog</span> <span class=o>:=</span> <span class=nx>http</span><span class=p>.</span><span class=nf>NewServeMux</span><span class=p>()</span>
+	<span class=nx>dog</span><span class=p>.</span><span class=nf>HandleFunc</span><span class=p>(</span><span class=s>&#34;/voice&#34;</span><span class=p>,</span> <span class=kd>func</span><span class=p>(</span><span class=nx>w</span> <span class=nx>http</span><span class=p>.</span><span class=nx>ResponseWriter</span><span class=p>,</span> <span class=nx>r</span> <span class=o>*</span><span class=nx>http</span><span class=p>.</span><span class=nx>Request</span><span class=p>)</span> <span class=p>{</span>
+		<span class=nx>w</span><span class=p>.</span><span class=nf>Write</span><span class=p>([]</span><span class=nb>byte</span><span class=p>(</span><span class=s>&#34;wow!\n&#34;</span><span class=p>))</span>
+	<span class=p>})</span>
+	<span class=nx>mux</span> <span class=o>:=</span> <span class=nx>http</span><span class=p>.</span><span class=nf>NewServeMux</span><span class=p>()</span>
+	<span class=nx>mux</span><span class=p>.</span><span class=nf>Handle</span><span class=p>(</span><span class=s>&#34;/cat/&#34;</span><span class=p>,</span> <span class=nx>http</span><span class=p>.</span><span class=nf>StripPrefix</span><span class=p>(</span><span class=s>&#34;/cat&#34;</span><span class=p>,</span> <span class=nx>cat</span><span class=p>))</span>
+	<span class=nx>mux</span><span class=p>.</span><span class=nf>Handle</span><span class=p>(</span><span class=s>&#34;/dog/&#34;</span><span class=p>,</span> <span class=nx>http</span><span class=p>.</span><span class=nf>StripPrefix</span><span class=p>(</span><span class=s>&#34;/dog&#34;</span><span class=p>,</span> <span class=nx>dog</span><span class=p>))</span>
+
+	<span class=nx>http</span><span class=p>.</span><span class=nf>ListenAndServe</span><span class=p>(</span><span class=s>&#34;:3000&#34;</span><span class=p>,</span> <span class=nx>mux</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><h2 id=補充>補充</h2>
+<p>更多的使用方式，<code>go doc [package name]</code><br>
+或是問 Google，畢竟標準函式庫提供了不少函式可以使用&mldr;</p>
+<h2 id=參考資料reference>參考資料(Reference)</h2>
+<ol>
+<li><a href=https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216 target=_blank rel="noopener noreffer">Learning Go</a> (書籍)</li>
+<li><a href=https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go target=_blank rel="noopener noreffer">An Introduction to Handlers and Servemuxes in Go</a></li>
+<li><a href=https://old-panda.com/2019/12/11/golang-omitempty/ target=_blank rel="noopener noreffer">Golang 的 “omitempty” 关键字略解</a></li>
+<li><a href=https://golang.cafe/blog/golang-reader-example.html target=_blank rel="noopener noreffer">Golang Reader Example</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-03-24</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/go/11_standardlib/ data-title="Golang - 標準函式庫(Standard Library)" data-via=wiwi571246 data-hashtags=go,golang><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/go/11_standardlib/ data-hashtag=go><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/go/11_standardlib/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/go/11_standardlib/ data-title="Golang - 標準函式庫(Standard Library)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>go</a>,&nbsp;<a href=/tags/golang/>golang</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/go/10_concurrency/ class=prev rel=prev title="Golang - 並發(Concurrency)"><i class="fas fa-angle-left fa-fw"></i>Golang - 並發(Concurrency)</a>
+<a href=/posts/go/12_tests/ class=next rel=next title="Golang - 測試(Tests)">Golang - 測試(Tests)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

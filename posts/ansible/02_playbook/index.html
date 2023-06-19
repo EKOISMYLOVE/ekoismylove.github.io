@@ -9,18 +9,18 @@
 <meta property="og:description" content="使用 ansible 第一步就是編寫 playbook，本篇文章會簡單介紹 playbook。
 會以設定一台主機，並透過 nginx 運作一個簡單的 HTTP 伺服器作為範例。運作完成後再進行介紹。">
 <meta property="og:type" content="article">
-<meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/ansible_note02/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/ansible_note02/ansible-logo.png"><meta property="article:section" content="posts">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/02_playbook/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/02_playbook/ansible-logo.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-10-24T00:00:00+00:00">
 <meta property="article:modified_time" content="2022-10-31T00:00:00+00:00">
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/ansible_note02/ansible-logo.png">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/02_playbook/ansible-logo.png">
 <meta name=twitter:title content="Ansible - Playbook(上)">
 <meta name=twitter:description content="使用 ansible 第一步就是編寫 playbook，本篇文章會簡單介紹 playbook。
 會以設定一台主機，並透過 nginx 運作一個簡單的 HTTP 伺服器作為範例。運作完成後再進行介紹。">
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/ansible_note02/><link rel=prev href=http://ekoismylove.github.io/posts/infra/sre_1/><link rel=next href=http://ekoismylove.github.io/posts/ansible/ansible_note03/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Playbook(上)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra, vagrant, playbook","wordcount":815,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible_note02\/","datePublished":"2022-10-24T00:00:00+00:00","dateModified":"2022-10-31T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/02_playbook/><link rel=prev href=http://ekoismylove.github.io/posts/infra/sre_1/><link rel=next href=http://ekoismylove.github.io/posts/ansible/03_playbook_part2/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Playbook(上)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/02_playbook\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/02_playbook\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra, vagrant, playbook","wordcount":815,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/02_playbook\/","datePublished":"2022-10-24T00:00:00+00:00","dateModified":"2022-10-31T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -275,8 +275,8 @@ callback_enabled = timer
 </code></pre><p>確認沒問題之後，我們執行這個指令：</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook webservers.yml
 </code></pre></div><p>接著我們打開瀏覽器，連線到 <code>http://localhost:8080</code> ，應該能看到 html 的畫面！
-<figure><a class=lightgallery href=/posts/ansible/ansible_note02/example.png title=/posts/ansible/ansible_note02/example.png data-thumbnail=/posts/ansible/ansible_note02/example.png data-sub-html="<h2>順利完成啦～ 觀察一下 templates 內的 inventory_hostname 在哪，內容又是什麼？</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=example.png data-srcset="/posts/ansible/ansible_note02/example.png, example.png 1.5x, /posts/ansible/ansible_note02/example.png 2x" data-sizes=auto alt=/posts/ansible/ansible_note02/example.png width=50%>
+<figure><a class=lightgallery href=/posts/ansible/02_playbook/example.png title=/posts/ansible/02_playbook/example.png data-thumbnail=/posts/ansible/02_playbook/example.png data-sub-html="<h2>順利完成啦～ 觀察一下 templates 內的 inventory_hostname 在哪，內容又是什麼？</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=example.png data-srcset="/posts/ansible/02_playbook/example.png, example.png 1.5x, /posts/ansible/02_playbook/example.png 2x" data-sizes=auto alt=/posts/ansible/02_playbook/example.png width=50%>
 </a><figcaption class=image-caption>順利完成啦～ 觀察一下 templates 內的 inventory_hostname 在哪，內容又是什麼？</figcaption>
 </figure></p>
 <h2 id=yaml>YAML</h2>
@@ -381,8 +381,8 @@ callback_enabled = timer
 $ ansible-doc service
 </code></pre></div><h3 id=structure>Structure</h3>
 <p>playboos 包含一個或多個 play，而 play 將 host 與 Task 做關聯，每個 Task 只與一個 Module 做關聯，如果以圖來表示關係的話，大概會是像下圖這樣子：
-<figure><a class=lightgallery href=/posts/ansible/ansible_note02/structure.png title=/posts/ansible/ansible_note02/structure.png data-thumbnail=/posts/ansible/ansible_note02/structure.png data-sub-html="<h2>關係圖</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=structure.png data-srcset="/posts/ansible/ansible_note02/structure.png, structure.png 1.5x, /posts/ansible/ansible_note02/structure.png 2x" data-sizes=auto alt=/posts/ansible/ansible_note02/structure.png width=50%>
+<figure><a class=lightgallery href=/posts/ansible/02_playbook/structure.png title=/posts/ansible/02_playbook/structure.png data-thumbnail=/posts/ansible/02_playbook/structure.png data-sub-html="<h2>關係圖</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=structure.png data-srcset="/posts/ansible/02_playbook/structure.png, structure.png 1.5x, /posts/ansible/02_playbook/structure.png 2x" data-sizes=auto alt=/posts/ansible/02_playbook/structure.png width=50%>
 </a><figcaption class=image-caption>關係圖</figcaption>
 </figure></p>
 <h2 id=status>Status</h2>
@@ -435,7 +435,7 @@ testserver                 : <span class=nv>ok</span><span class=o>=</span><span
 <div class=post-info-line>
 <div class=post-info-md></div>
 <div class=post-info-share>
-<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/ansible/ansible_note02/ data-title="Ansible - Playbook(上)" data-via=wiwi571246 data-hashtags=Ansible,Infra,vagrant,playbook><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/ansible/ansible_note02/ data-hashtag=Ansible><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/ansible/ansible_note02/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/ansible/ansible_note02/ data-title="Ansible - Playbook(上)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/ansible/02_playbook/ data-title="Ansible - Playbook(上)" data-via=wiwi571246 data-hashtags=Ansible,Infra,vagrant,playbook><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/ansible/02_playbook/ data-hashtag=Ansible><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/ansible/02_playbook/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/ansible/02_playbook/ data-title="Ansible - Playbook(上)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
 </div>
 </div>
 </div>
@@ -446,7 +446,7 @@ testserver                 : <span class=nv>ok</span><span class=o>=</span><span
 </section>
 </div>
 <div class=post-nav><a href=/posts/infra/sre_1/ class=prev rel=prev title="Site Reliability Engineering - Introduction"><i class="fas fa-angle-left fa-fw"></i>Site Reliability Engineering - Introduction</a>
-<a href=/posts/ansible/ansible_note03/ class=next rel=next title="Ansible - Playbook(下)">Ansible - Playbook(下)<i class="fas fa-angle-right fa-fw"></i></a></div>
+<a href=/posts/ansible/03_playbook_part2/ class=next rel=next title="Ansible - Playbook(下)">Ansible - Playbook(下)<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id=comments><div id=utterances></div><noscript>
 Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.

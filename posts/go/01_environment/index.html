@@ -1,0 +1,237 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Golang - 環境建置 (Environment) - Wei's Note</title><meta name=Description content="本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。"><meta name=keywords content="go,golang"><meta property="og:title" content="Golang - 環境建置 (Environment)">
+<meta property="og:description" content="本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/01_environment/"><meta property="og:image" content="http://ekoismylove.github.io/posts/go/01_environment/go_header.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-01-15T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-01-15T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/go/01_environment/go_header.png">
+<meta name=twitter:title content="Golang - 環境建置 (Environment)">
+<meta name=twitter:description content="本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/go/01_environment/><link rel=prev href=http://ekoismylove.github.io/posts/infra/upgradedebian/><link rel=next href=http://ekoismylove.github.io/posts/go/02_type_and_declarations/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang - 環境建置 (Environment)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/go\/01_environment\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/go\/01_environment\/go_header.png","width":820,"height":364}],"genre":"posts","keywords":"go, golang","wordcount":252,"url":"http:\/\/ekoismylove.github.io\/posts\/go\/01_environment\/","datePublished":"2022-01-15T00:00:00+00:00","dateModified":"2022-01-15T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Golang - 環境建置 (Environment)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/go/><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-01-15>2022-01-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;252 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#install-go>Install go</a></li>
+<li><a href=#first-program>First program</a></li>
+<li><a href=#format>Format</a></li>
+<li><a href=#linting-and-veting>Linting and Veting</a></li>
+<li><a href=#makefile>Makefile</a></li>
+<li><a href=#參考資料reference>參考資料(Reference)</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇基本上是說明golang的環境建置，編譯，環境先建置好，後續才能進行開發。另外會再提到一些程式碼的品質工具等。基本上在開發時都希望程式碼能具有較好的品質與一致的規範，降低後續維護的成本。</p>
+<h2 id=install-go>Install go</h2>
+<p>我自己的開發環境是在 macos 底下，基本上透過 <code>brew install go</code> 就會安裝完成。<del>如果網路沒問題的話?</del></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ brew install go
+</code></pre></div><p>在 Windows 環境下，可以透過 <a href=https://chocolatey.org/ target=_blank rel="noopener noreffer">Chocolatey</a> 進行安裝，此外<a href=https://go.dev/dl/ target=_blank rel="noopener noreffer">官方網站</a>有提供相關壓縮檔與安裝檔，挑選自己使用的平台下載相關檔案後，解壓縮或是進行安裝即可。</p>
+<p>安裝完成後，可以透過 <code>go version</code>指令，確定是否安裝完成。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ go version
+go version go1.15.2 darwin/amd64
+</code></pre></div><h2 id=first-program>First program</h2>
+<p>建立一個檔案，通常第一支程式都會是設法在 Terminal 上顯示 Hello world!，故這程式碼的檔名先命名為 hello.go，並編輯該檔案。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ touch hello.go
+$ vim hello.go
+</code></pre></div><p>程式碼大致如下。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+
+<span class=kn>import</span> <span class=s>&#34;fmt&#34;</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Hello world!&#34;</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><p>儲存該檔案後，在 Terminal 執行下列指令，此時應該能看到 <code>Hello world!</code> 顯示在Terminal上。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ go run hello.go
+Hello world!
+</code></pre></div><p><code>go run</code> 指令會將程式碼在臨時目錄中編譯成 binary 後執行，執行完成後刪除這個檔案，若要編譯成 binary 並使用，則使用 <code>go build</code> 。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ go build hello.go
+</code></pre></div><p>此時會產生一個hello的檔案，執行該檔案一樣會看到 <code>Hello world!</code> 顯示在Terminal上。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ ./hello
+Hello world!
+</code></pre></div><h2 id=format>Format</h2>
+<p>go 語言對於撰寫格式相當嚴格，須嚴格使用標準格式，雖然在開發上會稍有不適，但對於多人開發與維護時，固定格式的程式碼會使這些工作更加容易。
+也因為格式有嚴格標準，go也提供一個開發工具，<code>go fmt</code>，這個工具會自動重新格式化程式碼使齊符合標準格式。且目前有 <code>go fmt</code> 的加強版 <code>goimports</code>，有新的且更好用的工具，那就用新的工具吧。<del>喜新厭舊</del></p>
+<p>嘗試一下，修改前面提到的 <code>hello.go</code>，將其改成下面的程式碼，改動不大，僅是刪除一行縮排。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+
+<span class=kn>import</span> <span class=s>&#34;fmt&#34;</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Hello world!&#34;</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><p>安裝 goimports，在 Terminal 中使用下列指令下載 <code>goimports</code>。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ go install golang.org/x/tools/cmd/goimports@latest
+</code></pre></div><p>安裝完成後，使用以下指令，重新開啟該檔案會發現那行縮排被重新加了回去。代表在函式中，程式碼要縮排為嚴格標準格式的規範。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ goimports -l -w .
+</code></pre></div><ul>
+<li>-l : 告訴goimports，將格式不正確的檔案顯示在 Terminal上。</li>
+<li>-w : 告訴goimports，直接修改該文件。</li>
+<li>. : 路徑的意思，這邊用 . 代表目前的目錄與所有子目錄的所有檔案。</li>
+</ul>
+<p>注意，盡量在編譯前執行 <code>go fmt</code> 或 <code>goimports</code> ，確保程式碼的格式沒有問題。</p>
+<h2 id=linting-and-veting>Linting and Veting</h2>
+<p><code>goimports</code> 能確保程式碼是大家慣用的格式，但在其他規範上則不會做檢查，像是變數命名規則，程式碼樣式與潛在錯誤等。高品質的程式碼請參考 <a href=https://go.dev/doc/effective_go target=_blank rel="noopener noreffer">Effective Go</a> 與 <a href=https://github.com/golang/go/wiki/CodeReviewComments target=_blank rel="noopener noreffer">Go Code Review Comments</a> 兩個網站。當然，也有相關的工具能處理這些問題，目前常見的有 <code>golint</code>、<code>go vet</code> 工具。</p>
+<ul>
+<li><code>golint</code>，嘗試確保程式碼會依循文件，會建議更改像是變數名稱、public method 等，他的建議並不代表是錯誤，只是希望程式碼具有特定的格式並遵循特定的規則。</li>
+<li><code>go vet</code>，可以檢測一些有效的但有可能存在錯誤的程式碼。像是將錯誤數量的參數傳遞給 method，或使用不恰當的 Function。</li>
+</ul>
+<p>除了這兩個工具以外，另外還有許多第三方的工具可以檢查程式碼樣式與潛在錯誤，然而愈多的工具，在進行檢查時就會花費愈多時間。其中，<code>golangci-lint</code>結合了上述兩項與其他相關的程式碼品質工具。<a href=https://github.com/golangci/golangci-lint target=_blank rel="noopener noreffer">golangci-lint 文件</a></p>
+<p>且這個工具可以在開發目錄的根目錄中，透過一個 <code>.golangci.yml</code> 的檔案，根據需求設定啟用那些工具與檢查那些檔案。<a href=https://golangci-lint.run/usage/configuration/ target=_blank rel="noopener noreffer">.golangci.yml 文件</a></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ golangci-lint run
+</code></pre></div><p>注意，一樣盡量在編譯前執行 <code>golangci-lint</code>，或是其他相關的工具，盡可能在編譯前找出錯誤或有疑慮的部分，確保程式碼的品質。</p>
+<h2 id=makefile>Makefile</h2>
+<p>也就是說，在寫完程式後要進行編譯，我需要經常做這些事情：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ goimport -l .
+$ golangci-lint run
+$ go run <span class=o>[</span>targetPath<span class=o>]</span>
+<span class=c1>### 或是</span>
+$ go build <span class=o>[</span>targetPath<span class=o>]</span>
+</code></pre></div><p><strong>太麻煩了 !!!</strong></p>
+<p>透過 <code>Make</code>、<code>shellscript</code> 或其他的腳本語言，可以省略掉許多手動的步驟，降低重複動作的時間。
+但此篇文章說的是關於程式設計，我會傾向用 <code>make</code> 來設計：</p>
+<p>建立一個檔案名為Makefile，並編輯該檔案：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-makefile data-lang=makefile><span class=nv>.DEFAULT_GOAL</span> <span class=o>:=</span> build
+
+<span class=nf>fmt</span><span class=o>:</span>
+    goimports -l -w .
+<span class=nf>.PHONY</span><span class=o>:</span><span class=n>fmt</span>
+
+<span class=nf>lint</span><span class=o>:</span>
+    golangci-lint run *.go
+<span class=nf>.PHONY</span><span class=o>:</span><span class=n>lint</span>
+
+<span class=nf>build</span><span class=o>:</span> <span class=n>lint</span>
+    go build hello.go
+<span class=nf>.PHONY</span><span class=o>:</span><span class=n>build</span>
+</code></pre></div><p>並使用根目錄下使用 <code>make</code> 指令。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ make
+</code></pre></div><p>若順利的話，則會依序進行 <code>goimports</code>、<code>golangci-lint</code> 與 <code>go build</code>，且不用再重複下多次指令，一個 <code>Make</code> 就足夠了，只是要做一些前置準備。(Makefile)，另外，因為這篇主要是說明 golang 的環境建置， Makefile 的說明以後有空會再另外寫一篇說明(?)</p>
+<h2 id=參考資料reference>參考資料(Reference)</h2>
+<ol>
+<li><a href=https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216 target=_blank rel="noopener noreffer">Learning Go</a>(書籍)</li>
+<li><a href=https://go.dev/doc/effective_go target=_blank rel="noopener noreffer">Effective Go</a></li>
+<li><a href=https://github.com/golang/go/wiki/CodeReviewComments target=_blank rel="noopener noreffer">Go Code Review Comments</a></li>
+<li><a href=https://pkg.go.dev/golang.org/x/tools/cmd/goimports target=_blank rel="noopener noreffer">goimports</a></li>
+<li><a href=https://github.com/golangci/golangci-lint target=_blank rel="noopener noreffer">golangci-lint</a></li>
+<li><a href=https://golangci-lint.run/usage/configuration/ target=_blank rel="noopener noreffer">.golangci.yml</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-01-15</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/go/01_environment/ data-title="Golang - 環境建置 (Environment)" data-via=wiwi571246 data-hashtags=go,golang><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/go/01_environment/ data-hashtag=go><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/go/01_environment/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/go/01_environment/ data-title="Golang - 環境建置 (Environment)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>go</a>,&nbsp;<a href=/tags/golang/>golang</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/infra/upgradedebian/ class=prev rel=prev title="有新的就要嘗試！教你如何從 Debian 10 升級至 Debian 11"><i class="fas fa-angle-left fa-fw"></i>有新的就要嘗試！教你如何從 Debian 10 升級至 Debian 11</a>
+<a href=/posts/go/02_type_and_declarations/ class=next rel=next title="Golang - 類型與聲明 (Types and Declarations)">Golang - 類型與聲明 (Types and Declarations)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

@@ -7,7 +7,7 @@
 <title>在 Ubuntu/Debian 上架設 DHCPv6 服務 - Wei's Note</title><meta name=Description content="本篇文章將簡單說明，如何在 Ubuntu/Debian 上架設 DHCPv6 伺服器。"><meta name=keywords content="DHCP,DHCPv6,DHCP Server,DHCPv6 Server"><meta property="og:title" content="在 Ubuntu/Debian 上架設 DHCPv6 服務">
 <meta property="og:description" content="本篇文章將簡單說明，如何在 Ubuntu/Debian 上架設 DHCPv6 伺服器。">
 <meta property="og:type" content="article">
-<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/dhcpv6/"><meta property="article:section" content="posts">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/builddgcpv6ondebian/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-11-30T00:00:00+00:00">
 <meta property="article:modified_time" content="2023-02-16T00:00:00+00:00">
 <meta name=twitter:card content="summary">
@@ -16,7 +16,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/dhcpv6/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible_note03/><link rel=next href=http://ekoismylove.github.io/posts/ansible/ansible_note04/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上架設 DHCPv6 服務","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/"},"genre":"posts","keywords":"DHCP, DHCPv6, DHCP Server, DHCPv6 Server","wordcount":275,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/dhcpv6\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2023-02-16T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/builddgcpv6ondebian/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/03_playbook_part2/><link rel=next href=http://ekoismylove.github.io/posts/ansible/04_inventory_part1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上架設 DHCPv6 服務","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/builddgcpv6ondebian\/"},"genre":"posts","keywords":"DHCP, DHCPv6, DHCP Server, DHCPv6 Server","wordcount":275,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/builddgcpv6ondebian\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2023-02-16T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -191,7 +191,7 @@ $ sudo service isc-dhcp-server restart
 <div class=post-info-line>
 <div class=post-info-md></div>
 <div class=post-info-share>
-<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/infra/dhcpv6/ data-title="在 Ubuntu/Debian 上架設 DHCPv6 服務" data-via=wiwi571246 data-hashtags="DHCP,DHCPv6,DHCP Server,DHCPv6 Server"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/infra/dhcpv6/ data-hashtag=DHCP><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/infra/dhcpv6/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/infra/dhcpv6/ data-title="在 Ubuntu/Debian 上架設 DHCPv6 服務"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/infra/builddgcpv6ondebian/ data-title="在 Ubuntu/Debian 上架設 DHCPv6 服務" data-via=wiwi571246 data-hashtags="DHCP,DHCPv6,DHCP Server,DHCPv6 Server"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/infra/builddgcpv6ondebian/ data-hashtag=DHCP><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/infra/builddgcpv6ondebian/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/infra/builddgcpv6ondebian/ data-title="在 Ubuntu/Debian 上架設 DHCPv6 服務"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
 </div>
 </div>
 </div>
@@ -201,8 +201,8 @@ $ sudo service isc-dhcp-server restart
 <span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
 </section>
 </div>
-<div class=post-nav><a href=/posts/ansible/ansible_note03/ class=prev rel=prev title="Ansible - Playbook(下)"><i class="fas fa-angle-left fa-fw"></i>Ansible - Playbook(下)</a>
-<a href=/posts/ansible/ansible_note04/ class=next rel=next title="Ansible - Inventory(上)">Ansible - Inventory(上)<i class="fas fa-angle-right fa-fw"></i></a></div>
+<div class=post-nav><a href=/posts/ansible/03_playbook_part2/ class=prev rel=prev title="Ansible - Playbook(下)"><i class="fas fa-angle-left fa-fw"></i>Ansible - Playbook(下)</a>
+<a href=/posts/ansible/04_inventory_part1/ class=next rel=next title="Ansible - Inventory(上)">Ansible - Inventory(上)<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id=comments><div id=utterances></div><noscript>
 Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.

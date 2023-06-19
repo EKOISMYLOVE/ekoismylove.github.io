@@ -1,0 +1,296 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Golang - 指標(Pointer) - Wei's Note</title><meta name=Description content="本篇文章會簡單介紹指標，並學習如何使用指標與記憶體空間，使程式執行上能更有效能。"><meta name=keywords content="go,golang"><meta property="og:title" content="Golang - 指標(Pointer)">
+<meta property="og:description" content="本篇文章會簡單介紹指標，並學習如何使用指標與記憶體空間，使程式執行上能更有效能。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/06_pointer/"><meta property="og:image" content="http://ekoismylove.github.io/posts/go/06_pointer/go_header.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-03-07T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-03-10T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/go/06_pointer/go_header.png">
+<meta name=twitter:title content="Golang - 指標(Pointer)">
+<meta name=twitter:description content="本篇文章會簡單介紹指標，並學習如何使用指標與記憶體空間，使程式執行上能更有效能。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/go/06_pointer/><link rel=prev href=http://ekoismylove.github.io/posts/go/05_functions/><link rel=next href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang - 指標(Pointer)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/go\/06_pointer\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/go\/06_pointer\/go_header.png","width":820,"height":364}],"genre":"posts","keywords":"go, golang","wordcount":490,"url":"http:\/\/ekoismylove.github.io\/posts\/go\/06_pointer\/","datePublished":"2022-03-07T00:00:00+00:00","dateModified":"2022-03-10T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Golang - 指標(Pointer)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/go/><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-07>2022-03-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;490 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#pointer>Pointer</a>
+<ul>
+<li><a href=#簡介>簡介</a></li>
+<li><a href=#運算符>運算符</a></li>
+<li><a href=#指標類型>指標類型</a></li>
+</ul>
+</li>
+<li><a href=#傳遞call>傳遞(call)</a>
+<ul>
+<li><a href=#簡介-1>簡介</a></li>
+<li><a href=#傳遞-pointer>傳遞 pointer</a></li>
+<li><a href=#小心使用>小心使用</a></li>
+<li><a href=#效能>效能</a></li>
+<li><a href=#slice>Slice</a></li>
+</ul>
+</li>
+<li><a href=#garbage-collector>Garbage Collector</a></li>
+<li><a href=#參考資料reference>參考資料(Reference)</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇文章會簡單介紹指標，並學習如何使用指標與記憶體空間，使程式執行上能更有效能。</p>
+<h2 id=pointer>Pointer</h2>
+<h3 id=簡介>簡介</h3>
+<p><em><strong>學習 pointer 的第一條規則 ： 不要害怕 ！！</strong></em></p>
+<p>pointer 是一種 variable，他的內容是儲存另一個 variable 的 address，Address 則是每一個 variable 儲存在一個或多個連續的記憶體位置。</p>
+<p>不同類型的 variable 會佔用不同的記憶體空間，像是 bool 只要一個 byte 就能代表 true 或 false，(因為可以獨立尋找 address 的最小空間是 byte)，而 int32 需要 4 個 byte 的儲存空間。</p>
+<p>雖然不同類型的 variable 可以佔用不同的記憶體空間，但每個 pointer 無論指向任何類型的 variable，都會是相同的大小。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=kt>int32</span> <span class=p>=</span> <span class=mi>10</span>
+<span class=kd>var</span> <span class=nx>y</span> <span class=kt>bool</span> <span class=p>=</span> <span class=kc>true</span>
+<span class=nx>pointerX</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>x</span>
+<span class=nx>pointerY</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>y</span>
+<span class=kd>var</span> <span class=nx>pointerZ</span> <span class=o>*</span><span class=kt>string</span>
+</code></pre></div><ul>
+<li>pointerX 會是 x 的 address</li>
+<li>pointerY 會是 y 的 address</li>
+<li>pointerZ 不會指向任何東西，Value 會是 Zero value。</li>
+</ul>
+<p>而 pointer 的 Zero value 是 <code>nil</code> 而不是 0，與 C 語言的 null 不同， <code>nil</code> 不代表 0，故不能將 nil 轉換成 0。</p>
+<h3 id=運算符>運算符</h3>
+<p>基本上 golang 的 pointer 運算符與 C/C++ 的相似。</p>
+<p><code>&</code> : address operator，用在變數前的話，會返回該變數的 address。</p>
+<p><code>*</code> : indirection operator，用於指針變數，會返回該 pointer 指向的 value。也被稱為 dereferencing。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>x</span> <span class=o>:=</span> <span class=mi>5</span>
+<span class=nx>pointerX</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>x</span>
+<span class=nx>y</span> <span class=o>:=</span> <span class=mi>5</span> <span class=o>+</span> <span class=o>*</span><span class=nx>pointerX</span>
+<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>y</span><span class=p>)</span> <span class=c1>// 10
+</span></code></pre></div><p>dereferencing 要確保 pointer 不是 <code>nil</code>，否則會造成 panic。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=o>*</span><span class=kt>int</span>
+<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=o>*</span><span class=nx>x</span><span class=p>)</span> <span class=c1>// panic
+</span></code></pre></div><h3 id=指標類型>指標類型</h3>
+<p>其實就是有一種類型叫做指標類型啦。用來表示 pointer，基本上可以基於任何類型。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>x</span> <span class=o>:=</span> <span class=mi>10</span>
+<span class=kd>var</span> <span class=nx>pointerX</span> <span class=o>*</span><span class=kt>int</span>
+<span class=nx>pointerX</span> <span class=p>=</span> <span class=o>&amp;</span><span class=nx>x</span>
+</code></pre></div><p>另外透過 <code>new</code> 聲明一個指針變數時，他的初始值會是 0 而不是 <code>nil</code>。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=p>=</span> <span class=nb>new</span><span class=p>(</span><span class=kt>int</span><span class=p>)</span>
+<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=o>*</span><span class=nx>x</span><span class=p>)</span>  <span class=c1>// prints 0
+</span></code></pre></div><h2 id=傳遞call>傳遞(call)</h2>
+<h3 id=簡介-1>簡介</h3>
+<p>當原始值分配給另一個變數或傳遞給 function or method 時，對其他變數所做的任何更改都不會反映在原始值中。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-Java data-lang=Java><span class=c1>// Java
+</span><span class=c1></span><span class=kt>int</span> <span class=n>x</span> <span class=o>=</span> <span class=n>10</span><span class=o>;</span>
+<span class=kt>int</span> <span class=n>y</span> <span class=o>=</span> <span class=n>x</span><span class=o>;</span>
+<span class=n>y</span> <span class=o>=</span> <span class=n>20</span><span class=o>;</span>
+<span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=n>x</span><span class=o>);</span> <span class=c1>// prints 10
+</span></code></pre></div><p>然而在透過類型所建立的 instance，分配給另一個 instance 或傳遞給 function or method 時，又會是不同的結果。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=o>//</span> <span class=n>python</span>
+<span class=k>class</span> <span class=nc>Foo</span><span class=p>:</span>
+    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>x</span><span class=p>):</span>
+        <span class=bp>self</span><span class=o>.</span><span class=n>x</span> <span class=o>=</span> <span class=n>x</span>
+
+
+<span class=k>def</span> <span class=nf>outer</span><span class=p>():</span>
+    <span class=n>f</span> <span class=o>=</span> <span class=n>Foo</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span>
+    <span class=n>inner1</span><span class=p>(</span><span class=n>f</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=n>f</span><span class=o>.</span><span class=n>x</span><span class=p>)</span>
+    <span class=n>inner2</span><span class=p>(</span><span class=n>f</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=n>f</span><span class=o>.</span><span class=n>x</span><span class=p>)</span>
+    <span class=n>g</span> <span class=o>=</span> <span class=kc>None</span>
+    <span class=n>inner2</span><span class=p>(</span><span class=n>g</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=n>g</span> <span class=ow>is</span> <span class=kc>None</span><span class=p>)</span>
+
+
+<span class=k>def</span> <span class=nf>inner1</span><span class=p>(</span><span class=n>f</span><span class=p>):</span>
+    <span class=n>f</span><span class=o>.</span><span class=n>x</span> <span class=o>=</span> <span class=mi>20</span>
+
+
+<span class=k>def</span> <span class=nf>inner2</span><span class=p>(</span><span class=n>f</span><span class=p>):</span>
+    <span class=n>f</span> <span class=o>=</span> <span class=n>Foo</span><span class=p>(</span><span class=mi>30</span><span class=p>)</span>
+
+
+<span class=n>outer</span><span class=p>()</span>
+<span class=o>//</span> <span class=n>Output</span>
+<span class=mi>20</span>
+<span class=mi>20</span>
+<span class=kc>True</span>
+</code></pre></div><p>在許多程式語言中(e.g. Java, Python)，會有以下特性：</p>
+<ul>
+<li>如果將 instance 傳遞給函式並更改 field 的值，則這次更改會反映在傳遞進去的 instance。</li>
+<li>如果重新分配參數，則更改不會反應在傳遞進去的變數。</li>
+<li>如果傳遞 <code>nil/null/None</code> 等參考值，會將傳入參數本身設定為新的數值，而不會影響原先原先的數值。</li>
+</ul>
+<p>因為這些語言的 instance 是透過 pointer 實現的，當 instance 傳遞給 function 或是 method 時，被複製的數值是指向該 instance 的 pointer。在 <code>inner1</code> 是指向相同的 address，而在 <code>inner2</code> 則是建立一個新的 instance，會指向不同的 address，因此不會影響到原先傳入的 instance。</p>
+<p>基本上在 golang 中，會有一樣的特性，但 golang 不同的是可以對原始類型與架構使用 pointer 或是 value。</p>
+<h3 id=傳遞-pointer>傳遞 pointer</h3>
+<p>上篇文章提到，golang 是 call by value，但可以透過將 pointer 傳遞給函式的方式，使原始變數被函式進行修改。只不過有幾點是要注意的。</p>
+<p>如果傳遞 <code>nil</code> pointer，則不能將數值修改為非 <code>nil</code>。如果已經將該 pointer 分配了一個數值，則只能 reassign 這個數值。因為 call by value 的關係，會複製一份 pointer 變數，並在函式內處理，而原先的 pointer 當然就不會被函式修改到。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>func</span> <span class=nf>failedUpdate</span><span class=p>(</span><span class=nx>g</span> <span class=o>*</span><span class=kt>int</span><span class=p>)</span> <span class=p>{</span>
+    <span class=nx>x</span> <span class=o>:=</span> <span class=mi>10</span>
+    <span class=nx>g</span> <span class=p>=</span> <span class=o>&amp;</span><span class=nx>x</span>
+<span class=p>}</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=kd>var</span> <span class=nx>f</span> <span class=o>*</span><span class=kt>int</span> <span class=c1>// f is nil
+</span><span class=c1></span>    <span class=nf>failedUpdate</span><span class=p>(</span><span class=nx>f</span><span class=p>)</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>f</span><span class=p>)</span> <span class=c1>// prints nil
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></div><p>如果希望 pointer 參數傳入後修改的值在退出函式時仍然存在，不要在函式內建立一個新的變數並透過修改 pointer 來修改，而是透過 pointer 指向要修改的數值並進行修改。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>func</span> <span class=nf>failedUpdate</span><span class=p>(</span><span class=nx>px</span> <span class=o>*</span><span class=kt>int</span><span class=p>)</span> <span class=p>{</span>
+    <span class=nx>x2</span> <span class=o>:=</span> <span class=mi>20</span>
+    <span class=nx>px</span> <span class=p>=</span> <span class=o>&amp;</span><span class=nx>x2</span>
+<span class=p>}</span>
+
+<span class=kd>func</span> <span class=nf>update</span><span class=p>(</span><span class=nx>px</span> <span class=o>*</span><span class=kt>int</span><span class=p>)</span> <span class=p>{</span>
+    <span class=o>*</span><span class=nx>px</span> <span class=p>=</span> <span class=mi>20</span>
+<span class=p>}</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=nx>x</span> <span class=o>:=</span> <span class=mi>10</span>
+    <span class=nf>failedUpdate</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>x</span><span class=p>)</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>x</span><span class=p>)</span> <span class=c1>// prints 10
+</span><span class=c1></span>    <span class=nf>update</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>x</span><span class=p>)</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>x</span><span class=p>)</span> <span class=c1>// prints 20
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></div><h3 id=小心使用>小心使用</h3>
+<p>基本上在 golang 是不建議使用 pointer，會影響數據傳遞的理解，除了在某些情況下使用會好些，例如在使用函式時需要一個 interface、部分類型需要以指針傳遞、數據類型中存在需要修改的狀態，會建議返回值使用指針類型。</p>
+<h3 id=效能>效能</h3>
+<p>不過，pointer 的好處是無論任何的類型，pointer 都會是一樣的大小，也就是說當我們傳遞大的數值給函式時，花費的時間也會較多，但傳遞 pointer 則會減少原先所需傳遞的時間。</p>
+<h3 id=slice>Slice</h3>
+<p>上一篇我們提到，Map 與 Slice 是以 pointer 實現的，故直接傳遞 Map 與 Slice 給函式是可以直接修改數值的，這邊提一下 Slice ，在函式內雖然可以修改內部數值，但不能修改 slice 的容量。</p>
+<p>Slice 基本上為三個單元所組成：</p>
+<ul>
+<li>資料，以 pointer 指向某一段記憶體空間。</li>
+<li>長度，使用了多少空間。</li>
+<li>容量，這個 slice 總共有多大。</li>
+</ul>
+<p>因為 call by value 的關係，傳遞至函式內的 slice 會被複製，因為資料是以 pointer 指向某一段記憶體空間，所以可以直接修改，但容量部分只會修改函式內被複製的這份 slice，因此原先的 slice 並不會被修改到容量。</p>
+<p>另外，slice 也很適合作為 buffer 使用，後面的文章會再提起 slice。</p>
+<h2 id=garbage-collector>Garbage Collector</h2>
+<p>Garbage 是指沒有 pointer 指向該筆數據，則代表該數據存在記憶體空間中但沒有做使用，該數據就是 Garbage，這些空間就會被拿來重新使用，避免記憶體使用量一直增加。</p>
+<p>Golang 有 Garbage Collector，但不代表可以隨性的使用記憶體空間。因為 Garbage Collector 也是需要資源去處理這些 Garbage，會降低程式的效能。</p>
+<p>另外， Golang 會將原始類型、結構等放至 stack 中，並順序排列，透過建立最少的 Garbage，達到低延遲的目標。</p>
+<p>寫著寫著發現 Stack, Garbage Collector 是個坑，之後有空可能會另外寫一篇出來吧。</p>
+<p>後面會附上一些連結，有興趣的話可以參考。</p>
+<h2 id=參考資料reference>參考資料(Reference)</h2>
+<ol>
+<li><a href=https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216 target=_blank rel="noopener noreffer">Learning Go</a> (書籍)</li>
+<li><a href=https://go.dev/blog/ismmkeynote target=_blank rel="noopener noreffer">Getting to Go: The Journey of Go&rsquo;s Garbage Collector</a></li>
+<li><a href=https://www.forrestthewoods.com/blog/memory-bandwidth-napkin-math/ target=_blank rel="noopener noreffer">Memory Bandwidth Napkin Math</a></li>
+<li><a href=https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers.html target=_blank rel="noopener noreffer">Language Mechanics On Stacks And Pointers</a></li>
+<li><a href=https://segment.com/blog/allocation-efficiency-in-high-performance-go-services/ target=_blank rel="noopener noreffer">Allocation efficiency in high-performance Go services</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-03-10</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/go/06_pointer/ data-title="Golang - 指標(Pointer)" data-via=wiwi571246 data-hashtags=go,golang><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/go/06_pointer/ data-hashtag=go><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/go/06_pointer/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/go/06_pointer/ data-title="Golang - 指標(Pointer)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>go</a>,&nbsp;<a href=/tags/golang/>golang</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/go/05_functions/ class=prev rel=prev title="Golang - 函式(Functions)"><i class="fas fa-angle-left fa-fw"></i>Golang - 函式(Functions)</a>
+<a href=/posts/application/catchtawawa/ class=next rel=next title="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一">星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

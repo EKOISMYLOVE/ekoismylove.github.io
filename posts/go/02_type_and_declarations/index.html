@@ -1,0 +1,370 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Golang - 類型與聲明 (Types and Declarations) - Wei's Note</title><meta name=Description content="本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
+如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。"><meta name=keywords content="go,golang"><meta property="og:title" content="Golang - 類型與聲明 (Types and Declarations)">
+<meta property="og:description" content="本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
+如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/02_type_and_declarations/"><meta property="og:image" content="http://ekoismylove.github.io/posts/go/02_type_and_declarations/go_header.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-02-12T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-02-12T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/go/02_type_and_declarations/go_header.png">
+<meta name=twitter:title content="Golang - 類型與聲明 (Types and Declarations)">
+<meta name=twitter:description content="本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。
+如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/go/02_type_and_declarations/><link rel=prev href=http://ekoismylove.github.io/posts/go/01_environment/><link rel=next href=http://ekoismylove.github.io/posts/go/03_composite/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang - 類型與聲明 (Types and Declarations)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/go\/02_type_and_declarations\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/go\/02_type_and_declarations\/go_header.png","width":820,"height":364}],"genre":"posts","keywords":"go, golang","wordcount":491,"url":"http:\/\/ekoismylove.github.io\/posts\/go\/02_type_and_declarations\/","datePublished":"2022-02-12T00:00:00+00:00","dateModified":"2022-02-12T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Golang - 類型與聲明 (Types and Declarations)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/go/><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-02-12>2022-02-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;491 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#zero-value>Zero Value</a></li>
+<li><a href=#literal>Literal</a>
+<ul>
+<li><a href=#integer-literal>Integer literal</a></li>
+<li><a href=#float-literal>Float literal</a></li>
+<li><a href=#rune-literal>Rune literal</a></li>
+<li><a href=#string-literal>String literal</a></li>
+<li><a href=#boolean>Boolean</a></li>
+</ul>
+</li>
+<li><a href=#numeric-types-數值類型>Numeric Types (數值類型)</a>
+<ul>
+<li><a href=#整數-integer>整數 (integer)</a></li>
+<li><a href=#浮點數-float>浮點數 (float)</a></li>
+<li><a href=#複雜-complex>複雜 (complex)</a></li>
+</ul>
+</li>
+<li><a href=#運算子>運算子</a></li>
+<li><a href=#類型轉換>類型轉換</a></li>
+<li><a href=#聲明-var->聲明 (var, :=)</a></li>
+<li><a href=#const>const</a></li>
+<li><a href=#變數命名>變數命名</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇文章將介紹類型與聲明，基本上接觸過程式語言的話，許多部份是相似的，僅有少處不同。</p>
+<p>如同其他的程式語言，Golang 也有許多與相同的類型：Boolean、Integer、Float與String，後續會分別介紹不同的類型。</p>
+<p>但我比較喜歡使用宣告，後面若看到宣告意同聲明。(Declarations)</p>
+<h2 id=zero-value>Zero Value</h2>
+<p>在 Golang 中，會默認 Zero Value分配給已經聲明，但未分配數值的任何變數，換句話說也可以被稱為預設值，不同的類型的 Zero Value 也有所不同。<a href=https://www.geeksforgeeks.org/zero-value-in-golang/ target=_blank rel="noopener noreffer">這裡</a>列出了幾個常用的變數的 Zero Value。</p>
+<p><strong>【Zero Value 並不是代表為 0 !! 不同類型的變數有不同的 Zero Value !!】</strong></p>
+<h2 id=literal>Literal</h2>
+<p>Literal 簡單來說是在程式碼中賦予的數值、字元或是字串，例如：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>func</span> <span class=nf>main</span><span class=p>(){</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Hello World&#34;</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><p>這裡的 <code>"Hello World"</code> 就是字串型態的 Literal。</p>
+<h3 id=integer-literal>Integer literal</h3>
+<p>若 Literal 為整數時，透過不同的前綴代表不同的進制方式。另外，當整數字串過長時，可以透過 underscore 將數字進行分組，提高閱讀的效能，但不能在該數字的開頭或結尾使用。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=mb>0b111</span> <span class=c1>// 2進制
+</span><span class=c1></span><span class=mi>0</span><span class=nx>o111</span> <span class=c1>// 8進制
+</span><span class=c1></span><span class=mh>0x111</span> <span class=c1>// 16進制
+</span><span class=c1></span><span class=mo>0111</span> <span class=c1>// 這也是代表8進制，但容易搞混，不要使用這種方式!!
+</span><span class=c1>//b,o,x可以用大寫B,O,X代替，會是一樣的作用。
+</span><span class=c1></span>
+<span class=nx>a</span> <span class=o>:=</span> <span class=mi>1111</span>
+<span class=nx>b</span> <span class=o>:=</span> <span class=mi>1_111</span> <span class=c1>// 這兩組代表的是相同的數字。
+</span></code></pre></div><h3 id=float-literal>Float literal</h3>
+<p>若 Literal 為 float 時，可以使用字母 e 和數字組合出要使用的指數數值。與 Integer Literal 一樣能使用 underscore 提高閱讀的效能。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=mf>1.11e2</span> <span class=c1>// 111.0
+</span><span class=c1></span>
+<span class=mf>0.111</span><span class=nx>_111</span> <span class=c1>// 0.111111
+</span></code></pre></div><p>另外， Float Literal有一種十六進制的表示方式。以 0x 作為前綴，指數後面以字母 P 為開頭進行運算。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=mh>0x1</span><span class=nx>p</span><span class=o>-</span><span class=mi>2</span> <span class=c1>// 1.0 * (2^-2) = 1.0/4 = 0.25
+</span><span class=c1></span><span class=mh>0x2</span><span class=p>.</span><span class=nx>p10</span> <span class=c1>// 2.0 * 2^10 = 2048.0
+</span></code></pre></div><h3 id=rune-literal>Rune literal</h3>
+<p>通常代表字元，會用單引號包起來，常用來表示 Unicode 字元。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=sc>&#39;a&#39;</span> <span class=c1>// Unicode
+</span><span class=c1></span><span class=sc>&#39;\141&#39;</span> <span class=c1>// 8進制
+</span><span class=c1></span><span class=sc>&#39;\x61&#39;</span> <span class=c1>// 16進制
+</span><span class=c1></span>
+<span class=c1>// 另外還有一些較特別且常使用的符號。
+</span><span class=c1></span><span class=sc>&#39;\n&#39;</span> <span class=c1>// newLine
+</span><span class=c1></span><span class=sc>&#39;\t&#39;</span> <span class=c1>// tab
+</span><span class=c1></span><span class=sc>&#39;\&#39;&#39;</span> <span class=c1>// 單引號
+</span><span class=c1></span><span class=sc>&#39;\&#34;&#39;</span> <span class=c1>// 雙引號
+</span><span class=c1></span><span class=sc>&#39;\\&#39;</span> <span class=c1>// 反斜線
+</span></code></pre></div><h3 id=string-literal>String literal</h3>
+<p>如同前面所提到的 <code>"Hello world"</code>，會使用雙引號建立一個字串，並包含0個或多個字元，若要使用換行、反斜線與雙引號時，請記得透過反斜線進行轉義，使用方式與前面介紹 Rune literal 的符號是一樣的。</p>
+<h3 id=boolean>Boolean</h3>
+<p>透過 <code>bool</code> 表示布林變數，布林具有 <code>true</code> 或 <code>false</code>兩種數值，<code>bool</code>的 Zero Value 為 <code>false</code>。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>flag</span> <span class=kt>bool</span>
+<span class=kd>var</span> <span class=nx>status</span> <span class=p>=</span> <span class=kc>true</span>
+</code></pre></div><h2 id=numeric-types-數值類型>Numeric Types (數值類型)</h2>
+<p>基本上可分為三類：整數、浮點數與一些不常使用的複雜類型。</p>
+<h3 id=整數-integer>整數 (integer)</h3>
+<p>基本上有各種大小的有符號數與無符號數。所有整數類型的 Zero Value 為 0 ，整數類型如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>類型名稱</th>
+<th>數值範圍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int8</td>
+<td>–128 to 127</td>
+</tr>
+<tr>
+<td>int16</td>
+<td>–32768 to 32767</td>
+</tr>
+<tr>
+<td>int32</td>
+<td>–2147483648 to 2147483647</td>
+</tr>
+<tr>
+<td>int64</td>
+<td>–9223372036854775808 to 9223372036854775807</td>
+</tr>
+<tr>
+<td>uint8</td>
+<td>0 to 255</td>
+</tr>
+<tr>
+<td>uint16</td>
+<td>0 to 65536</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>0 to 4294967295</td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>0 to 18446744073709551615</td>
+</tr>
+</tbody>
+</table>
+<p>另外， <code>int</code> 與 <code>uint</code> 會因為開發環境的 CPU 而會是不同類型的整數，在32位元的CPU上會是 <code>int32</code>,<code>uint32</code>，在64位元的CPU上會是<code>int64</code>,<code>uint64</code>。</p>
+<p>然而，這麼多種的整數類型，要如何知道在何時使用其中一個呢？可以透過下述的三條規則去決定：</p>
+<ul>
+<li>若開發或使用在具有特定大小的整數之格式或協議，則使用相應的整數類型。</li>
+<li>若是撰寫一個用在任何整數類型的函式庫之函式時，請盡可能寫兩個函式，一個用 <code>int</code>而另一個使用<code>uint</code>。更加嚴謹的狀況下能規定大小會更好。(e.g. <code>int64</code>,<code>uint64</code>)</li>
+<li>其他情況下，使用 int 即可，除非因為效能或是特定目的，已知需要明確的整數大小與有無符號，否則請使用 <code>int</code>。</li>
+</ul>
+<h3 id=浮點數-float>浮點數 (float)</h3>
+<p>基本上分為兩種， <code>float32</code>與<code>float64</code>，浮點數類型的 Zero Value 為 0。</p>
+<table>
+<thead>
+<tr>
+<th>類型名稱</th>
+<th>最大絕對值</th>
+<th>最小(非零)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>float32</td>
+<td>3.40282346638528859811704183484516925440e+38</td>
+<td>1.401298464324817070923729583289916131280e-45</td>
+</tr>
+<tr>
+<td>float64</td>
+<td>1.797693134862315708145274237317043567981e+308</td>
+<td>4.940656458412465441765687928682213723651e-324</td>
+</tr>
+</tbody>
+</table>
+<p>除非是記憶體問題，否則請使用精度較好的 <code>float64</code>，但精度較好也不能明確的表示十進制數值，請不要使用浮點數代表金錢或是需要精確十進制表示的數值。</p>
+<h3 id=複雜-complex>複雜 (complex)</h3>
+<p>基本上用於複數，有complex64與complex128兩種。(<del>想到電學的交流電計算(頭痛)</del>)。但因為複數很少使用，我認為僅要知道有這個內置的類型即可。</p>
+<h2 id=運算子>運算子</h2>
+<p>常見的運算子 <code>+, -, *, /, %</code>，整數除法的結果仍會是整數，若需要有浮點數效果，則需使用類型轉換。</p>
+<p>另外可以將任何運算子與 <code>=</code> 做結合修改變數：<code>+=, -=, *=, /=, %=</code>。</p>
+<p>比較的運算子則有 <code>==, !=, >=, >, &lt;, &lt;=</code></p>
+<p>操作運算符則有：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=o>&lt;&lt;</span> <span class=c1>// shift left
+</span><span class=c1></span><span class=o>&gt;&gt;</span> <span class=c1>// shift right
+</span><span class=c1></span><span class=o>&amp;</span> <span class=c1>// logical AND
+</span><span class=c1></span><span class=p>|</span> <span class=c1>// logical OR
+</span><span class=c1></span><span class=p>^</span> <span class=c1>// logical XOR
+</span><span class=c1></span><span class=o>&amp;^</span> <span class=c1>// logical AND NOT
+</span></code></pre></div><p>一樣可以與 <code>=</code> 結合修改變數：<code>&=, |=, ^=, &^=, &lt;&lt;=, >>=</code></p>
+<h2 id=類型轉換>類型轉換</h2>
+<p>許多語言也有許多數字類型，且會在需要時自動類型提升，但自動轉換時可能會發生複雜的問題，並會有意想不到的結果。Go 作為嚴謹性高的語言，不允許自動類型提升，需要時要使用類型轉換才行。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=kt>int32</span> <span class=p>=</span> <span class=mi>10</span>
+<span class=kd>var</span> <span class=nx>y</span> <span class=kt>int64</span> <span class=p>=</span> <span class=mi>20</span>
+<span class=kd>var</span> <span class=nx>z</span> <span class=kt>int64</span> <span class=p>=</span> <span class=nb>int64</span><span class=p>(</span><span class=nx>x</span><span class=p>)</span> <span class=o>+</span> <span class=nx>y</span>
+<span class=kd>var</span> <span class=nx>w</span> <span class=kt>float64</span> <span class=p>=</span> <span class=nb>float64</span><span class=p>(</span><span class=nx>y</span><span class=p>)</span> <span class=o>+</span> <span class=nb>float64</span><span class=p>(</span><span class=nx>z</span><span class=p>)</span>
+</code></pre></div><h2 id=聲明-var->聲明 (var, :=)</h2>
+<p>宣告變數有許多方法，而每一種方法都傳達了有關如何使用該變數的資訊。</p>
+<p>最冗長的方法是使用 <code>var</code>、類型並賦予值。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=kt>int</span> <span class=p>=</span> <span class=mi>1</span>
+</code></pre></div><p>若等號右側的類型，是變數的預期類型，則可以省略等號左側的類型，</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=p>=</span> <span class=mi>1</span> <span class=c1>// type is int.
+</span></code></pre></div><p>若宣告變數並將其設為Zero Value，則將等號右側刪除。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=kt>int</span> 
+</code></pre></div><p>並可以一次宣告多個變數，可以是相同的類型，或是不同的類型。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span><span class=p>,</span><span class=nx>y</span> <span class=kt>int</span> <span class=p>=</span> <span class=mi>1</span><span class=p>,</span><span class=mi>2</span>
+<span class=kd>var</span> <span class=nx>i</span><span class=p>,</span><span class=nx>j</span> <span class=kt>int</span>
+<span class=kd>var</span> <span class=nx>a</span><span class=p>,</span><span class=nx>b</span> <span class=p>=</span> <span class=mi>1</span><span class=p>,</span><span class=s>&#34;Hi&#34;</span>
+</code></pre></div><p>還可以使用宣告列表(declaration list)一次宣告多個變數，但適用在函式外。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span><span class=p>(</span>
+    <span class=nx>x</span>   <span class=kt>int</span>
+    <span class=nx>y</span>       <span class=p>=</span> <span class=mi>1</span>
+    <span class=nx>a</span><span class=p>,</span><span class=nx>b</span>     <span class=p>=</span> <span class=mi>1</span><span class=p>,</span><span class=s>&#34;Hi&#34;</span>
+    <span class=nx>i</span><span class=p>,</span><span class=nx>j</span> <span class=kt>string</span>
+<span class=p>)</span>
+</code></pre></div><p>在函數中時，可以使用 <code>:=</code> 替換掉 <code>var</code> 使用類型推斷的聲明。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>x</span> <span class=p>=</span> <span class=mi>10</span>
+<span class=nx>x</span> <span class=o>:=</span> <span class=mi>10</span> <span class=c1>// 這兩行程式碼的作用是相同的。
+</span></code></pre></div><p>一樣可以同時聲明多個變數，但這種不帶類型的宣告方式只能在函數中使用。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>a</span><span class=p>,</span><span class=nx>b</span> <span class=o>:=</span> <span class=mi>1</span><span class=p>,</span><span class=s>&#34;Hi&#34;</span>
+</code></pre></div><p><code>:=</code> 可以允許為現有的變數賦值，只要 <code>:=</code>左側有一個新的變數，則任何其他變數都可以存在。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>x</span> <span class=o>:=</span> <span class=mi>1</span>
+<span class=nx>x</span><span class=p>,</span><span class=nx>y</span> <span class=o>:=</span> <span class=mi>2</span><span class=p>,</span> <span class=s>&#34;Hi&#34;</span>
+</code></pre></div><p>在package宣告變數的話，則必須使用 <code>var</code> 宣告，在函式外使用 <code>:=</code>是不允許的。</p>
+<p>另外有些情況下，盡量不要使用<code>:=</code></p>
+<ul>
+<li>將變數初始化為 Zero Value 時，請使用 <code>var</code> 進行宣告，因為 Zero Value 是有意的。</li>
+<li>賦值的預設類型與變數的類型不同時，請使用 <code>var</code>。</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=nx>x</span> <span class=o>:=</span> <span class=nb>byte</span><span class=p>(</span><span class=mi>20</span><span class=p>)</span> 
+<span class=c1>// 這個不好，賦值的預設類型是int，但變數是 byte。雖然可以用類型轉換處理這個議題，但用 var 直接宣告清楚會好一點。
+</span><span class=c1></span><span class=kd>var</span> <span class=nx>x</span> <span class=kt>byte</span> <span class=p>=</span> <span class=mi>20</span>
+</code></pre></div><ul>
+<li><code>:=</code> 可以同時宣告新變數與現有變數，但使用上可能會有 shadow variable 的狀況發生，建議宣告新的變數時用<code>var</code>宣告，並用 <code>=</code> 賦予數值。</li>
+</ul>
+<p>最後，盡量不在函式外宣告變數。會難以追蹤。</p>
+<h2 id=const>const</h2>
+<p>簡單來說，就是宣告一個數值，且該數值是不可變的。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>const</span> <span class=nx>x</span> <span class=kt>int64</span> <span class=p>=</span> <span class=mi>1</span>
+<span class=kd>const</span> <span class=p>(</span>
+    <span class=nx>a</span> <span class=p>=</span> <span class=mi>1</span>
+    <span class=nx>b</span> <span class=p>=</span> <span class=mi>2</span>
+<span class=p>)</span>
+</code></pre></div><h2 id=變數命名>變數命名</h2>
+<p>基本上沒有硬性規定，但還是建議遵循以下幾點。</p>
+<ul>
+<li>當變數名稱為多個單字組成時，採用駝峰式大小寫命名。</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>studentScore</span> <span class=kt>int</span> <span class=p>=</span> <span class=mi>100</span>
+</code></pre></div><ul>
+<li>變數名稱的第一個字母會確定是否能在 package 外被存取。</li>
+<li>在函式中，盡量使用較短的變數名稱，當該變數的範圍愈小，名稱就應該愈短。(e.g.跑迴圈時常使用 i 為變數(integer))</li>
+<li>Go 是強類型語言，是不需要在變數名稱中加入預期的變數類型，與其加入變數類型，最好是再想一個更完整的名稱來宣告這個變數代表甚麼。</li>
+</ul>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216 target=_blank rel="noopener noreffer">Learning Go</a>(書籍)</li>
+<li><a href=https://go101.org/article/basic-types-and-value-literals.html target=_blank rel="noopener noreffer">Basic Types and Basic Value Literals</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-02-12</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/go/02_type_and_declarations/ data-title="Golang - 類型與聲明 (Types and Declarations)" data-via=wiwi571246 data-hashtags=go,golang><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/go/02_type_and_declarations/ data-hashtag=go><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/go/02_type_and_declarations/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/go/02_type_and_declarations/ data-title="Golang - 類型與聲明 (Types and Declarations)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>go</a>,&nbsp;<a href=/tags/golang/>golang</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/go/01_environment/ class=prev rel=prev title="Golang - 環境建置 (Environment)"><i class="fas fa-angle-left fa-fw"></i>Golang - 環境建置 (Environment)</a>
+<a href=/posts/go/03_composite/ class=next rel=next title="Golang - 複合類型 (Composite Types)">Golang - 複合類型 (Composite Types)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
