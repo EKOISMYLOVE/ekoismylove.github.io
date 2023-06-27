@@ -16,7 +16,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/builddhcpv6ondebian/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/03_playbook_part2/><link rel=next href=http://ekoismylove.github.io/posts/ansible/04_inventory_part1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上架設 DHCPv6 服務","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/builddhcpv6ondebian\/"},"genre":"posts","keywords":"DHCP, DHCPv6, DHCP Server, DHCPv6 Server","wordcount":275,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/builddhcpv6ondebian\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2023-02-16T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/builddhcpv6ondebian/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/03_playbook_part2/><link rel=next href=http://ekoismylove.github.io/posts/ansible/04_inventory_part1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在 Ubuntu/Debian 上架設 DHCPv6 服務","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/builddhcpv6ondebian\/"},"genre":"posts","keywords":"DHCP, DHCPv6, DHCP Server, DHCPv6 Server","wordcount":290,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/builddhcpv6ondebian\/","datePublished":"2022-11-30T00:00:00+00:00","dateModified":"2023-02-16T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -84,7 +84,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">在 Ubuntu/Debian 上架設 DHCPv6 服務</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-11-30>2022-11-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;275 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-11-30>2022-11-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;290 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -97,6 +97,7 @@ Cancel
 <li><a href=#environment>Environment</a></li>
 <li><a href=#install>Install</a></li>
 <li><a href=#configure>Configure</a></li>
+<li><a href=#leases>leases</a></li>
 <li><a href=#小節>小節</a></li>
 <li><a href=#參考資料>參考資料</a></li>
 </ul>
@@ -173,7 +174,10 @@ $ chmod <span class=m>666</span> /var/lib/dhcp/dhcpd6.leases
 
 <span class=c1># 重新啟動吧！</span>
 $ sudo service isc-dhcp-server restart
-</code></pre></div><h2 id=小節>小節</h2>
+</code></pre></div><h2 id=leases>leases</h2>
+<p>最後，要如何在 server 上看到我們 leases 了哪些 IP 給 client 呢？<br>
+就在我們前面設定的 <code>/var/lib/dhcp/dhcpd6.leases</code> 裡面唷，用編輯器或是 <code>cat</code> 之類的工具瀏覽即可。</p>
+<h2 id=小節>小節</h2>
 <p>其實以前就架設過 DHCPv6 Server，但是在較舊版本的 Debian 上，當時所做的筆記用到現在卻不能用。印象中以前只要設定好 <code>dhcpd6.conf</code> 然後 restart service 就好的說。<br>
 另外也有一些不常用的系統管理工具(systemctl, journalctl)，也藉著這個機會學習。<del>以前都是傻傻的看 syslog，很累的</del></p>
 <h2 id=參考資料>參考資料</h2>
