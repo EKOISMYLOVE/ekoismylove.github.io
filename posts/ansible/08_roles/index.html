@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/08_roles/><link rel=prev href=http://ekoismylove.github.io/posts/troubleshooting/squid_utf8bom/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Roles","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra, playbook","wordcount":718,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/","datePublished":"2023-07-07T00:00:00+00:00","dateModified":"2023-07-07T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/08_roles/><link rel=prev href=http://ekoismylove.github.io/posts/troubleshooting/squid_utf8bom/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Roles","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra, playbook","wordcount":723,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/","datePublished":"2023-07-07T00:00:00+00:00","dateModified":"2023-07-07T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Roles</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-07-07>2023-07-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;718 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-07-07>2023-07-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;723 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -229,7 +229,8 @@ vagrant1                   : <span class=nv>ok</span><span class=o>=</span><span
 </div>
 <div class=details-content>
 <div class=admonition-content>通常我們改變數只會改 default 中的變數，vars 比較不會去動它。
-另外在優先權的部分，default 是最小的，所以 vars 或是其他檔案中有相同名稱的變數，則會覆蓋掉 default 中的變數。</div>
+另外在優先權的部分，default 是最小的，所以 vars 或是其他檔案中有相同名稱的變數，則會覆蓋掉 default 中的變數。
+由於 vars 的優先權極高，建議是在 task 執行時進行傳遞或是覆蓋。</div>
 </div>
 </div>
 <h2 id=ansible-galaxy>Ansible-galaxy</h2>
