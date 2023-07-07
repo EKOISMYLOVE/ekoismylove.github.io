@@ -17,7 +17,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/08_roles/><link rel=prev href=http://ekoismylove.github.io/posts/troubleshooting/squid_utf8bom/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Roles","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra, playbook","wordcount":719,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/","datePublished":"2023-07-07T00:00:00+00:00","dateModified":"2023-07-07T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/08_roles/><link rel=prev href=http://ekoismylove.github.io/posts/troubleshooting/squid_utf8bom/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Roles","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra, playbook","wordcount":718,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08_roles\/","datePublished":"2023-07-07T00:00:00+00:00","dateModified":"2023-07-07T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -85,7 +85,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Roles</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-07-07>2023-07-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;719 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-07-07>2023-07-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;718 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -336,8 +336,7 @@ $ ansible-galaxy remove -p <span class=o>[</span>path <span class=o>]</span>0x_p
 </span><span class=w>  </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;0.1&#34;</span><span class=w>  </span><span class=c># quoted, so YAML doesn&#39;t parse this as a floating-point value</span><span class=w>
 </span></code></pre></div><h2 id=結論>結論</h2>
 <p>role 是組織 playbook 的好方法，這篇文章介紹了如何使用 role，如何設計自己的 role 跟使用別人所設計的 role。</p>
-<p>這篇筆記是自己骨折後所寫的第一篇，心態上是有點急促，還沒寫我就覺得這篇會寫的不是很好。<br>
-但自己覺得要趕快恢復狀況，維持持續學習的習慣。</p>
+<p>這篇筆記是自己受傷後所寫的第一篇，希望自己能趕快恢復狀況，維持持續學習的習慣。</p>
 <h2 id=參考資料>參考資料</h2>
 <ol>
 <li><a href=https://www.amazon.com/Ansible-Automating-Configuration-Management-Deployment/dp/1491979801 target=_blank rel="noopener noreffer">Ansible: Up and Running: Automating Configuration Management and Deployment the Easy Way (3rd edition)</a></li>
