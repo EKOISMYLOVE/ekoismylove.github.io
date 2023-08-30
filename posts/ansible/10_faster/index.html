@@ -135,14 +135,14 @@ Cancel
 <h2 id=pipelining>Pipelining</h2>
 <pre tabindex=0><code>[connection]
 pipelining = True
-</code></pre><p><del>好了，把他設定為 True 就好</del>
+</code></pre><p><del>好了，把他設定為 True 就好。</del><br>
 複習一下 Ansible 執行流程：</p>
 <ol>
-<li>將根據正在使用的模組產生 python script</li>
-<li>將 python script 複製到主機</li>
-<li>執行 python script</li>
+<li>將根據正在使用的模組產生 python script。</li>
+<li>將 python script 複製到主機。</li>
+<li>執行 python script。</li>
 </ol>
-<p>透過啟用 pipelining，則 Ansible 會透過執行許多模組，而不是將檔案傳輸到遠端主機上來執行。
+<p>透過啟用 pipelining，則 Ansible 會透過執行許多模組，而不是將檔案傳輸到遠端主機上來執行。<br>
 一來減少檔案傳輸的時間，二來減少了網路連接，透過這個方式來加快速度。<br>
 不過這個方式，經常一開始會因為 <code>requiretty</code> 出錯，這時候使用 <code>visudo</code> 修改 <code>sudo</code> 即可 :</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>
