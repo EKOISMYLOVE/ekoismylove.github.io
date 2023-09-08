@@ -5,9 +5,9 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>Ansible - How to go faster - Wei's Note</title><meta name=Description content="當我們開始定期使用 Ansible 時，有時會想讓自己的 playbook 運行得更快。
-本篇文章將簡述減少 Ansible 執行 playbook 所需時間的一些方法。"><meta name=keywords content="Ansible,Infra"><meta property="og:title" content="Ansible - How to go faster">
+本篇文章將簡述減少 Ansible 執行 playbook 之所需時間的一些方法。"><meta name=keywords content="Ansible,Infra"><meta property="og:title" content="Ansible - How to go faster">
 <meta property="og:description" content="當我們開始定期使用 Ansible 時，有時會想讓自己的 playbook 運行得更快。
-本篇文章將簡述減少 Ansible 執行 playbook 所需時間的一些方法。">
+本篇文章將簡述減少 Ansible 執行 playbook 之所需時間的一些方法。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/10_faster/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/10_faster/ansible-logo.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2023-08-25T00:00:00+00:00">
@@ -16,7 +16,7 @@
 <meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/10_faster/ansible-logo.png">
 <meta name=twitter:title content="Ansible - How to go faster">
 <meta name=twitter:description content="當我們開始定期使用 Ansible 時，有時會想讓自己的 playbook 運行得更快。
-本篇文章將簡述減少 Ansible 執行 playbook 所需時間的一些方法。">
+本篇文章將簡述減少 Ansible 執行 playbook 之所需時間的一些方法。">
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
@@ -117,7 +117,7 @@ Cancel
 </ul>
 </nav></div>
 </div><div class=content id=content><p>當我們開始定期使用 Ansible 時，有時會想讓自己的 playbook 運行得更快。<br>
-本篇文章將簡述減少 Ansible 執行 playbook 所需時間的一些方法。</p>
+本篇文章將簡述減少 Ansible 執行 playbook 之所需時間的一些方法。</p>
 <h2 id=ssh>SSH</h2>
 <h3 id=multiplexing-and-controlpersist>Multiplexing and ControlPersist</h3>
 <p>Ansible 使用 SSH 作為主要的傳輸機制，SSH 是基於 TCP 傳輸協定，設備之間要先協商該次連接，完成後才實際進行傳輸行為。<br>
