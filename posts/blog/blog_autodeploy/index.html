@@ -1,0 +1,257 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Hugo 部落格建置 - 透過 Github Action 編譯與部署 - Wei's Note</title><meta name=Description content="本篇文章介紹如何在 Github 建立 Hugo 的編譯環境，並且透過 Github Action 部署到Github 的個人網站上。"><meta name=keywords content="Hugo,blog,Web,Github Action"><meta property="og:title" content="Hugo 部落格建置 - 透過 Github Action 編譯與部署">
+<meta property="og:description" content="本篇文章介紹如何在 Github 建立 Hugo 的編譯環境，並且透過 Github Action 部署到Github 的個人網站上。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/blog/blog_autodeploy/"><meta property="og:image" content="http://ekoismylove.github.io/posts/blog/blog_autodeploy/hugo_logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-09-27T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-09-27T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/blog/blog_autodeploy/hugo_logo.png">
+<meta name=twitter:title content="Hugo 部落格建置 - 透過 Github Action 編譯與部署">
+<meta name=twitter:description content="本篇文章介紹如何在 Github 建立 Hugo 的編譯環境，並且透過 Github Action 部署到Github 的個人網站上。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/blog/blog_autodeploy/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/10_faster/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Hugo 部落格建置 - 透過 Github Action 編譯與部署","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/blog\/blog_autodeploy\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/blog\/blog_autodeploy\/hugo_logo.png","width":1280,"height":350}],"genre":"posts","keywords":"Hugo, blog, Web, Github Action","wordcount":242,"url":"http:\/\/ekoismylove.github.io\/posts\/blog\/blog_autodeploy\/","datePublished":"2023-09-27T00:00:00+00:00","dateModified":"2023-09-27T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Hugo 部落格建置 - 透過 Github Action 編譯與部署</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/blog/><i class="far fa-folder fa-fw"></i>blog</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-09-27>2023-09-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;242 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#建立-repo>建立 repo</a></li>
+<li><a href=#建立-workflow>建立 workflow</a></li>
+<li><a href=#上傳本地端環境>上傳本地端環境</a></li>
+<li><a href=#token>Token</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇文章介紹如何在 Github 建立 Hugo 的編譯環境，並且透過 Github Action 部署到Github 的個人網站上。</p>
+<hr>
+<h2 id=前言>前言</h2>
+<p>之所以會寫這邊，一來是因為有點忘記當初是怎麼架設的，二來是這個 blog 被看到了，對方敲碗詢問怎麼運作的，於是才有了這篇文章。</p>
+<p>在看這篇文章之前，請先看<a href=https://ekoismylove.github.io/posts/blog/blog_build/ target=_blank rel="noopener noreffer">Hugo 部落格建置 - 安裝與部署</a>這邊文章，我們先把本地的環境架設好，再開始做後續的事情！</p>
+<hr>
+<h2 id=建立-repo>建立 repo</h2>
+<p>在這之前，我們要先建立兩個 repo，一個請你用你的帳號名稱命名，格式為[username].github.io，我這次的範例是 weiweihugo.github.io，這邊是要存放編譯後所產生的網頁檔。這個 repo 請選擇 public，因為是要給別人看的。</p>
+<div class="details admonition info open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>如果你使用其他名稱，那你連上去的url就要加上你的 repo name。<br>
+像是我使用 test 的話，那我就要用 weiweihugo.github.io/test 才看得到。</div>
+</div>
+</div>
+<p>另一個 repo 請你用你自己好記的名稱命名即可，這邊是要存放你的編譯環境，我們之後會把我們在本地端的環境 push 上去。這個 repo 請務必選擇 private，因為會存放 key，避免 key 外流而使得他人可以對你的 repo 動手腳。</p>
+<p>建立好了之後，我們先隨意上傳一個 index.html 並設定，確認我們是否能透過 [username].github.io 瀏覽到網頁。這邊的 index.html 就自己先隨意設計一個即可。</p>
+<p>如果上傳成功後，你應該能直接透過 [username].github.io 瀏覽到網頁。</p>
+<figure><a class=lightgallery href=/posts/blog/blog_autodeploy/firstpush.png title=/posts/blog/blog_autodeploy/firstpush.png data-thumbnail=/posts/blog/blog_autodeploy/firstpush.png data-sub-html="<h2>如果看到這個，表示沒問題。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=firstpush.png data-srcset="/posts/blog/blog_autodeploy/firstpush.png, firstpush.png 1.5x, /posts/blog/blog_autodeploy/firstpush.png 2x" data-sizes=auto alt=/posts/blog/blog_autodeploy/firstpush.png width=50%>
+</a><figcaption class=image-caption>如果看到這個，表示沒問題。</figcaption>
+</figure>
+<h2 id=建立-workflow>建立 workflow</h2>
+<p>我們進入那個 private 屬性的 repo，直接點選上方的 action，並選擇 Simple workflow。</p>
+<figure><a class=lightgallery href=/posts/blog/blog_autodeploy/simple_workflow.png title=/posts/blog/blog_autodeploy/simple_workflow.png data-thumbnail=/posts/blog/blog_autodeploy/simple_workflow.png data-sub-html="<h2>點這個</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=simple_workflow.png data-srcset="/posts/blog/blog_autodeploy/simple_workflow.png, simple_workflow.png 1.5x, /posts/blog/blog_autodeploy/simple_workflow.png 2x" data-sizes=auto alt=/posts/blog/blog_autodeploy/simple_workflow.png width=100%>
+</a><figcaption class=image-caption>點這個</figcaption>
+</figure>
+<p>接著貼上我已經寫好了 workflow，並稍微修改後面的變數即可。我有在內部加上說明。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CI</span><span class=w>
+</span><span class=w></span><span class=c># 當我們 push 時會觸發。</span><span class=w>
+</span><span class=w></span><span class=nt>on</span><span class=p>:</span><span class=w> </span><span class=l>push </span><span class=w>
+</span><span class=w></span><span class=nt>jobs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>deploy</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=c># 我們設定 ubuntu 為 runner。</span><span class=w>
+</span><span class=w>    </span><span class=nt>runs-on</span><span class=p>:</span><span class=w> </span><span class=l>ubuntu-20.04</span><span class=w>
+</span><span class=w>    </span><span class=nt>steps</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Git checkout</span><span class=w>
+</span><span class=w>        </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>actions/checkout@v2</span><span class=w>
+</span><span class=w>      </span><span class=c># 安裝 hugo，這裡使用最常被用的 peaceiris/actions-hugo@v2</span><span class=w>
+</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Setup hugo</span><span class=w>
+</span><span class=w>        </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>peaceiris/actions-hugo@v2</span><span class=w>
+</span><span class=w>        </span><span class=nt>with</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=nt>hugo-version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;0.92.2&#34;</span><span class=w>
+</span><span class=w>      </span><span class=c># 這邊是建置時使用的指令，我喜歡用 --minify</span><span class=w>
+</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Build</span><span class=w>
+</span><span class=w>        </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=l>hugo --minify</span><span class=w>
+</span><span class=w>      </span><span class=c># 這邊是部署的部分</span><span class=w>
+</span><span class=w>        </span><span class=c># token 後續會提到，不用動。</span><span class=w>
+</span><span class=w>        </span><span class=c># 要動的只有 external_repository, user_name, user_email</span><span class=w>
+</span><span class=w>        </span><span class=c># 如果你有改網頁產出的目錄，請更動publish_dir</span><span class=w>
+</span><span class=w>        </span><span class=c># 如果你需要更改 target branch，請更改 publish_branch</span><span class=w>
+</span><span class=w>        </span><span class=c># 如果 workflow 不能用的話，可以檢查一下各行的 tag 跟 space。</span><span class=w>
+</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Deploy</span><span class=w>
+</span><span class=w>        </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>peaceiris/actions-gh-pages@v3</span><span class=w>
+</span><span class=w>        </span><span class=nt>with</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=nt>personal_token</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.TOKEN }}</span><span class=w>
+</span><span class=w>          </span><span class=nt>external_repository</span><span class=p>:</span><span class=w> </span><span class=l>username/username.github.io</span><span class=w>
+</span><span class=w>          </span><span class=nt>publish_dir</span><span class=p>:</span><span class=w> </span><span class=l>./public</span><span class=w>
+</span><span class=w>          </span><span class=nt>user_name</span><span class=p>:</span><span class=w> </span><span class=l>你的username</span><span class=w>
+</span><span class=w>          </span><span class=nt>user_email</span><span class=p>:</span><span class=w> </span><span class=l>你的信箱</span><span class=w>
+</span><span class=w>          </span><span class=nt>publish_branch</span><span class=p>:</span><span class=w> </span><span class=l>main </span><span class=w>
+</span></code></pre></div><p>這時候，Github action 應該會開始運作，並且給你一個叉叉，因為我們又還沒上傳本地端的環境。</p>
+<h2 id=上傳本地端環境>上傳本地端環境</h2>
+<p>我們須將 config.toml 的那個目錄為相對根目錄，把所有檔案 push 上去到 private 那個 repo，也就是有 workflow 的那個 repo，不要推錯了唷！
+<figure><a class=lightgallery href=/posts/blog/blog_autodeploy/pushed.png title=/posts/blog/blog_autodeploy/pushed.png data-thumbnail=/posts/blog/blog_autodeploy/pushed.png data-sub-html="<h2>應該會有這些。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=pushed.png data-srcset="/posts/blog/blog_autodeploy/pushed.png, pushed.png 1.5x, /posts/blog/blog_autodeploy/pushed.png 2x" data-sizes=auto alt=/posts/blog/blog_autodeploy/pushed.png width=100%>
+</a><figcaption class=image-caption>應該會有這些。</figcaption>
+</figure></p>
+<p>這個時候，因為我們又做了一次 push ，所以又會再一次執行 Github Action，此時又給我們一個叉叉，是因為我們沒有設定 token，所以我們接下來要來產生 Token 並設定。</p>
+<h2 id=token>Token</h2>
+<p>因為我們是跨 repo 進行，故不能使用 repo 內的 secret 功能，我們需要到個人設定內的 developer setting 內進行。
+<figure><a class=lightgallery href=/posts/blog/blog_autodeploy/createToken.png title=/posts/blog/blog_autodeploy/createToken.png data-thumbnail=/posts/blog/blog_autodeploy/createToken.png data-sub-html="<h2>點那個 Generate。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=createToken.png data-srcset="/posts/blog/blog_autodeploy/createToken.png, createToken.png 1.5x, /posts/blog/blog_autodeploy/createToken.png 2x" data-sizes=auto alt=/posts/blog/blog_autodeploy/createToken.png width=100%>
+</a><figcaption class=image-caption>點那個 Generate。</figcaption>
+</figure></p>
+<p>Note 的部分就使用容易識別的，日期的話 github 有限制，最長是一年的樣子。<br>
+權限的話只需要開 repo 跟 workflow 即可。</p>
+<figure><a class=lightgallery href=/posts/blog/blog_autodeploy/tokenSetting.png title=/posts/blog/blog_autodeploy/tokenSetting.png data-thumbnail=/posts/blog/blog_autodeploy/tokenSetting.png data-sub-html="<h2>好了就往下到底，點那個 Generate。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=tokenSetting.png data-srcset="/posts/blog/blog_autodeploy/tokenSetting.png, tokenSetting.png 1.5x, /posts/blog/blog_autodeploy/tokenSetting.png 2x" data-sizes=auto alt=/posts/blog/blog_autodeploy/tokenSetting.png width=100%>
+</a><figcaption class=image-caption>好了就往下到底，點那個 Generate。</figcaption>
+</figure>
+<div class="details admonition danger open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-skull-crossbones fa-fw"></i>Danger<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>這時候 Github 會給你 token，務必先備份起來！！<br>
+因為你關掉頁面後，就再也看不到！！<br>
+然後也不要給任何不信任的人！</div>
+</div>
+</div>
+<p>之後我們到 private 這個 repo 設定 token，點選 New repository secrets
+<figure><a class=lightgallery href=/posts/blog/blog_autodeploy/setToken.png title=/posts/blog/blog_autodeploy/setToken.png data-thumbnail=/posts/blog/blog_autodeploy/setToken.png data-sub-html="<h2>怎麼頁面都好像。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=setToken.png data-srcset="/posts/blog/blog_autodeploy/setToken.png, setToken.png 1.5x, /posts/blog/blog_autodeploy/setToken.png 2x" data-sizes=auto alt=/posts/blog/blog_autodeploy/setToken.png width=100%>
+</a><figcaption class=image-caption>怎麼頁面都好像。</figcaption>
+</figure></p>
+<p>接著會有兩個欄位要填寫：</p>
+<ul>
+<li>Name : 如果你稍早的 workflow 是使用 <code>${{secrets.TOKEN}}</code> ，那這邊就要填入 TOKEN，如果是自己取變數名稱叫做 <code>${{secrets.XXX}}</code>，那這邊就填入XXX。</li>
+<li>Secret : 貼上剛剛產生的 Token。
+<figure><a class=lightgallery href=/posts/blog/blog_autodeploy/typeSecret.png title=/posts/blog/blog_autodeploy/typeSecret.png data-thumbnail=/posts/blog/blog_autodeploy/typeSecret.png data-sub-html="<h2>記得按那個 Add secret。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=typeSecret.png data-srcset="/posts/blog/blog_autodeploy/typeSecret.png, typeSecret.png 1.5x, /posts/blog/blog_autodeploy/typeSecret.png 2x" data-sizes=auto alt=/posts/blog/blog_autodeploy/typeSecret.png width=100%>
+</a><figcaption class=image-caption>記得按那個 Add secret。</figcaption>
+</figure></li>
+</ul>
+<p>到這邊就完成囉！你可以到 Github Action 內 re-job 或是 push 上去，讓 Github Action 再讓你重新產生頁面並部署到你的 Github pages 上，接著用[username].github.io 瀏覽網頁。</p>
+<p>往後你也只需要 push content 內的內容即可，如果你有做 theme 或是相關的修改，一律 push 就對了！！</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://blog.puckwang.com/posts/2020/use-github-actions-deploy-hugo/ target=_blank rel="noopener noreffer">使用 Github Actions 來自動化部署 Hugo 到 Github Pages</a></li>
+<li><a href=https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens target=_blank rel="noopener noreffer">Managing your personal access tokens</a></li>
+<li><a href=https://github.com/peaceiris/actions-hugo target=_blank rel="noopener noreffer">peaceiris/actions-hugo@v2</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2023-09-27</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/blog/blog_autodeploy/ data-title="Hugo 部落格建置 - 透過 Github Action 編譯與部署" data-via=wiwi571246 data-hashtags="Hugo,blog,Web,Github Action"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/blog/blog_autodeploy/ data-hashtag=Hugo><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/blog/blog_autodeploy/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/blog/blog_autodeploy/ data-title="Hugo 部落格建置 - 透過 Github Action 編譯與部署"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/hugo/>Hugo</a>,&nbsp;<a href=/tags/blog/>blog</a>,&nbsp;<a href=/tags/web/>Web</a>,&nbsp;<a href=/tags/github-action/>Github Action</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/ansible/10_faster/ class=prev rel=prev title="Ansible - How to go faster"><i class="fas fa-angle-left fa-fw"></i>Ansible - How to go faster</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
