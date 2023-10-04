@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Golang - 測試(Tests) - Wei&#39;s Note</title><meta name="Description" content="簡單說明如何進行程式碼測試，介紹檢查代碼覆蓋率與編寫基準測試。"><meta name="keywords" content='go, golang' /><meta property="og:title" content="Golang - 測試(Tests)" />
+<meta property="og:description" content="簡單說明如何進行程式碼測試，介紹檢查代碼覆蓋率與編寫基準測試。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/go_note13/" /><meta property="og:image" content="http://ekoismylove.github.io/posts/go/go_note13/go_header.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-25T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-03-26T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://ekoismylove.github.io/posts/go/go_note13/go_header.png"/>
+<meta name="twitter:title" content="Golang - 測試(Tests)"/>
+<meta name="twitter:description" content="簡單說明如何進行程式碼測試，介紹檢查代碼覆蓋率與編寫基準測試。"/>
+<meta name="application-name" content="Wei&#39;s Note">
+<meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://ekoismylove.github.io/posts/go/go_note13/" /><link rel="prev" href="http://ekoismylove.github.io/posts/go/go_note11/" /><link rel="next" href="http://ekoismylove.github.io/posts/go/go_note14/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Golang - 測試(Tests)",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note13\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note13\/go_header.png",
+                            "width":  820 ,
+                            "height":  364 
+                        }],"genre": "posts","keywords": "go, golang","wordcount":  360 ,
+        "url": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note13\/","datePublished": "2022-03-25T00:00:00+00:00","dateModified": "2022-03-26T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "Wei","logo": "http:\/\/ekoismylove.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Wei"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Golang - 測試(Tests)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-25">2022-03-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;360 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#basic">Basic</a>
+      <ul>
+        <li><a href="#測試失敗">測試失敗</a></li>
+      </ul>
+    </li>
+    <li><a href="#testmain">TestMain</a>
+      <ul>
+        <li><a href="#testdata">testdata</a></li>
+        <li><a href="#測試-public-api">測試 public api</a></li>
+      </ul>
+    </li>
+    <li><a href="#code-coverage">Code Coverage</a></li>
+    <li><a href="#benchmarks">Benchmarks</a></li>
+    <li><a href="#stubs">Stubs</a></li>
+    <li><a href="#參考資料reference">參考資料(Reference)</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>簡單說明如何進行程式碼測試，介紹檢查代碼覆蓋率與編寫基準測試。</p>
+<h2 id="basic">Basic</h2>
+<p>測試分成兩個部分：</p>
+<ul>
+<li>package : <code>testing</code></li>
+<li>tool : <code>go test</code></li>
+</ul>
+<p><code>testing</code> 提供了測試的類型與函數，而 <code>go test</code> 則是將相關工具綁在一起進行測試後產生報告。<br>
+另外， Go 的測試與程式碼會放在同一個目錄，或是同一個 package 當中，也因為在同一個 package 中，所以可以測試未導出的變數與函數。</p>
+<p>一個簡單的測試，先寫好一個要被測試的函數，並存放在 adder/adder.go 中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">adder</span>
+
+<span class="kd">func</span> <span class="nf">addNumbers</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">x</span>
+<span class="p">}</span>
+
+</code></pre></div><p>每個測試都寫在一個以 _test.go 結尾的檔案中。<br>
+因此，測試會放在 adder/adder_test.go：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">adder</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;testing&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">Test_Adder</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">){</span>
+	<span class="nx">result</span> <span class="o">:=</span> <span class="nf">addNumbers</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">result</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;incorrect result&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>測試函數開頭，會以 <code>Test</code> 為開頭，並傳入 <code>*testing.T</code>。<br>
+測試函數不會返回任何數值。這個測試中會使用 <code>t.Error</code> 返回錯誤訊息，用法與 <code>fmt.Println</code> 類似。<br>
+完成之後使用 <code>go test</code> 進行測試：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ go <span class="nb">test</span> 
+PASS 
+ok test_examples/adder 0.006s
+</code></pre></div><h3 id="測試失敗">測試失敗</h3>
+<p>剛剛使用的 <code>t.Error</code> 是報告的其中一個方法，也可使用 <code>t.Errorf</code> 格式化輸出。<br>
+另外也可以使用 <code>t.Fatal</code>或是 <code>t.Fatalf</code>，它會在錯誤發生時，中斷測試，而使用 <code>t.Error</code> 則不會。<br>
+看自己要怎麼應用測試而使用。</p>
+<h2 id="testmain">TestMain</h2>
+<p>有時候在測試時，要先設定一些環境或變數再開始進行測試，透過 <code>TestMain</code> 可以讓我們在測試前或測試後做一些事情，像是我要從 database 或是外部撈數據之後，透過這些事情的結果再進行測試。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">testTime</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+
+<span class="kd">func</span> <span class="nf">TestMain</span><span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">M</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Set up stuff for tests here&#34;</span><span class="p">)</span>
+	<span class="nx">testTime</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+	<span class="nx">exitVal</span> <span class="o">:=</span> <span class="nx">m</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Clean up stuff after tests here&#34;</span><span class="p">)</span>
+	<span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="nx">exitVal</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">TestFirst</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;TestFirst uses stuff set up in TestMain&#34;</span><span class="p">,</span> <span class="nx">testTime</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">TestSecond</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;TestSecond also uses stuff set up in TestMain&#34;</span><span class="p">,</span> <span class="nx">testTime</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p>我們建立了一個 TestMain，在裡面初始化了需要使用的變數，完成後使用 <code>Run</code> 去執行 test，這時就會開始進行測試。<br>
+要注意一點是，最後必須從 <code>Run</code> 裡面使用 <code>os.Exit</code> 來結束測試。
+TestMain 他不會單獨的在測試函式前後執行，另外要注意的是，每個 package 內只能有一個 TestMain。</p>
+<h3 id="testdata">testdata</h3>
+<p>Go 有保留這個目錄名稱，作為存放初始測試資料的目錄，從這個目錄存取檔案時，請使用相對路徑。</p>
+<h3 id="測試-public-api">測試 public api</h3>
+<p>前面我們提到過，函數的大小寫字首決定他是否為 public，如果我們只想測試 public api，透過下列的方法即可，一樣會以前面的 adder 為例子。<br>
+<code>adder.go</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">adder</span>
+<span class="c1">// public : 字首大寫
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">AddNumbers</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">x</span>
+<span class="p">}</span>
+</code></pre></div><p><code>adder_test.go</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Package 的名稱後面加上 _test
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">adder_test</span>	
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;testing&#34;</span>
+	<span class="c1">// 導入 adder，使用時注意路徑
+</span><span class="c1"></span>	<span class="s">&#34;adder&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">Test_Adder</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">){</span>
+	<span class="nx">result</span> <span class="o">:=</span> <span class="nx">adder</span><span class="p">.</span><span class="nf">AddNumbers</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">result</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;incorrect result&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="code-coverage">Code Coverage</h2>
+<p>Code Coverage 可以幫助我們了解，程式中是否有遺漏明顯的地方，雖然覆蓋率 100% 不代表程式運作 100% 正常，但至少可以降低錯誤發生的機率(吧)<br>
+透過 <code>go test -v -cover</code> 可以顯示覆蓋率，如果再加上 <code>-coverprofile=[filename]</code> 可以把訊息輸出。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ go <span class="nb">test</span> -v -cover -coverprofile<span class="o">=</span>test.out
+</code></pre></div><p>輸出後可以用 html 的方式開啟，會告訴你哪邊有被覆蓋，哪邊尚未被覆蓋。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ go tool cover -html<span class="o">=</span>test.out
+</code></pre></div><a class="lightgallery" href="/posts/go/go_note13/cover.png" title="/posts/go/go_note13/cover.png" data-thumbnail="/posts/go/go_note13/cover.png">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="cover.png"
+            data-srcset="/posts/go/go_note13/cover.png, cover.png 1.5x, /posts/go/go_note13/cover.png 2x"
+            data-sizes="auto"
+            alt="/posts/go/go_note13/cover.png" width="100%" />
+    </a>
+<h2 id="benchmarks">Benchmarks</h2>
+<p>當我們的程式都沒問題了之後，下一步要測試的可能是程式的快慢，Go 提供了 <code>test_examples/bench</code> 讓我們可以進行一些基準測試：</p>
+<ul>
+<li>要以 <code>Benchmark</code> 作為開頭。</li>
+<li>接收一個 <code>*testing.B</code> 類型的參數</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">BenchmarkSay</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">){</span>
+	<span class="k">for</span> <span class="nx">i</span><span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="p">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">adder</span><span class="p">.</span><span class="nf">Say</span><span class="p">(</span><span class="s">&#34;Hi&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>每個 Go 基準測試都必須有一個從 0 迭代到 b.N，測試框架一遍又一遍地用越來越大的 N 值調用我們的基準函數，直到確定計時結果準確為止。<br>
+測試時使用 <code>-bench=.</code> 執行所有的基準測試，再加上 <code>-benchmem</code> 會顯示記憶體的資訊。<br>
+如果測試程式中有一般的測試(*testing.T)與基準測試，則會先執行一般的測試再進行基準測試。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ go <span class="nb">test</span> -bench<span class="o">=</span>. -benchmem
+goos: darwin
+goarch: amd64
+pkg: adder
+BenchmarkSay-4   	       2	 <span class="m">512890848</span> ns/op	      <span class="m">48</span> B/op	       <span class="m">1</span> allocs/op
+PASS
+ok  	adder	1.555s
+</code></pre></div><ul>
+<li>BenchmarkSay-4 : 名稱</li>
+<li>2 : 測試運行已產生穩定結果的次數</li>
+<li>512890848 ns/op : 執行一次測試需要花費的時間</li>
+<li>48 B/op : 每次測試使用的記憶體空間</li>
+<li>1 allocs/op : 每次測試發生了多少由 heap 分配的次數。</li>
+</ul>
+<h2 id="stubs">Stubs</h2>
+<p>因為函數之間通常會有依賴關係，在測試中可能會因為某個函數需要前一個動作處理後的結果，才能進行測試，比方說，我需要從 database 取得資料，故我要先與 database 進行連線，但我只是要測試取得資料這個函式而已，能不能不要與 database 進行連線？<br>
+在前面我們提到了 function type 與 interface type，我們可以透過這兩種類型降低測試時的函式依賴。</p>
+<p><strong>範例待補</strong></p>
+<h2 id="參考資料reference">參考資料(Reference)</h2>
+<ol>
+<li><a href="https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216" target="_blank" rel="noopener noreffer">Learning Go</a> (書籍)</li>
+</ol></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-03-26</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://ekoismylove.github.io/posts/go/go_note13/" data-title="Golang - 測試(Tests)" data-via="wiwi571246" data-hashtags="go,golang"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://ekoismylove.github.io/posts/go/go_note13/" data-hashtag="go"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://ekoismylove.github.io/posts/go/go_note13/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://ekoismylove.github.io/posts/go/go_note13/" data-title="Golang - 測試(Tests)"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">go</a>,&nbsp;<a href="/tags/golang/">golang</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/go/go_note11/" class="prev" rel="prev" title="Golang - 標準函式庫(Standard Library)"><i class="fas fa-angle-left fa-fw"></i>Golang - 標準函式庫(Standard Library)</a>
+            <a href="/posts/go/go_note14/" class="next" rel="next" title="Golang - 反射，不安全與Cgo (Reflect, Unsafe, and Cgo)">Golang - 反射，不安全與Cgo (Reflect, Unsafe, and Cgo)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="utterances"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span>&nbsp;|&nbsp;<span class="license"><a href = "https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script src="/dayjs.min.js"></script><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":200},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"EKOISMYLOVE/blog_comment"}},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"V23NTWV8MR","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"ecc9ae3d4e27fdfec35503cae9c6b716","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

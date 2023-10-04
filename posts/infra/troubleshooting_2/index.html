@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>故障排除的工具介紹與使用方式--服務中斷 - Wei&#39;s Note</title><meta name="Description" content="這篇會簡單提一下自己在網路正常卻無法存取服務時，自己會使用的工具與使用方式。"><meta name="keywords" content='Infra, Troubleshooting, debug, tools' /><meta property="og:title" content="故障排除的工具介紹與使用方式--服務中斷" />
+<meta property="og:description" content="這篇會簡單提一下自己在網路正常卻無法存取服務時，自己會使用的工具與使用方式。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/troubleshooting_2/" /><meta property="og:image" content="http://ekoismylove.github.io/posts/infra/troubleshooting_2/troubleshooting_header_content.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-17T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-06-20T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://ekoismylove.github.io/posts/infra/troubleshooting_2/troubleshooting_header_content.jpg"/>
+<meta name="twitter:title" content="故障排除的工具介紹與使用方式--服務中斷"/>
+<meta name="twitter:description" content="這篇會簡單提一下自己在網路正常卻無法存取服務時，自己會使用的工具與使用方式。"/>
+<meta name="application-name" content="Wei&#39;s Note">
+<meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://ekoismylove.github.io/posts/infra/troubleshooting_2/" /><link rel="prev" href="http://ekoismylove.github.io/posts/infra/troubleshooting_1/" /><link rel="next" href="http://ekoismylove.github.io/posts/infra/troubleshooting_3/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "故障排除的工具介紹與使用方式--服務中斷",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/troubleshooting_header_content.jpg",
+                            "width":  2914 ,
+                            "height":  966 
+                        }],"genre": "posts","keywords": "Infra, Troubleshooting, debug, tools","wordcount":  523 ,
+        "url": "http:\/\/ekoismylove.github.io\/posts\/infra\/troubleshooting_2\/","datePublished": "2022-06-17T00:00:00+00:00","dateModified": "2022-06-20T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "Wei","logo": "http:\/\/ekoismylove.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Wei"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">故障排除的工具介紹與使用方式--服務中斷</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/infra/"><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-06-17">2022-06-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;523 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/posts/infra/troubleshooting_2/troubleshooting_header_content.jpg"
+        data-srcset="/posts/infra/troubleshooting_2/troubleshooting_header_content.jpg, /posts/infra/troubleshooting_2/troubleshooting_header_content.jpg 1.5x, /posts/infra/troubleshooting_2/troubleshooting_header_content.jpg 2x"
+        data-sizes="auto"
+        alt="/posts/infra/troubleshooting_2/troubleshooting_header_content.jpg"
+        title="/posts/infra/troubleshooting_2/troubleshooting_header_content.jpg" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#netstat">netstat</a>
+      <ul>
+        <li><a href="#ss">ss</a></li>
+        <li><a href="#tcp-states">TCP states</a></li>
+      </ul>
+    </li>
+    <li><a href="#nmap">nmap</a></li>
+    <li><a href="#nc-netcat">nc (netcat)</a></li>
+    <li><a href="#小結論">小結論</a></li>
+    <li><a href="#參考資料">參考資料</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>這篇會簡單提一下自己在網路正常卻無法存取服務時，自己會使用的工具與使用方式。</p>
+<h2 id="前言">前言</h2>
+<p>上一篇文章基本上是自己在找網路中斷的問題時會用到的工具，但許多時候網路是正常的，問題點則是在伺服器或服務上。<br>
+我通常會看服務是否有啟用，並根據相對應的服務做後續的處理，下面是我在這種情境中，我經常用到的工具。</p>
+<ul>
+<li>netstat(ss)</li>
+<li>nmap</li>
+<li>nc</li>
+</ul>
+<h2 id="netstat">netstat</h2>
+<p>基本上許多作業系統都已預設安裝 netstat 這個工具，用來顯示目前網路連結的狀態 (connetion)。</p>
+<ul>
+<li>-s : 會顯示統計數據。可以在後面加上 t(tcp)或是u(udp) 對於協定做進一步的查詢。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ netstat -st
+IcmpMsg:
+    InType0: <span class="m">33</span>
+    InType11: <span class="m">319</span>
+    OutType3: <span class="m">7</span>
+    OutType8: <span class="m">352</span>
+Tcp:
+    <span class="m">50</span> active connection openings
+    <span class="m">14</span> passive connection openings
+    <span class="m">0</span> failed connection attempts
+    <span class="m">1</span> connection resets received
+    <span class="m">19</span> connections established
+    <span class="m">7193</span> segments received
+    <span class="m">7100</span> segments sent out
+    <span class="m">0</span> segments retransmitted
+    <span class="m">0</span> bad segments received
+    <span class="m">2</span> resets sent
+UdpLite:
+TcpExt:
+    <span class="m">39</span> TCP sockets finished <span class="nb">time</span> <span class="nb">wait</span> in fast timer
+    <span class="m">31</span> delayed acks sent
+    <span class="m">1818</span> packet headers predicted
+    <span class="m">2219</span> acknowledgments not containing data payload received
+    <span class="m">1497</span> predicted acknowledgments
+    TCPBacklogCoalesce: <span class="m">11</span>
+    TCPRcvCoalesce: <span class="m">293</span>
+    TCPAutoCorking: <span class="m">28</span>
+    TCPOrigDataSent: <span class="m">1900</span>
+    TCPKeepAlive: <span class="m">1830</span>
+    TCPDelivered: <span class="m">1950</span>
+IpExt:
+    InOctets: <span class="m">1865047</span>
+    OutOctets: <span class="m">207989</span>
+    InNoECTPkts: <span class="m">2521</span>
+</code></pre></div><ul>
+<li>-r : 可以顯示目前的路由表(routing table)。也可以透過 route 指令去顯示。(依據作業系統可能會是 route PRINT 或 route -n)</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ netstat -r
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+default         10.0.2.2        0.0.0.0         UG        <span class="m">0</span> <span class="m">0</span>          <span class="m">0</span> enp0s3
+10.0.2.0        0.0.0.0         255.255.255.0   U         <span class="m">0</span> <span class="m">0</span>          <span class="m">0</span> enp0s3
+</code></pre></div><ul>
+<li>-p : 可以觀察到是哪個 process 在存取。在 Windows 上的會是選擇觀察哪種協定(TCP, UDP)。</li>
+</ul>
+<p>netstat 還有許多參數可以使用，請依據自己遇到的情境挑選適合的參數。</p>
+<h3 id="ss">ss</h3>
+<p>基本上他就是 netstat 的加強版，基本上參數的使用也跟 netstat 差不多，個人覺得 ss 比較好用，看起來比較舒服一點，但 netstat 通常會是預設安裝，而 ss 則不是。
+ss 目前在 iproute2 中，要使用請安裝 iproute2 :</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ sudo apt-get install iproute2
+</code></pre></div><a class="lightgallery" href="/posts/infra/troubleshooting_2/ss.JPG" title="/posts/infra/troubleshooting_2/ss.JPG" data-thumbnail="/posts/infra/troubleshooting_2/ss.JPG">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="ss.JPG"
+            data-srcset="/posts/infra/troubleshooting_2/ss.JPG, ss.JPG 1.5x, /posts/infra/troubleshooting_2/ss.JPG 2x"
+            data-sizes="auto"
+            alt="/posts/infra/troubleshooting_2/ss.JPG" width="100%" />
+    </a>
+<h3 id="tcp-states">TCP states</h3>
+<p><strong>請你暫時忍耐一下，關閉夜間模式 !</strong></p>
+<figure><a class="lightgallery" href="/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg" title="/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg" data-thumbnail="/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg" data-sub-html="<h2>如同聖經般的 TCP 狀態圖。</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="tcp-state-diagram-v2.svg"
+            data-srcset="/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg, tcp-state-diagram-v2.svg 1.5x, /posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg 2x"
+            data-sizes="auto"
+            alt="/posts/infra/troubleshooting_2/tcp-state-diagram-v2.svg" width="100%" />
+    </a><figcaption class="image-caption">如同聖經般的 TCP 狀態圖。</figcaption>
+    </figure>
+<p>之所以會放這張圖是因為，有時候是 Service 在設計上時有問題，又或者是遇到服務被攻擊而造成的 breakdown，此時可以透過狀態來分析並進行後一步的處理。</p>
+<ul>
+<li>好比說我在 Server 上看到許多 <code>SYN_RECV</code> 狀態，可能代表在 3-way handshake 上遇到問題，Server 收到了 Client 發送的 SYN packet，於是 Server 的狀態為 <code>SYN_RECV</code> 並回傳一個 SYN+ACK 的封包並等待對方回傳 ACK，然而一直沒收到就保持在這個狀態許久。<br>
+通常遇到這種情形，可以先懷疑是 TCP SYN FLOOD 攻擊。</li>
+</ul>
+<h2 id="nmap">nmap</h2>
+<p>坦白說他是掃描 port 的工具，是自己以前在接觸 cyber security 時所學到的。<br>
+我會提到 nmap 是因為他可以讓我快速知道遠端機器是否存活，服務是否有掛上。<br>
+除此之外，nmap 也很常使用在網路安全上，並可以透過 script 和微調設定，掃瞄系統並檢查常見的漏洞，或是找到在常用的伺服器上具有的致命設定。(Web, Database and Mail &hellip; etc)<br>
+<del>有點扯太遠了，我還是拿來看 port 有沒有開即可 &hellip;</del></p>
+<div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">請不要對某個特定目標用 nmap 執行大量的 scan，你有可能因此被 block。</div>
+        </div>
+    </div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 最常使用的 scan command.</span>
+$ nmap -sS example.com 
+
+<span class="c1"># UDP Scan</span>
+$ nmap -sU example.com
+
+<span class="c1"># 針對某幾個 port number 做 Scan</span>
+$ nmap -sS -p 80,443 8.8.8.8
+Starting Nmap 7.80 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2022-06-16 19:34 HST
+Nmap scan report <span class="k">for</span> dns.google <span class="o">(</span>8.8.8.8<span class="o">)</span>
+Host is up <span class="o">(</span>0.0014s latency<span class="o">)</span>.
+
+PORT    STATE    SERVICE
+80/tcp  filtered http
+443/tcp open     https
+
+Nmap <span class="k">done</span>: <span class="m">1</span> IP address <span class="o">(</span><span class="m">1</span> host up<span class="o">)</span> scanned in 1.23 seconds
+</code></pre></div><h2 id="nc-netcat">nc (netcat)</h2>
+<p>一個很強但我不太會用的工具。(功能太多)<br>
+會簡單提一下我比較常用的功能:</p>
+<p>確認 Port 是否有開啟：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ nc -v example.com <span class="m">80</span>
+Warning: inverse host lookup failed <span class="k">for</span> 93.184.216.34: Unknown host
+example.com <span class="o">[</span>93.184.216.34<span class="o">]</span> <span class="m">80</span> <span class="o">(</span>http<span class="o">)</span> open
+</code></pre></div><p>如果沒有開啟則會得到這個結果：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ nc -v example.com <span class="m">2022</span>
+nc: connect to 192.168.233.208 <span class="m">2022</span> <span class="o">(</span>tcp<span class="o">)</span> failed: Connection refused
+<span class="c1">### 也有可能像到進黑洞，下完指令後就卡在那邊&gt;&lt;</span>
+<span class="c1">### 這時要看你的目標的防火牆或是相關的規則，進而導致有不同的結果。</span>
+</code></pre></div><p>也因此 <code>nc</code> 可以用來做 port scanning !
+不過這不代表可以取代 <code>nmap</code>，我覺得工具各有優缺點，像我做 scanning 應該還是會用 <code>nmap</code>。</p>
+<div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">再一次提醒，請不要對某個特定目標執行大量的 scan，你有可能被 block。</div>
+        </div>
+    </div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># nc -vnz [parameter] [Target IP address] [port range]</span>
+<span class="c1"># e.g.</span>
+$ nc -vz -w <span class="m">1</span> 8.8.8.8 2000-3000
+<span class="c1">## -w 是 timeout。</span>
+<span class="c1">## 這樣會是測 TCP 的，如果想要測 UDP ，就給他個 U 吧 !!</span>
+<span class="c1"># e.g.</span>
+$ nc -vzu  8.8.8.8 2000-3000
+</code></pre></div><p>如果你能同時控制兩台電腦，nc 也很常被用來傳輸檔案，<br>
+這邊要注意一下優先順序， Receiver 要先開啟後再由 Transmitter 傳輸。<br>
+<del>(冰箱沒有打開，要怎麼把大象放進去???)</del></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">## Receiver</span>
+$ nc -l -p <span class="m">3333</span> &gt; name.file
+
+<span class="c1">## Transmitter</span>
+$ nc <span class="o">[</span>receiver IP address<span class="o">]</span> <span class="m">3333</span> &lt; name.file
+</code></pre></div><p>自己比較常常用來把系統的日誌檔扔到自己的電腦，做一些分析~~(抱歉我的 grep, awk, sed 沒學好)~~<br>
+或許用 <code>scp</code> 與其他的 command 會比較快一點，但多學一個方式也不是壞處。<br>
+<del>可以偷偷把 Linux 上的 shadow 跟 passwd 拿出去然後做一些壞壞的事情(?</del></p>
+<p>也可以連線到服務，做簡單的測試：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ nc example.com <span class="m">80</span>
+GET / HTTP/1.1 <span class="c1"># 這一行是要自己 key in 的。</span>
+<span class="c1"># 但如果要測網頁，我會建議你用 curl, wget 或是我們常用的 browser 會比較快速也比較方便一點。</span>
+</code></pre></div><h2 id="小結論">小結論</h2>
+<p>在確定網路正常，但使用者仍無法連線至服務的情況下，我會使用上述的工具，快速檢查伺服器端的上的 service port 是否正常開啟，若不是正常開啟，又會是甚麼原因造成的。<br>
+並根據不同的服務，進一步使用不同的工具來做故障排除。<br>
+像是 DNS 就再用 dig 看一下紀錄是否正常，Web 就用 curl, wget 等。<br>
+當然，還有很多原因會造成網路正常但服務無法存取，至少希望能透過這些工具進一步的判斷故障點在何處，或是大概的範圍。</p>
+<p>最後，nmap 與 netcat(nc)都是很有力的工具，甚至可以單獨為一本書，在參考資料我會提到相關書籍可以參考。</p>
+<h2 id="參考資料">參考資料</h2>
+<ol>
+<li><a href="https://docs.microsoft.com/zh-tw/windows-server/administration/windows-commands/netstat" target="_blank" rel="noopener noreffer">Windows-commands: netstat</a></li>
+<li><a href="https://manpages.debian.org/testing/iproute2/ss.8.en.html" target="_blank" rel="noopener noreffer">manpages-ss, Debian testing</a></li>
+<li><a href="https://www.amazon.com/Nmap-Exploration-Security-discovery-fingertips/dp/1786467453" target="_blank" rel="noopener noreffer">Nmap Network Exploration and Security Auditing Cookbook</a></li>
+<li><a href="https://www.amazon.com/Netcat-Power-Tools-Jan-Kanclirz/dp/1597492574" target="_blank" rel="noopener noreffer">Netcat Power Tools</a></li>
+</ol></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-06-20</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://ekoismylove.github.io/posts/infra/troubleshooting_2/" data-title="故障排除的工具介紹與使用方式--服務中斷" data-via="wiwi571246" data-hashtags="Infra,Troubleshooting,debug,tools"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://ekoismylove.github.io/posts/infra/troubleshooting_2/" data-hashtag="Infra"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://ekoismylove.github.io/posts/infra/troubleshooting_2/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://ekoismylove.github.io/posts/infra/troubleshooting_2/" data-title="故障排除的工具介紹與使用方式--服務中斷"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/infra/">Infra</a>,&nbsp;<a href="/tags/troubleshooting/">Troubleshooting</a>,&nbsp;<a href="/tags/debug/">debug</a>,&nbsp;<a href="/tags/tools/">tools</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/infra/troubleshooting_1/" class="prev" rel="prev" title="故障排除的工具介紹與使用方式--網路中斷"><i class="fas fa-angle-left fa-fw"></i>故障排除的工具介紹與使用方式--網路中斷</a>
+            <a href="/posts/infra/troubleshooting_3/" class="next" rel="next" title="故障排除的工具介紹與使用方式--Slowly">故障排除的工具介紹與使用方式--Slowly<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="utterances"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span>&nbsp;|&nbsp;<span class="license"><a href = "https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script src="/dayjs.min.js"></script><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":200},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"EKOISMYLOVE/blog_comment"}},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"V23NTWV8MR","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"ecc9ae3d4e27fdfec35503cae9c6b716","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

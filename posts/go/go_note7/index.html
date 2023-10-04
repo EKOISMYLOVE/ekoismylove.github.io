@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Golang - 類型、方法與介面(Types, Methods, and Interfaces) - Wei&#39;s Note</title><meta name="Description" content="本篇文章會介紹類型、方法和介面。"><meta name="keywords" content='go, golang' /><meta property="og:title" content="Golang - 類型、方法與介面(Types, Methods, and Interfaces)" />
+<meta property="og:description" content="本篇文章會介紹類型、方法和介面。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/go_note7/" /><meta property="og:image" content="http://ekoismylove.github.io/posts/go/go_note7/go_header.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-03-23T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://ekoismylove.github.io/posts/go/go_note7/go_header.png"/>
+<meta name="twitter:title" content="Golang - 類型、方法與介面(Types, Methods, and Interfaces)"/>
+<meta name="twitter:description" content="本篇文章會介紹類型、方法和介面。"/>
+<meta name="application-name" content="Wei&#39;s Note">
+<meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://ekoismylove.github.io/posts/go/go_note7/" /><link rel="prev" href="http://ekoismylove.github.io/posts/application/catchtawawa/" /><link rel="next" href="http://ekoismylove.github.io/posts/go/go_note8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Golang - 類型、方法與介面(Types, Methods, and Interfaces)",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note7\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note7\/go_header.png",
+                            "width":  820 ,
+                            "height":  364 
+                        }],"genre": "posts","keywords": "go, golang","wordcount":  653 ,
+        "url": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note7\/","datePublished": "2022-03-15T00:00:00+00:00","dateModified": "2022-03-23T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "Wei","logo": "http:\/\/ekoismylove.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Wei"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Golang - 類型、方法與介面(Types, Methods, and Interfaces)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-15">2022-03-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;653 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#類型types">類型(Types)</a></li>
+    <li><a href="#方法method">方法(method)</a>
+      <ul>
+        <li><a href="#介紹">介紹</a></li>
+        <li><a href="#接收器receiver">接收器(receiver)</a></li>
+        <li><a href="#methods-are-function">Methods are Function</a></li>
+      </ul>
+    </li>
+    <li><a href="#介面interface">介面(Interface)</a>
+      <ul>
+        <li><a href="#使用-interface-的理由">使用 interface 的理由</a></li>
+        <li><a href="#nil">nil</a></li>
+        <li><a href="#empty-interface">Empty interface</a></li>
+        <li><a href="#type-assertions-and-type-switches">Type Assertions and Type Switches</a></li>
+        <li><a href="#function-interface">Function Interface</a></li>
+      </ul>
+    </li>
+    <li><a href="#補充">補充</a></li>
+    <li><a href="#參考資料reference">參考資料(Reference)</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>本篇文章會介紹類型、方法和介面。</p>
+<h2 id="類型types">類型(Types)</h2>
+<p>一種基本上就像我們前面用過的，由開發者自行定義的類型。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span><span class="p">{</span>
+    <span class="nx">Name</span> <span class="kt">string</span>
+    <span class="nx">Age</span> <span class="kt">int</span>
+<span class="p">}</span>
+</code></pre></div><p>另外也可以使用原始類型，甚至是以複合的方式定義類型。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Score</span> <span class="kt">int</span>
+<span class="kd">type</span> <span class="nx">Converter</span> <span class="kd">func</span><span class="p">(</span><span class="kt">string</span><span class="p">)</span><span class="nx">Score</span>
+<span class="kd">type</span> <span class="nx">TeamScore</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Score</span> 
+</code></pre></div><p>基本上可以在任何的 code block 定義類型，但就只能在該 code block 的範圍內存取，唯一的例外是 exported package block level type。</p>
+<h2 id="方法method">方法(method)</h2>
+<h3 id="介紹">介紹</h3>
+<p>聲明方法其實很像聲明函數，只是差在多了一個 receiver specification。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span><span class="p">{</span>
+    <span class="nx">Name</span> <span class="kt">string</span>
+    <span class="nx">Age</span> <span class="kt">int</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="nx">Person</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s, age %d&#34;</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span>  <span class="nx">p</span><span class="p">.</span><span class="nx">Age</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p>receiver 的名稱通常會是該類型的縮寫，通常是該類型的第一個字母。在其他語言中經常是使用 <code>this</code> 或 <code>self</code>。</p>
+<p>方法不能重載（overloading），這是 go 語言的特性，或許從其他語言再過來使用時，使用上可能會感到有些限制。</p>
+<p>那這是聲明方式，使用方式呢？也很簡單：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">me</span> <span class="o">:=</span> <span class="nx">Person</span> <span class="p">{</span>
+    <span class="nx">Name</span> <span class="p">:</span> <span class="s">&#34;Wei&#34;</span><span class="p">,</span>
+    <span class="nx">Age</span> <span class="p">:</span> <span class="mi">26</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="nx">output</span> <span class="p">=</span> <span class="nx">me</span><span class="p">.</span><span class="nf">String</span><span class="p">()</span>
+</code></pre></div><h3 id="接收器receiver">接收器(receiver)</h3>
+<p>前面的文章提到過，如果函數使用 pointer 類型的參數，代表這個傳入參數可能會被函式修改，相同的概念一樣在 receiver 上，receiver 有 pointer receiver 與 value receiver 兩種。</p>
+<p>決定使用哪種 receiver 可以參考以下規則：</p>
+<ul>
+<li>如果這個 method 需要修改 receiver，則必須使用 pointer receiver。</li>
+<li>如果這個 method 要處理 nil 的情況，則必須使用 pointer receiver。</li>
+<li>如果這個 method 不會修改 receiver，則可以使用 value receiver。</li>
+<li>如果這個 type 內的 method 中，有一個以上的 pointer receiver，建議保持一致，讓所有的 method 都使用 pointer receiver。</li>
+</ul>
+<h3 id="methods-are-function">Methods are Function</h3>
+<p>Method 其實就很像前面提到的 Function，我在書中看到一個比較特別的用法是 method expression，直接從 type 中建立一個 function。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Adder</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">start</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">a</span> <span class="nx">Adder</span><span class="p">)</span> <span class="nf">AddTo</span><span class="p">(</span><span class="nx">val</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="nx">val</span>
+<span class="p">}</span>
+
+<span class="nx">myAdder</span> <span class="o">:=</span> <span class="nx">Adder</span><span class="p">{</span><span class="nx">start</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+
+<span class="c1">// method expression
+</span><span class="c1"></span><span class="nx">f1</span> <span class="p">=</span> <span class="nx">Adder</span><span class="p">.</span><span class="nx">AddTo</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">f1</span><span class="p">(</span><span class="nx">myAdder</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">// print 20
+</span></code></pre></div><p>當然，從已經建立的 type 中將 method 取出來用也是可行的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">f2</span> <span class="p">=</span> <span class="nx">myAdder</span><span class="p">.</span><span class="nx">AddTo</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">f2</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span> <span class="c1">// print 25
+</span></code></pre></div><div class="details admonition Tips open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">複習一下：Golang 是 Call by Value.</div>
+        </div>
+    </div>
+<h2 id="介面interface">介面(Interface)</h2>
+<p>interface 定義並描述了某些其他類型必須具有的確切方法。</p>
+<p>聲明 Interface 也很簡單。interface 出現在 type 的名稱後方，通常會以 &ldquo;er&rdquo; 做為結尾命名。<br>
+我們在標準函式庫中，可以看到這個 <code>fmt.Stringer</code> 介面。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Stringer</span> <span class="kd">interface</span> <span class="p">{</span>
+    <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span>
+<span class="p">}</span>
+</code></pre></div><div class="details admonition Tips open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">看到 type 了嗎？所以也有一種類型是介面類型(interface type)。</div>
+        </div>
+    </div>
+<p>如果某個 type 有精確簽名(exact signature)的 method，就可以說他滿足該 interface，<br>
+像下面這個範例，因為他有一個 <code>String() string</code> 的 method。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Book</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Title</span>  <span class="kt">string</span>
+    <span class="nx">Author</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">b</span> <span class="nx">Book</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;Book: %s - %s&#34;</span><span class="p">,</span> <span class="nx">b</span><span class="p">.</span><span class="nx">Title</span><span class="p">,</span> <span class="nx">b</span><span class="p">.</span><span class="nx">Author</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p>下方這個 <code>Count</code> 類型也滿足 <code>fmt.Stringer</code> 介面。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Count</span> <span class="kt">int</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="nx">Count</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nx">c</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div><p>我們有兩種不同的類型，但他們都滿足 <code>fmt.Stringer</code> 介面。<br>
+反過來說，如果知道某個類型滿足 <code>fmt.Stringer</code> 介面，代表他有一個 method 是 <code>String() string</code>。</p>
+<p>也就是說，當我們在任何地方看到具有 interface type 的聲明，都可以使用任何類型，只要他滿足該 interface。
+這樣子我們不需要在意傳入的類型是什麼，我們需要在意的是該類型有什麼方法。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Printer</span><span class="p">(</span><span class="nx">s</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Stringer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nf">String</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="nx">book</span> <span class="o">:=</span> <span class="nx">Book</span><span class="p">{</span><span class="s">&#34;I am learing Go&#34;</span><span class="p">,</span> <span class="s">&#34;Wei&#34;</span><span class="p">}</span>
+<span class="nx">count</span> <span class="o">:=</span> <span class="nf">Count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nf">Printer</span><span class="p">(</span><span class="nx">book</span><span class="p">)</span>
+<span class="nf">Printer</span><span class="p">(</span><span class="nx">count</span><span class="p">)</span>
+<span class="c1">// output
+</span><span class="c1"></span><span class="nx">Book</span><span class="p">:</span> <span class="nx">I</span> <span class="nx">am</span> <span class="nx">learing</span> <span class="nx">Go</span> <span class="o">-</span> <span class="nx">Wei</span>
+<span class="mi">1</span>
+</code></pre></div><h3 id="使用-interface-的理由">使用 interface 的理由</h3>
+<ol>
+<li>減少重複或是樣板的程式碼。</li>
+<li>為了更容易在單元測試中使用模擬而不是實體類型</li>
+<li>作為一種架構工具，有助於強制執行程式碼庫各部分之間的解耦(decoupling)。</li>
+</ol>
+<p>第一點有一部分是因為，函式庫內已經幫你實現了許多，就不需要再去實現。<br>
+當然，要自己實現 interface 肯定是沒問題的。
+這裡附上一些常用到的 interface type 。<a href="https://www.alexedwards.net/blog/interfaces-explained#useful-interface-types" target="_blank" rel="noopener noreffer">link</a></p>
+<p>第二點，當產品有時會用到 DB 或是 internet 時，測試就不太好做，<br>
+比方說，我只是要測試一個 insert 的功能，但我在測試上我得先建立一個 Database 的測試實例，<br>
+但我可以透過建立一個 interface 並模擬 Database 達到我要的目的，在測試上我就不需要使用實際的 Database。</p>
+<p>最後也是 interface 最重要的一個特色，解耦。<br>
+降低函式庫之間的依賴關係，讓程式依賴於抽象，而不是依賴於實現。<br>
+以前面的例子來說，當我更改了 <code>Book</code> ，我不必去顧慮其他的程式，我只需要注意 <code>Book</code> 有沒有一個 method 滿足 interface 即可。
+但我將 <code>Printer</code> 的傳入參數更改為 <code>Book</code> 時，一來是我要考量到 <code>Count</code> 需不需要使用 <code>Printer</code>，二來是要考量到修改 <code>Book</code> 會不會影響到 <code>Printer</code> 運作。<br>
+不過就是剛開始開發時會比較累一點，畢竟多了一個 interface 要設計。</p>
+<h3 id="nil">nil</h3>
+<p>nil 也是 interface type 的 zero value。<br>
+只是要注意一點，是 interface 的 type 與 value 都是 nil，才會被認為是 nil。
+如果 interface 是 nil，使用他的 method 會造成 panic。
+但就算 interface 不是 nil，如果 value 是 nil 且沒有處理好該情況，仍然有機會產生 panic。</p>
+<h3 id="empty-interface">Empty interface</h3>
+<p>有時候需要一種方式，代表可以儲存任何類型的 value:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">i</span> <span class="kd">interface</span><span class="p">{}</span>
+<span class="nx">i</span> <span class="p">=</span> <span class="mi">20</span>
+<span class="nx">i</span> <span class="p">=</span> <span class="s">&#34;Hi&#34;</span>
+<span class="nx">i</span> <span class="p">=</span> <span class="kd">struct</span><span class="p">{</span>
+    <span class="nx">Name</span> <span class="kt">string</span>
+    <span class="nx">Age</span> <span class="kt">int</span>
+<span class="p">}{</span><span class="s">&#34;Wei&#34;</span><span class="p">,</span> <span class="mi">26</span><span class="p">}</span>
+</code></pre></div><p><code>interface{}</code> 可以保存任何類型的值。通常用於處理未知類型的函式，<br>
+像我們很常用的 <code>fmt.Println()</code>。<br>
+不過使用上要注意，因為會不知道儲存的是什麼類型的數值。而且 Golang 是強型態語言，語言特性說實在的，與 empty interface 有點衝突啦。</p>
+<h3 id="type-assertions-and-type-switches">Type Assertions and Type Switches</h3>
+<p>若我們把 value 存到 <code>interface{}</code>，則可以透過 Type Assertions 與 Type Switches 觀察是否有特定的具體類型，或是具體類型實現了另一個 interface。<br>
+Type Assertions 實現該 interface 的類型，或是命名另一個 interface。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">MyInt</span> <span class="kt">int</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">i</span> <span class="kd">interface</span><span class="p">{}</span>
+    <span class="kd">var</span> <span class="nx">mine</span> <span class="nx">MyInt</span> <span class="p">=</span> <span class="mi">20</span>
+    <span class="nx">i</span> <span class="p">=</span> <span class="nx">mine</span>
+    <span class="nx">i2</span> <span class="o">:=</span> <span class="nx">i</span><span class="p">.(</span><span class="nx">MyInt</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p>此時 i2 的類型是 <code>MyInt</code>。
+若我們更改成以下程式碼，會造成 panic，是因為類型不對而導致的錯誤。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">i2</span> <span class="o">:=</span> <span class="nx">i</span><span class="p">.(</span><span class="kt">string</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i2</span><span class="p">)</span>
+</code></pre></div><p>Type switches 則是當 interface{} 可能會儲存多種類型的值時，透過 switch 進行判斷：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">doThings</span><span class="p">(</span><span class="nx">i</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="nx">j</span> <span class="o">:=</span> <span class="nx">i</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kc">nil</span><span class="p">:</span>
+        <span class="c1">// i is nil, type of j is interface{}
+</span><span class="c1"></span>    <span class="k">case</span> <span class="kt">int</span><span class="p">:</span>
+        <span class="c1">// j is of type int
+</span><span class="c1"></span>    <span class="k">case</span> <span class="nx">MyInt</span><span class="p">:</span>
+        <span class="c1">// j is of type MyInt
+</span><span class="c1"></span>    <span class="k">case</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">:</span>
+        <span class="c1">// j is of type io.Reader
+</span><span class="c1"></span>    <span class="k">case</span> <span class="kt">string</span><span class="p">:</span>
+        <span class="c1">// j is a string
+</span><span class="c1"></span>    <span class="k">case</span> <span class="kt">bool</span><span class="p">,</span> <span class="kt">rune</span><span class="p">:</span>
+        <span class="c1">// i is either a bool or rune, so j is of type interface{}
+</span><span class="c1"></span>    <span class="k">default</span><span class="p">:</span>
+        <span class="c1">// no idea what i is, so j is of type interface{}
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="function-interface">Function Interface</h3>
+<p>前面介紹 type 與 function 時提到，function 也可以是一種類型，因此也可以用在 interface 上，透過 function type 實現 interface。<br>
+常見的例子是 http 服務：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Handler</span> <span class="kd">interface</span> <span class="p">{</span>
+    <span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">HandlerFunc</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="nx">HandlerFunc</span><span class="p">)</span> <span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">w</span> <span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nf">f</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+<span class="p">}</span>
+
+</code></pre></div><p>透過 <code>HandlerFunc</code> 進行類型轉換，將函式快速轉換為 <code>Handler</code> 的介面類型，使得任何具有簽名的函數<code>func(http.ResponseWriter,*http.Request)</code>都可以用作<code>http.Handler</code>，透過 <code>http.Handler</code> 可以使用 function, method 與 closures 實現 HTTP 服務。<br>
+將符合 interface 的函數定義為 type，對這個 type 實現 interface 中的函式，使用的時候只要把自定義的函式做型態轉換就可以使用了。注意一點，原本的類型要相同才可以使用。</p>
+<h2 id="補充">補充</h2>
+<p>關於解耦的部分，可以參考 solid 的依賴反轉原則，了解到解耦的優缺點。<a href="https://web.archive.org/web/20110714224327/http://www.objectmentor.com/resources/articles/dip.pdf" target="_blank" rel="noopener noreffer">DIP</a></p>
+<h2 id="參考資料reference">參考資料(Reference)</h2>
+<ol>
+<li><a href="https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216" target="_blank" rel="noopener noreffer">Learning Go</a> (書籍)</li>
+<li><a href="https://www.alexedwards.net/blog/interfaces-explained" target="_blank" rel="noopener noreffer">Golang Interfaces Explained</a></li>
+</ol></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-03-23</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://ekoismylove.github.io/posts/go/go_note7/" data-title="Golang - 類型、方法與介面(Types, Methods, and Interfaces)" data-via="wiwi571246" data-hashtags="go,golang"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://ekoismylove.github.io/posts/go/go_note7/" data-hashtag="go"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://ekoismylove.github.io/posts/go/go_note7/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://ekoismylove.github.io/posts/go/go_note7/" data-title="Golang - 類型、方法與介面(Types, Methods, and Interfaces)"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">go</a>,&nbsp;<a href="/tags/golang/">golang</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/application/catchtawawa/" class="prev" rel="prev" title="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一"><i class="fas fa-angle-left fa-fw"></i>星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一</a>
+            <a href="/posts/go/go_note8/" class="next" rel="next" title="Golang - 錯誤(Error)">Golang - 錯誤(Error)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="utterances"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span>&nbsp;|&nbsp;<span class="license"><a href = "https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script src="/dayjs.min.js"></script><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":200},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"EKOISMYLOVE/blog_comment"}},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"V23NTWV8MR","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"ecc9ae3d4e27fdfec35503cae9c6b716","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

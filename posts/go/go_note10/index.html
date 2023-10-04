@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Golang - 並發(Concurrency) - Wei&#39;s Note</title><meta name="Description" content="本篇文章將簡單介紹 Concurrency，並說明 goroutine, channel 和 select。"><meta name="keywords" content='go, golang' /><meta property="og:title" content="Golang - 並發(Concurrency)" />
+<meta property="og:description" content="本篇文章將簡單介紹 Concurrency，並說明 goroutine, channel 和 select。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://ekoismylove.github.io/posts/go/go_note10/" /><meta property="og:image" content="http://ekoismylove.github.io/posts/go/go_note10/go_header.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-03-24T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://ekoismylove.github.io/posts/go/go_note10/go_header.png"/>
+<meta name="twitter:title" content="Golang - 並發(Concurrency)"/>
+<meta name="twitter:description" content="本篇文章將簡單介紹 Concurrency，並說明 goroutine, channel 和 select。"/>
+<meta name="application-name" content="Wei&#39;s Note">
+<meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://ekoismylove.github.io/posts/go/go_note10/" /><link rel="prev" href="http://ekoismylove.github.io/posts/go/go_note9/" /><link rel="next" href="http://ekoismylove.github.io/posts/go/go_note11/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Golang - 並發(Concurrency)",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/go_header.png",
+                            "width":  820 ,
+                            "height":  364 
+                        }],"genre": "posts","keywords": "go, golang","wordcount":  468 ,
+        "url": "http:\/\/ekoismylove.github.io\/posts\/go\/go_note10\/","datePublished": "2022-03-23T00:00:00+00:00","dateModified": "2022-03-24T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "Wei","logo": "http:\/\/ekoismylove.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Wei"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Golang - 並發(Concurrency)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;468 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#concurrency">Concurrency</a>
+      <ul>
+        <li><a href="#什麼時候使用">什麼時候使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#goroutine">Goroutine</a>
+      <ul>
+        <li><a href="#如何使用">如何使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#channel">Channel</a>
+      <ul>
+        <li><a href="#讀取與寫入">讀取與寫入</a></li>
+        <li><a href="#關閉">關閉</a></li>
+      </ul>
+    </li>
+    <li><a href="#select">select</a></li>
+    <li><a href="#remenber">Remenber</a></li>
+    <li><a href="#備註">備註</a></li>
+    <li><a href="#參考資料reference">參考資料(Reference)</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>本篇文章將簡單介紹 Concurrency，並說明 goroutine, channel 和 select。</p>
+<h2 id="concurrency">Concurrency</h2>
+<p>可能有聽過 “asynchronous”,“Parallelism” 或是 “threaded”，雖然很像但有點不太一樣。
+主要可以解釋成，一個或多個 processes 同時發生的 process，好比說你正在看我的筆記，而其他人正在世界上做自己的事情，這些人同時與您存在。
+<del>但我認為一樣的都是，很難正確處理。</del></p>
+<h3 id="什麼時候使用">什麼時候使用</h3>
+<p>首先要確定，使用並發會讓效能變好再使用，因為並發並不是並行(Parallelism)，過多的並發只會導致程式難以理解，並發的數量也不會與效能成真正的正比關係。<br>
+基本上程式的邏輯是：</p>
+<ol>
+<li>獲取數據</li>
+<li>計算</li>
+<li>輸出結果</li>
+</ol>
+<p>基本上要使用並發，取決於數據如何通過程式的步驟流動，有時候多個步驟可以並發，因為他們沒有需要別的步驟執行後才能執行，反過來說，如果步驟是像串聯一般地執行，則不應使用並發。<br>
+另外，如果並發運行的程式不會花費太多時間，也不推薦使用並發，因為硬體資源並不是免費的，如果不確定使用並發會不會提升效能，可以透過寫測試的方式驗證。</p>
+<h2 id="goroutine">Goroutine</h2>
+<p>Goroutine 是 Go 在運行時管理的輕量化 processes。<br>
+當程式啟動時，運行中會建立許多 thread 並運行一個 goroutine 來運行我們所寫的程式。<br>
+程式所建立的所有 goroutine（包含一開始的），都會由 go 去調度並分配給 thread，類似我們設計跨 CPU kernel 的程式。<br>
+但作業系統已經能做到這件事，為什麼 Go 還要再實現類似的機制呢？</p>
+<ul>
+<li>Goroutine 建立的比 thread 還快。</li>
+<li>Goroutine 初始化 stack 比 thread stack 還小，代表相同的記憶體空間下可以放更多的 goroutine。</li>
+<li>Goroutine 之間切換的速度比 thread 還快，因為 Goroutine 完全發生在 process 內。</li>
+<li>Go 有 scheduler 能做最佳化。</li>
+</ul>
+<h3 id="如何使用">如何使用</h3>
+<p>我們在函數前面輸入 <code>go</code> 就能夠啟動了，只是這個函式的返回值會被忽略。<br>
+任何函式都能夠這樣子啟用並發，但通常會在 closure 內執行，這樣會使程式較容易測試與模組化，並使得 API 不具有並發性。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 我們要並發的函式
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">process</span><span class="p">(</span><span class="nx">val</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="c1">// do something with val
+</span><span class="c1"></span><span class="p">}</span>
+<span class="c1">// 透過一個函式去呼叫
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">runThingConcurrently</span><span class="p">(</span><span class="nx">in</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">out</span> <span class="kd">chan</span><span class="o">&lt;-</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// closure
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">in</span> <span class="p">{</span>
+            <span class="nx">result</span> <span class="o">:=</span> <span class="nf">process</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+            <span class="nx">out</span> <span class="o">&lt;-</span> <span class="nx">result</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="channel">Channel</h2>
+<p>goroutine 透過 channel 進行溝通。<br>
+聲明 <code>chan</code> 後透過 <code>make</code> 實現：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+</code></pre></div><p>channel 是參考類型(reference)，與 map, slice一樣，傳遞時是傳遞 channel 的 pointer。 channel 的 zero value 是 <code>nil</code>。</p>
+<h3 id="讀取與寫入">讀取與寫入</h3>
+<p>透過一個 <code>&lt;-</code>運算符進行讀取與寫入的動作，與C++的 <code>-&gt;</code> 是相反過來的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">a</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch</span> <span class="c1">// reads a value from ch and assigns it to a
+</span><span class="c1"></span><span class="nx">ch</span> <span class="o">&lt;-</span> <span class="nx">b</span>   <span class="c1">// write the value in b to ch
+</span></code></pre></div><p>另外我們也可以用 <code>for-range</code> 從 channel 中讀取，這種讀取方式，會一直持續到 channel 關閉，或是遇到 <code>break</code> 與 <code>return</code> 才會結束。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">ch</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p>每個被寫入 channel 的數值只能被讀取一次。如果有多個 goroutine 從同一個 channel 讀取，寫入 channel 的數值只會被其中一個 goroutine 讀取。</p>
+<p>Channel 也可以設定為單向讀取或是單向寫入：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">writeOnly</span> <span class="kd">chan</span> <span class="o">&lt;-</span> <span class="kt">int</span> <span class="p">=</span> <span class="nx">ch1</span>
+<span class="kd">var</span> <span class="nx">readOnly</span> <span class="o">&lt;-</span> <span class="kd">chan</span> <span class="kt">int</span> <span class="p">=</span> <span class="nx">ch2</span>
+</code></pre></div><p>Channel 預設是無緩衝的，每一次寫入了一個開放的無緩衝 channel，都會導致寫入 goroutine 暫停，直到另一個 goroutine 從這個 channel 讀取，反過來說，每一次讀取這個 channel，都會導致讀取 goroutine 暫停，一直到有一個 goroutine 寫入這個 channel，也就是說至少要有兩個 goroutine 才能寫入與讀取 channel。</p>
+<p>Go 也有緩衝的 channel，如果在讀取這個 channel 前， channel 的緩衝區已經滿了，則後面的寫入將會暫停寫入，一直到讀取這個 channel 為止。<del>就已經滿了你不給他空間不然你是想怎樣！？</del></p>
+<p>有緩衝區的 channel 怎麼實現呢？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</code></pre></div><p>最後，大部分的時候會建議使用無緩衝區的 channel。</p>
+<h3 id="關閉">關閉</h3>
+<p>關閉，就是使用，<code>close</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nb">close</span><span class="p">(</span><span class="nx">ch</span><span class="p">)</span>
+</code></pre></div><p>這樣就能夠關閉 channel，此時再寫入這個 channel 或是再次關閉都會造成 panic，但關閉後的 channel 是可以讀取的，若裡面還有未讀取的值，則會依序返回，如果沒有未讀取的值，則會返回 zero value。</p>
+<p>但這樣當我們讀取到 zero value 時，我們要怎麼知道，這個 zero value 是被關閉的 channel 的，還是還沒讀取的值？ <del>偷看第三篇</del></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">v</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch</span>
+</code></pre></div><h2 id="select">select</h2>
+<p>select 是並發的控制結構。<br>
+透過 select 可以允許 goroutine 讀取或寫入一組多個 channel 中的一個，他用起來很像 <code>switch</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">select</span> <span class="p">{</span>
+<span class="k">case</span> <span class="nx">v</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch1</span><span class="p">:</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+<span class="k">case</span> <span class="nx">ch2</span> <span class="o">&lt;-</span> <span class="nx">x</span><span class="p">:</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;wrote&#34;</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span>
+<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">ch3</span><span class="p">:</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;got value on ch4, but ignored it&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p>如果有多個 case 可以讀取或寫入的話，會發生什麼？ Go 的設計上會隨機選擇一個進行，可以防止飢餓的問題發生，另外也可以預防一種 deadlock 的發生：acquiring locks in an inconsistent order。</p>
+<p>因為 select 用來負責讓多個 channel 進行聯繫，因此會用在一個 <code>for-loop</code> 中，這裡也被稱為 <code>for-select</code> 循環，使用 <code>for-select</code> 記得必須要有退出的方法。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span><span class="p">{</span>
+    <span class="k">select</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">v</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch1</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nx">ch2</span> <span class="o">&lt;-</span> <span class="nx">x</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;wrote&#34;</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">&lt;-</span><span class="nx">ch3</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;got value on ch4, but ignored it&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">case</span> <span class="o">&lt;-</span><span class="nx">done</span><span class="p">:</span>
+        <span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="remenber">Remenber</h2>
+<ul>
+<li>保持 API 沒有並發：
+前面也提到了，盡量在 closure 內設計並發，並盡量隱藏，當使用者知道可以使用 API 來執行並發時。摁&hellip;</li>
+<li>每當您的 goroutine 使用的數值是可能會改變的變量時，請將變量的當前值傳遞給 goroutine。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">a</span> <span class="p">{</span>
+    <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">val</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">ch</span> <span class="o">&lt;-</span> <span class="nx">val</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="p">}(</span><span class="nx">v</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 下面這個就沒傳值，goroutine內的v會是迴圈結束後的v值
+</span><span class="c1"></span><span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">a</span> <span class="p">{</span>
+    <span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">ch</span> <span class="o">&lt;-</span> <span class="nx">v</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="p">}()</span>
+<span class="p">}</span>
+</code></pre></div><ul>
+<li>清理與關閉 goroutine：<br>
+如果一個 goroutine 沒有退出，scheduler仍然會定期給它時間，但他可能什麼都不做，這會降低程式的效能。</li>
+<li>何時使用緩衝與非緩衝 channel：
+當知道已經啟動了多少個 goroutine，想要限制將啟動的 goroutine 的數量，或者想要限制排隊的工作量時，可以使用緩衝 channel。</li>
+</ul>
+<h2 id="備註">備註</h2>
+<p>還有一些像是 Backpressure, sync.Waitgroup, sync.Once 跟 Mutex 的作用與用法想做筆記，但一時之間還想不到該怎麼寫，可能等之後有時間再來補充。</p>
+<p>更多關於 Concurrency 的資訊，可以參考 Katherine Cox-Buday 所寫的 Concurrency in Go。（歐萊禮也有這本所以&hellip;又是坑）</p>
+<p>另外，後續還會有一篇 Context 的筆記，但我會想看完 Concurrency in Go 再來寫筆記分享。</p>
+<h2 id="參考資料reference">參考資料(Reference)</h2>
+<ol>
+<li><a href="https://www.amazon.com/Learning-Go-Idiomatic-Real-World-Programming/dp/1492077216" target="_blank" rel="noopener noreffer">Learning Go</a> (書籍)</li>
+<li><a href="https://www.amazon.com/Concurrency-Go-Tools-Techniques-Developers/dp/1491941197" target="_blank" rel="noopener noreffer">Concurrency in Go</a> (書籍)</li>
+<li><a href="https://medium.com/mr-efacani-teatime/concurrency%E8%88%87parallelism%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E8%99%95-1b212a020e30" target="_blank" rel="noopener noreffer">Concurrency與Parallelism的不同之處</a></li>
+</ol></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-03-24</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://ekoismylove.github.io/posts/go/go_note10/" data-title="Golang - 並發(Concurrency)" data-via="wiwi571246" data-hashtags="go,golang"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://ekoismylove.github.io/posts/go/go_note10/" data-hashtag="go"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://ekoismylove.github.io/posts/go/go_note10/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://ekoismylove.github.io/posts/go/go_note10/" data-title="Golang - 並發(Concurrency)"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">go</a>,&nbsp;<a href="/tags/golang/">golang</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/go/go_note9/" class="prev" rel="prev" title="Golang - 模組、包與導入(Modules, Packages, and Imports)"><i class="fas fa-angle-left fa-fw"></i>Golang - 模組、包與導入(Modules, Packages, and Imports)</a>
+            <a href="/posts/go/go_note11/" class="next" rel="next" title="Golang - 標準函式庫(Standard Library)">Golang - 標準函式庫(Standard Library)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="utterances"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span>&nbsp;|&nbsp;<span class="license"><a href = "https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script src="/dayjs.min.js"></script><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":200},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"EKOISMYLOVE/blog_comment"}},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"V23NTWV8MR","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"ecc9ae3d4e27fdfec35503cae9c6b716","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
