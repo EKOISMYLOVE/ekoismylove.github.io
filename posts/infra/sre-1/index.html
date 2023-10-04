@@ -1,0 +1,188 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Site Reliability Engineering - Introduction - Wei's Note</title><meta name=Description content><meta name=keywords content="Infra,SRE"><meta property="og:title" content="Site Reliability Engineering - Introduction">
+<meta property="og:description" content>
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/sre-1/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-08-30T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-08-30T00:00:00+00:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Site Reliability Engineering - Introduction">
+<meta name=twitter:description content>
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/sre-1/><link rel=prev href=http://ekoismylove.github.io/posts/troubleshooting/tools-3/><link rel=next href=http://ekoismylove.github.io/posts/ansible/02-playbook/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Site Reliability Engineering - Introduction","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/sre-1\/"},"genre":"posts","keywords":"Infra, SRE","wordcount":143,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/sre-1\/","datePublished":"2022-08-30T00:00:00+00:00","dateModified":"2022-08-30T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Site Reliability Engineering - Introduction</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/sre/><i class="far fa-folder fa-fw"></i>SRE</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-08-30>2022-08-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;143 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#tradition>Tradition</a></li>
+<li><a href=#in-google>In Google</a></li>
+<li><a href=#sre-宗旨>SRE 宗旨</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><h2 id=前言>前言</h2>
+<p>這邊是我自己想寫的廢話，可以 skip 不看。</p>
+<p>基本上現在處於一種 Chaos 的狀態吧，一邊點著 coding 的技能，另一邊又不願意放開 system & networking administration(management) 的技能樹，有一陣子去看了 SRE 的書籍，坦白說可能也不是很適合自己，但仍以學習新知識的角度來學習這項技能(或是知識)。</p>
+<p>參考書籍 Google 已經提供，我有附在後面的參考資料。<br>
+基本上會是以 <strong>Site Reliability Engineering</strong> 這本書來作筆記。(<del>其實是有想起來這本書看了一半，就乾脆把書看完吧</del>)</p>
+<h2 id=tradition>Tradition</h2>
+<p>公司透過系統來提供服務，而這些系統並不會自動運作，歷史上來看會需要雇用系統管理員(Administrator, Admin)來運行或維護系統(IT,MIS)，Admin的任務基本上是做部屬，讓系統之間能協同工作並提供服務，還有在問題發生時進行處理(Update, troubleshooting &mldr;)，由於技能樹點的不同，基本上在大部分的公司中，軟體或服務開發人員，與系統管理員，會分為兩個團隊。</p>
+<p>目前在系統管理上，有許多現成的工具，並且網路上也有許多例子可以做學習，我們不必花費太多時間在重造輪子上。</p>
+<p>然而當系統成長時，管理的成本也逐漸提高。例如原先手動一次就可以完成的事項，在系統成長後需要做到 100 次，甚至 1000 次。或是團隊之間對服務的看法不同，這經常發生在開發團隊與管理團隊之間。這是會影響團隊之間是合作或是分裂的成本。</p>
+<ul>
+<li>開發團隊想推出新功能，管理團隊想要穩定服務(誰知道你的新功能會不會出包)</li>
+<li>安全性，可靠性，服務是否在這次更新後正常運作，有沒有 bug，會不會造成其他功能 crash ?</li>
+</ul>
+<p>我自己的經驗真的是這樣，兩個團隊的目標不一樣，之前我在管理團隊中就是不太想去做 patch update，只希望服務能夠穩定提供，甚至是這台伺服器就都不要去動他。但在開發團隊時，又很想趕快做出新功能後，進行更新並提供給使用者做使用。(<del>工讀時兩個團隊都待過。</del>)</p>
+<p>但不可能都不推出新功能阿，只是，為了服務的可靠性，管理團隊會使用許多方式來檢查、驗證或測試新的功能是否有問題，或是會造成其他問題的可能。<br>
+開發團隊也可以透過發布更少的 patch、flag flips、incremental updates 與 cherrypicks 來減緩或降低這些事情發生的次數。</p>
+<div class="details admonition info open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>即使兩個團隊的價值觀不盡相同，但大家都是為了提供更好且穩定的服務，請盡量不要因為目標不同而真的吵起來&mldr;</div>
+</div>
+</div>
+<h2 id=in-google>In Google</h2>
+<p>基本上在 Google 內部是透過軟體工程師建立系統來運行由系統管理員手動執行的工作。</p>
+<p>這個 SRE 團隊一半是軟體工程師，一半是具備 SRE 技能的工程師，SRE技能基本上是 Linux internals 與 networking(TCP/IP)(但也會軟體工程)。
+基本上是以軟體工程的方式，來處理系統管理的問題，盡可能的使用軟體設計實現自動化以降低手動執行的工作，甚至是獲得自動化的系統，這個系統能夠自動運行並自我修復。</p>
+<p>限定 50% 的時間會用在管理，另外的時間會用於實際開發，一來是可以參與主要工程，了解這次的開發是為了甚麼，是如何運作的，有沒有能再更好的地方，當知道系統怎麼維運時，在進行開發上就會知道那些地方是要注意的，並且這些經驗可以與開發團隊分享，達到提升整體的技能之目的。</p>
+<p>偷渡個 SRE 的技能書 (<del>面試用書</del>)，<strong>但請記得，軟體開發仍是最重要的技能。</strong></p>
+<ol>
+<li><strong>Algorithms and data structures</strong> :<br>
+Book: Cracking the Coding Interview, 6th Edition, ISBN 0984782869
+(arrays, stacks, linked lists, binary trees, graphs, recursion)</li>
+<li><strong>System design</strong> :<br>
+Book: System Design Interview – An insider&rsquo;s guide, 2nd Edition, ISBN 979-8664653403</li>
+<li><strong>Linux internals</strong> :<br>
+Book: Advanced Programming in the UNIX Environment, 3rd Edition, ISBN 0321637739</li>
+<li><strong>TCP/IP</strong> :<br>
+Book: TCP/IP Illustrated, Volume 1: The Protocols, ISBN 0321336313</li>
+</ol>
+<h2 id=sre-宗旨>SRE 宗旨</h2>
+<p>負責並專注在服務的可用性、延遲、性能、效率、變更管理、監控、緊急事項回應與容量規劃。<br>
+不僅僅是專注在系統服務環境，還包含開發團隊、測試團隊與使用者等。</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://sre.google/books/ target=_blank rel="noopener noreffer">SRE-Books</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-08-30</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/infra/sre-1/ data-title="Site Reliability Engineering - Introduction" data-via=wiwi571246 data-hashtags=Infra,SRE><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/infra/sre-1/ data-hashtag=Infra><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/infra/sre-1/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/infra/sre-1/ data-title="Site Reliability Engineering - Introduction"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/infra/>Infra</a>,&nbsp;<a href=/tags/sre/>SRE</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/troubleshooting/tools-3/ class=prev rel=prev title=【TroubleShooting】故障排除的工具介紹與使用方式--Slowly><i class="fas fa-angle-left fa-fw"></i>【TroubleShooting】故障排除的工具介紹與使用方式--Slowly</a>
+<a href=/posts/ansible/02-playbook/ class=next rel=next title="Ansible - Playbook(上)">Ansible - Playbook(上)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

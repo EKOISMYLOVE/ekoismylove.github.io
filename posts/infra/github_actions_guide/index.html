@@ -1,114 +1,139 @@
-<!doctype html><html lang=zh-tw>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=robots content="noodp">
-<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
-<title>自己動起來！ Github Actions 極簡單介紹與使用 - Wei's Note</title><meta name=Description content="簡單介紹 Github Actions，因為有人看了星期一就憂鬱那篇文章而詢問 Github Actions 的使用，故想說透過這次機會簡單介紹下。"><meta name=keywords content="Github Actions"><meta property="og:title" content="自己動起來！ Github Actions 極簡單介紹與使用">
-<meta property="og:description" content="簡單介紹 Github Actions，因為有人看了星期一就憂鬱那篇文章而詢問 Github Actions 的使用，故想說透過這次機會簡單介紹下。">
-<meta property="og:type" content="article">
-<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/github_actions_guide/"><meta property="og:image" content="http://ekoismylove.github.io/posts/infra/github_actions_guide/github_actions_header.png"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2022-04-01T00:00:00+00:00">
-<meta property="article:modified_time" content="2022-04-01T00:00:00+00:00">
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="http://ekoismylove.github.io/posts/infra/github_actions_guide/github_actions_header.png">
-<meta name=twitter:title content="自己動起來！ Github Actions 極簡單介紹與使用">
-<meta name=twitter:description content="簡單介紹 Github Actions，因為有人看了星期一就憂鬱那篇文章而詢問 Github Actions 的使用，故想說透過這次機會簡單介紹下。">
-<meta name=application-name content="Wei's Note">
-<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/github_actions_guide/><link rel=prev href=http://ekoismylove.github.io/posts/misc/learning_go_summary/><link rel=next href=http://ekoismylove.github.io/posts/ansible/01_introduction/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"自己動起來！ Github Actions 極簡單介紹與使用","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/github_actions_header.png","width":1400,"height":378}],"genre":"posts","keywords":"Github Actions","wordcount":463,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/","datePublished":"2022-04-01T00:00:00+00:00","dateModified":"2022-04-01T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
-<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
-<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
-<div class=header-wrapper>
-<div class=header-title>
-<a href=/ title="Wei's Note">Wei's Note</a>
-</div>
-<div class=menu>
-<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
-<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
-<i class="fas fa-search fa-fw"></i>
-</a>
-<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
-<i class="fas fa-times-circle fa-fw"></i>
-</a>
-<span class="search-button search-loading" id=search-loading-desktop>
-<i class="fas fa-spinner fa-fw fa-spin"></i>
-</span>
-</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw"></i>
-</a>
-</div>
-</div>
-</div>
-</header><header class=mobile id=header-mobile>
-<div class=header-container>
-<div class=header-wrapper>
-<div class=header-title>
-<a href=/ title="Wei's Note">Wei's Note</a>
-</div>
-<div class=menu-toggle id=menu-toggle-mobile>
-<span></span><span></span><span></span>
-</div>
-</div>
-<div class=menu id=menu-mobile><div class=search-wrapper>
-<div class="search mobile" id=search-mobile>
-<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
-<i class="fas fa-search fa-fw"></i>
-</a>
-<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
-<i class="fas fa-times-circle fa-fw"></i>
-</a>
-<span class="search-button search-loading" id=search-loading-mobile>
-<i class="fas fa-spinner fa-fw fa-spin"></i>
-</span>
-</div>
-<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
-Cancel
-</a>
-</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw"></i>
-</a></div>
-</div>
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>自己動起來！ Github Actions 極簡單介紹與使用 - Wei&#39;s Note</title><meta name="Description" content="簡單介紹 Github Actions，因為有人看了星期一就憂鬱那篇文章而詢問 Github Actions 的使用，故想說透過這次機會簡單介紹下。"><meta name="keywords" content='Github Actions' /><meta property="og:title" content="自己動起來！ Github Actions 極簡單介紹與使用" />
+<meta property="og:description" content="簡單介紹 Github Actions，因為有人看了星期一就憂鬱那篇文章而詢問 Github Actions 的使用，故想說透過這次機會簡單介紹下。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/github_actions_guide/" /><meta property="og:image" content="http://ekoismylove.github.io/posts/infra/github_actions_guide/github_actions_header.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-04-01T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://ekoismylove.github.io/posts/infra/github_actions_guide/github_actions_header.png"/>
+<meta name="twitter:title" content="自己動起來！ Github Actions 極簡單介紹與使用"/>
+<meta name="twitter:description" content="簡單介紹 Github Actions，因為有人看了星期一就憂鬱那篇文章而詢問 Github Actions 的使用，故想說透過這次機會簡單介紹下。"/>
+<meta name="application-name" content="Wei&#39;s Note">
+<meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://ekoismylove.github.io/posts/infra/github_actions_guide/" /><link rel="prev" href="http://ekoismylove.github.io/posts/misc/learning_go_summary/" /><link rel="next" href="http://ekoismylove.github.io/posts/ansible/01_introduction/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "自己動起來！ Github Actions 極簡單介紹與使用",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/github_actions_header.png",
+                            "width":  1400 ,
+                            "height":  378 
+                        }],"genre": "posts","keywords": "Github Actions","wordcount":  463 ,
+        "url": "http:\/\/ekoismylove.github.io\/posts\/infra\/github_actions_guide\/","datePublished": "2022-04-01T00:00:00+00:00","dateModified": "2022-04-01T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "Wei","logo": "http:\/\/ekoismylove.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Wei"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
 </header>
 <div class="search-dropdown desktop">
-<div id=search-dropdown-desktop></div>
+    <div id="search-dropdown-desktop"></div>
 </div>
 <div class="search-dropdown mobile">
-<div id=search-dropdown-mobile></div>
+    <div id="search-dropdown-mobile"></div>
 </div>
-<main class=main>
-<div class=container><div class=toc id=toc-auto>
-<h2 class=toc-title>Contents</h2>
-<div class=toc-content id=toc-content-auto></div>
-</div><article class="page single"><h1 class="single-title animated flipInX">自己動起來！ Github Actions 極簡單介紹與使用</h1><div class=post-meta>
-<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-01>2022-04-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;463 words&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
-</div><div class="details toc" id=toc-static kept>
-<div class="details-summary toc-title">
-<span>Contents</span>
-<span><i class="details-icon fas fa-angle-right"></i></span>
-</div>
-<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
-<ul>
-<li><a href=#簡介>簡介</a></li>
-<li><a href=#基本使用>基本使用</a>
-<ul>
-<li><a href=#建立-workflow>建立 workflow</a></li>
-<li><a href=#on>on</a></li>
-<li><a href=#jobs>jobs</a></li>
-</ul>
-</li>
-<li><a href=#steps>steps</a></li>
-<li><a href=#secret>Secret</a></li>
-<li><a href=#參考資料>參考資料</a></li>
-</ul>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">自己動起來！ Github Actions 極簡單介紹與使用</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/infra/"><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-04-01">2022-04-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;463 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#簡介">簡介</a></li>
+    <li><a href="#基本使用">基本使用</a>
+      <ul>
+        <li><a href="#建立-workflow">建立 workflow</a></li>
+        <li><a href="#on">on</a></li>
+        <li><a href="#jobs">jobs</a></li>
+      </ul>
+    </li>
+    <li><a href="#steps">steps</a></li>
+    <li><a href="#secret">Secret</a></li>
+    <li><a href="#參考資料">參考資料</a></li>
+  </ul>
 </nav></div>
-</div><div class=content id=content><p>簡單介紹 Github Actions，因為有人看了星期一就憂鬱那篇文章而詢問 Github Actions 的使用，故想說透過這次機會簡單介紹下。</p>
-<h2 id=簡介>簡介</h2>
+            </div><div class="content" id="content"><p>簡單介紹 Github Actions，因為有人看了星期一就憂鬱那篇文章而詢問 Github Actions 的使用，故想說透過這次機會簡單介紹下。</p>
+<h2 id="簡介">簡介</h2>
 <p>Github Actions 可以用來自動化、自定義和執行您的軟體開發工作流程。<br>
 許多人用來做 CI/CD 使用，透過 Github Actions 進行程式的建構與測試，並進行相關的部署。</p>
 <p>在 Github 上，可以透過 push, create issue 或是排程的方式啟動 workflow。
@@ -117,57 +142,63 @@ Cancel
 Github Actions 也有相關的社群，且能夠透過 Marketplace 取得其他開發者設計完成的 Actions，或者是發布自己的 Actions。</p>
 <p><strong>簡單來說，Github 給你一個平台，你可以在上面進行 CI/CD。</strong></p>
 <div class="details admonition warning open">
-<div class="details-summary admonition-title">
-<i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
-</div>
-<div class=details-content>
-<div class=admonition-content>Github Actions 有使用時間與容量限制，使用上請注意。<a href=https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions target=_blank rel="noopener noreffer">(Billing for Github Actions)</a></div>
-</div>
-</div>
-<h2 id=基本使用>基本使用</h2>
-<h3 id=建立-workflow>建立 workflow</h3>
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Github Actions 有使用時間與容量限制，使用上請注意。<a href="https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions" target="_blank" rel="noopener noreffer">(Billing for Github Actions)</a></div>
+        </div>
+    </div>
+<h2 id="基本使用">基本使用</h2>
+<h3 id="建立-workflow">建立 workflow</h3>
 <p>基本上點選專案上方的 Actions，會進入到這個畫面：</p>
-<figure><a class=lightgallery href=/posts/infra/github_actions_guide/github_1.png title=/posts/infra/github_actions_guide/github_1.png data-thumbnail=/posts/infra/github_actions_guide/github_1.png data-sub-html="<h2>修改前的檔案</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=github_1.png data-srcset="/posts/infra/github_actions_guide/github_1.png, github_1.png 1.5x, /posts/infra/github_actions_guide/github_1.png 2x" data-sizes=auto alt=/posts/infra/github_actions_guide/github_1.png width=100%>
-</a><figcaption class=image-caption>修改前的檔案</figcaption>
-</figure>
+<figure><a class="lightgallery" href="/posts/infra/github_actions_guide/github_1.png" title="/posts/infra/github_actions_guide/github_1.png" data-thumbnail="/posts/infra/github_actions_guide/github_1.png" data-sub-html="<h2>修改前的檔案</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="github_1.png"
+            data-srcset="/posts/infra/github_actions_guide/github_1.png, github_1.png 1.5x, /posts/infra/github_actions_guide/github_1.png 2x"
+            data-sizes="auto"
+            alt="/posts/infra/github_actions_guide/github_1.png" width="100%" />
+    </a><figcaption class="image-caption">修改前的檔案</figcaption>
+    </figure>
 <p>Github 會推薦給您一些 Actions，如果有需要的人可以點選做使用，就不必再重造一次輪子，但這次是要做個簡單介紹與使用，這邊我們點選上方的 <code>set up a workflow yourself</code>。會提供一個範例檔案：</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=c># This is a basic workflow to help you get started with Actions</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CI</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=c># Controls when the workflow will run</span><span class=w>
-</span><span class=w></span><span class=nt>on</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=c># Triggers the workflow on push or pull request events but only for the master branch</span><span class=w>
-</span><span class=w>  </span><span class=nt>push</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>branches</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=l>master ]</span><span class=w>
-</span><span class=w>  </span><span class=nt>pull_request</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>branches</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=l>master ]</span><span class=w>
-</span><span class=w>
-</span><span class=w>  </span><span class=c># Allows you to run this workflow manually from the Actions tab</span><span class=w>
-</span><span class=w>  </span><span class=nt>workflow_dispatch</span><span class=p>:</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=c># A workflow run is made up of one or more jobs that can run sequentially or in parallel</span><span class=w>
-</span><span class=w></span><span class=nt>jobs</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=c># This workflow contains a single job called &#34;build&#34;</span><span class=w>
-</span><span class=w>  </span><span class=nt>build</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=c># The type of runner that the job will run on</span><span class=w>
-</span><span class=w>    </span><span class=nt>runs-on</span><span class=p>:</span><span class=w> </span><span class=l>ubuntu-latest</span><span class=w>
-</span><span class=w>
-</span><span class=w>    </span><span class=c># Steps represent a sequence of tasks that will be executed as part of the job</span><span class=w>
-</span><span class=w>    </span><span class=nt>steps</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=c># Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>actions/checkout@v3</span><span class=w>
-</span><span class=w>
-</span><span class=w>      </span><span class=c># Runs a single command using the runners shell</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Run a one-line script</span><span class=w>
-</span><span class=w>        </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=l>echo Hello, world!</span><span class=w>
-</span><span class=w>
-</span><span class=w>      </span><span class=c># Runs a set of commands using the runners shell</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Run a multi-line script</span><span class=w>
-</span><span class=w>        </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
-</span><span class=sd>          echo Add other actions to build,
-</span><span class=sd>          echo test, and deploy your project.</span><span class=w>          
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># This is a basic workflow to help you get started with Actions</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">CI</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c"># Controls when the workflow will run</span><span class="w">
+</span><span class="w"></span><span class="nt">on</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># Triggers the workflow on push or pull request events but only for the master branch</span><span class="w">
+</span><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">master ]</span><span class="w">
+</span><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">master ]</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># Allows you to run this workflow manually from the Actions tab</span><span class="w">
+</span><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c"># A workflow run is made up of one or more jobs that can run sequentially or in parallel</span><span class="w">
+</span><span class="w"></span><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># This workflow contains a single job called &#34;build&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># The type of runner that the job will run on</span><span class="w">
+</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c"># Steps represent a sequence of tasks that will be executed as part of the job</span><span class="w">
+</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v3</span><span class="w">
+</span><span class="w">
+</span><span class="w">      </span><span class="c"># Runs a single command using the runners shell</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run a one-line script</span><span class="w">
+</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">echo Hello, world!</span><span class="w">
+</span><span class="w">
+</span><span class="w">      </span><span class="c"># Runs a set of commands using the runners shell</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run a multi-line script</span><span class="w">
+</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">          echo Add other actions to build,
+</span><span class="sd">          echo test, and deploy your project.</span><span class="w">          
 </span></code></pre></div><p>當滿足 <code>push</code> 或是 <code>pull_request</code> 時，都會在 Github actions 內看到相關的資訊與 <code>echo</code> 出來的文字。</p>
 <p>基本上我會把這個 main.yml 分成三個部分：</p>
 <ul>
@@ -179,70 +210,76 @@ Github Actions 也有相關的社群，且能夠透過 Marketplace 取得其他�
 on : 控制這個 workflow 如何觸發或是何時要運作。<br>
 job : 就是我們希望他能幫我們運作的工作，job 可以依序進行，或是以平行方式同時進行。<br>
 除了 name 以外， on 與 jobs 會簡單介紹與使用。</p>
-<h3 id=on>on</h3>
+<h3 id="on">on</h3>
 <p>觸發方式有很多種，我目前是比較常使用 <code>schedule</code> 與 <code>push</code> 兩種方式。<br>
 <code>schedule</code> 通常會搭配 <code>cron</code> 做排程使用，但我自己的經驗是觸發時間不太準確，如果專案很在意觸發時間的請使用其他方式。<br>
 <code>push</code> 則是當你推送內容至 branch 時，就會觸發，我編輯 yaml 並測試時是採用這個方式進行測試。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>on</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>push</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>branches</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;main&#34;</span><span class=p>]</span><span class=w>
-</span><span class=w>  </span><span class=nt>schedule</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span>- <span class=nt>cron</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;0 1 * * 1&#39;</span><span class=w>
-</span></code></pre></div><p>Github 有個說明文件提供了可使用的觸發方法：<a href=https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#push target=_blank rel="noopener noreffer">Events that trigger workflows</a><br>
-<code>cron</code> 的使用方式，就像你在 Linux 上使用 <code>crontab</code> 是一樣的，這邊提供時間設定的方式參考：<a href=https://crontab.guru/ target=_blank rel="noopener noreffer">crontab guru</a></p>
-<h3 id=jobs>jobs</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;main&#34;</span><span class="p">]</span><span class="w">
+</span><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;0 1 * * 1&#39;</span><span class="w">
+</span></code></pre></div><p>Github 有個說明文件提供了可使用的觸發方法：<a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#push" target="_blank" rel="noopener noreffer">Events that trigger workflows</a><br>
+<code>cron</code> 的使用方式，就像你在 Linux 上使用 <code>crontab</code> 是一樣的，這邊提供時間設定的方式參考：<a href="https://crontab.guru/" target="_blank" rel="noopener noreffer">crontab guru</a></p>
+<h3 id="jobs">jobs</h3>
 <p>由許多個 step 所組成，step 則是實際要運作的指令，job 之間是平行處理，若 job 之間有依賴性，需要透過 need 進行設定。<br>
 如下列的程式碼， <code>deploy</code> 需要等待 <code>build</code> 完成後才會進行。<br>
 進一步的話可以透過 <code>if</code> 判斷要依賴的 <code>jobs</code> 的狀態再進一步處理。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>jobs</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>build</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>steps</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=l>// steps, steps and steps.</span><span class=w>
-</span><span class=w>  </span><span class=nt>deploy</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>needs</span><span class=p>:</span><span class=w> </span><span class=l>build</span><span class=w>
-</span><span class=w>    </span><span class=nt>if</span><span class=p>:</span><span class=w> </span><span class=l>needs.build.result == &#39;success&#39;</span><span class=w>
-</span><span class=w>    </span><span class=nt>steps</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=l>// steps, steps and steps.</span><span class=w>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="l">// steps, steps and steps.</span><span class="w">
+</span><span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l">build</span><span class="w">
+</span><span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l">needs.build.result == &#39;success&#39;</span><span class="w">
+</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="l">// steps, steps and steps.</span><span class="w">
 </span></code></pre></div><p>另外，我們使用的 runner 也是在這邊透過 <code>runs-on</code> 做設定：</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>jobs</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>build</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>runs-on</span><span class=p>:</span><span class=w> </span><span class=l>ubuntu-latest</span><span class=w>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
 </span></code></pre></div><p><code>runs-on</code> 可以設定要使用 Github 提供的 runner 其中之一，或是自行提供相關設備連線進行使用。<br>
-關於更多 <code>runs-on</code> 的使用方式，可以參考官方文件：<a href=https://docs.github.com/en/actions/hosting-your-own-runners target=_blank rel="noopener noreffer">Hosting your own runners</a></p>
-<h2 id=steps>steps</h2>
+關於更多 <code>runs-on</code> 的使用方式，可以參考官方文件：<a href="https://docs.github.com/en/actions/hosting-your-own-runners" target="_blank" rel="noopener noreffer">Hosting your own runners</a></p>
+<h2 id="steps">steps</h2>
 <p>基本上運行 steps 都會先建議用一次 <code>actions/checkout</code>，看設定是否有問題，這邊我們會透過 <code>uses: actions/checkout@v3</code> 做這件事情，<code>uses</code> 可以讓我們使用在 github 上，其他開發者寫好的 action。
 <div class="details admonition tips open">
-<div class="details-summary admonition-title">
-<i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
-</div>
-<div class=details-content>
-<div class=admonition-content>有些 actions 在 <code>actions/checkout@v3</code> 會發生問題，可以採用 <code>actions/checkout@v2</code> ，或是看用的 actions 是否有釋出新版本來解決這個問題。</div>
-</div>
-</div></p>
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">有些 actions 在 <code>actions/checkout@v3</code> 會發生問題，可以採用 <code>actions/checkout@v2</code> ，或是看用的 actions 是否有釋出新版本來解決這個問題。</div>
+        </div>
+    </div></p>
 <p>或是自行定義，以 github 提供的範本做說明：</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Run a one-line script</span><span class=w>
-</span><span class=w>  </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=l>echo Hello, world!</span><span class=w>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Run a one-line script</span><span class="w">
+</span><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">echo Hello, world!</span><span class="w">
 </span></code></pre></div><p>我定義了一個名稱為 <code>Run a one-line script</code> 的 workflow，並讓他執行 <code>echo Hello, world!</code> 這行指令。<br>
 當我們透過這種方式定義時，還可以使用一些參數協助設定，像是從 secrets 中取出我們的 secret 並放到環境變數中。(env)</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Export Variables</span><span class=w>
-</span><span class=w>  </span><span class=nt>env</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>BEARER_TOKEN</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.TWITTER_BEARER_TOKEN }}</span><span class=w>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Export Variables</span><span class="w">
+</span><span class="w">  </span><span class="nt">env</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">BEARER_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l">${{ secrets.TWITTER_BEARER_TOKEN }}</span><span class="w">
 </span></code></pre></div><p>或是透過 with 加入更多的變數做使用。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>send tweet content for telegram message</span><span class=w>
-</span><span class=w>  </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>appleboy/telegram-action@master</span><span class=w>
-</span><span class=w>    </span><span class=c># These are environments secrets.</span><span class=w>
-</span><span class=w>    </span><span class=nt>with</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>to</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.TELEGRAM_TO }}</span><span class=w>
-</span><span class=w>      </span><span class=nt>token</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.TELEGRAM_TOKEN }}</span><span class=w>
-</span><span class=w>      </span><span class=nt>message</span><span class=p>:</span><span class=w> </span><span class=l>${{ steps.tweet.outputs.result }}</span><span class=w>
-</span></code></pre></div><p>更多 workflow 的使用方式，可以參考官方文件：<a href=https://docs.github.com/en/actions/using-workflows target=_blank rel="noopener noreffer">Using workflows</a></p>
-<h2 id=secret>Secret</h2>
-<p>有一些敏感的資訊，不能放在程式碼內，因為會被他人看到進而被做其他利用。 Github 提供了 secret 的功能，讓我們可以存放這些敏感資訊並使用。<br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">send tweet content for telegram message</span><span class="w">
+</span><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">appleboy/telegram-action@master</span><span class="w">
+</span><span class="w">    </span><span class="c"># These are environments secrets.</span><span class="w">
+</span><span class="w">    </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="l">${{ secrets.TELEGRAM_TO }}</span><span class="w">
+</span><span class="w">      </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l">${{ secrets.TELEGRAM_TOKEN }}</span><span class="w">
+</span><span class="w">      </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l">${{ steps.tweet.outputs.result }}</span><span class="w">
+</span></code></pre></div><p>更多 workflow 的使用方式，可以參考官方文件：<a href="https://docs.github.com/en/actions/using-workflows" target="_blank" rel="noopener noreffer">Using workflows</a></p>
+<h2 id="secret">Secret</h2>
+<p>有一些敏感的資訊，不能放在程式碼內，因為會被他人看到進而被做其他利用。  Github 提供了 secret 的功能，讓我們可以存放這些敏感資訊並使用。<br>
 進入專案的 setting，並點選左側的 Secret 標籤即可設定。
-<figure><a class=lightgallery href=/posts/infra/github_actions_guide/github_2.png title=/posts/infra/github_actions_guide/github_2.png data-thumbnail=/posts/infra/github_actions_guide/github_2.png data-sub-html="<h2>修改前的檔案</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=github_2.png data-srcset="/posts/infra/github_actions_guide/github_2.png, github_2.png 1.5x, /posts/infra/github_actions_guide/github_2.png 2x" data-sizes=auto alt=/posts/infra/github_actions_guide/github_2.png width=100%>
-</a><figcaption class=image-caption>修改前的檔案</figcaption>
-</figure></p>
+<figure><a class="lightgallery" href="/posts/infra/github_actions_guide/github_2.png" title="/posts/infra/github_actions_guide/github_2.png" data-thumbnail="/posts/infra/github_actions_guide/github_2.png" data-sub-html="<h2>修改前的檔案</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="github_2.png"
+            data-srcset="/posts/infra/github_actions_guide/github_2.png, github_2.png 1.5x, /posts/infra/github_actions_guide/github_2.png 2x"
+            data-sizes="auto"
+            alt="/posts/infra/github_actions_guide/github_2.png" width="100%" />
+    </a><figcaption class="image-caption">修改前的檔案</figcaption>
+    </figure></p>
 <p>secret 分成兩種：</p>
 <ul>
 <li>Environment secrets</li>
@@ -250,49 +287,52 @@ job : 就是我們希望他能幫我們運作的工作，job 可以依序進行�
 </ul>
 <p>Environment secrets 主要是給 Github actions 作為環境參數使用，而 Repository secrets 則是給 Repository 做使用。<br>
 依據需求建立即可，另外設定好的 secrets 自己要另外儲存一份，因為儲存過後的 secrets 就真的是秘密，看不到了！</p>
-<h2 id=參考資料>參考資料</h2>
+<h2 id="參考資料">參考資料</h2>
 <ol>
-<li><a href=https://github.com/features/actions target=_blank rel="noopener noreffer">Github Actions</a></li>
-<li><a href=https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#push target=_blank rel="noopener noreffer">Events that trigger workflows</a></li>
-<li><a href=https://crontab.guru/ target=_blank rel="noopener noreffer">crontab guru</a></li>
-<li><a href=https://docs.github.com/en/actions/hosting-your-own-runners target=_blank rel="noopener noreffer">Hosting your own runners</a></li>
-<li><a href="https://github.com/marketplace?type=actions" target=_blank rel="noopener noreffer">GitHub Marketplace · Actions to improve your workflow</a></li>
-</ol></div><div class=post-footer id=post-footer>
-<div class=post-info>
-<div class=post-info-line>
-<div class=post-info-mod>
-<span>Updated on 2022-04-01</span>
+<li><a href="https://github.com/features/actions" target="_blank" rel="noopener noreffer">Github Actions</a></li>
+<li><a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#push" target="_blank" rel="noopener noreffer">Events that trigger workflows</a></li>
+<li><a href="https://crontab.guru/" target="_blank" rel="noopener noreffer">crontab guru</a></li>
+<li><a href="https://docs.github.com/en/actions/hosting-your-own-runners" target="_blank" rel="noopener noreffer">Hosting your own runners</a></li>
+<li><a href="https://github.com/marketplace?type=actions" target="_blank" rel="noopener noreffer">GitHub Marketplace · Actions to improve your workflow</a></li>
+</ol></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-04-01</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://ekoismylove.github.io/posts/infra/github_actions_guide/" data-title="自己動起來！ Github Actions 極簡單介紹與使用" data-via="wiwi571246" data-hashtags="Github Actions"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://ekoismylove.github.io/posts/infra/github_actions_guide/" data-hashtag="Github Actions"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://ekoismylove.github.io/posts/infra/github_actions_guide/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://ekoismylove.github.io/posts/infra/github_actions_guide/" data-title="自己動起來！ Github Actions 極簡單介紹與使用"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/github-actions/">Github Actions</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/misc/learning_go_summary/" class="prev" rel="prev" title="Learning Go 讀後感(Summary)"><i class="fas fa-angle-left fa-fw"></i>Learning Go 讀後感(Summary)</a>
+            <a href="/posts/ansible/01_introduction/" class="next" rel="next" title="Ansible - Intro">Ansible - Intro<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-<div class=post-info-license></div>
-</div>
-<div class=post-info-line>
-<div class=post-info-md></div>
-<div class=post-info-share>
-<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/infra/github_actions_guide/ data-title="自己動起來！ Github Actions 極簡單介紹與使用" data-via=wiwi571246 data-hashtags="Github Actions"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/infra/github_actions_guide/ data-hashtag="Github Actions"><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/infra/github_actions_guide/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/infra/github_actions_guide/ data-title="自己動起來！ Github Actions 極簡單介紹與使用"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
-</div>
-</div>
-</div>
-<div class=post-info-more>
-<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/github-actions/>Github Actions</a></section>
-<section>
-<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
-</section>
-</div>
-<div class=post-nav><a href=/posts/misc/learning_go_summary/ class=prev rel=prev title="Learning Go 讀後感(Summary)"><i class="fas fa-angle-left fa-fw"></i>Learning Go 讀後感(Summary)</a>
-<a href=/posts/ansible/01_introduction/ class=next rel=next title="Ansible - Intro">Ansible - Intro<i class="fas fa-angle-right fa-fw"></i></a></div>
-</div>
-<div id=comments><div id=utterances></div><noscript>
-Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
-</noscript></div></article></div>
-</main><footer class=footer>
-<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
-</div>
-</footer></div>
-<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
-<i class="fas fa-arrow-up fa-fw"></i>
-</a><a href=# id=view-comments class=fixed-button title="View Comments">
-<i class="fas fa-comment fa-fw"></i>
-</a>
-</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+<div id="comments"><div id="utterances"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span>&nbsp;|&nbsp;<span class="license"><a href = "https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script src="/dayjs.min.js"></script><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":200},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"EKOISMYLOVE/blog_comment"}},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"V23NTWV8MR","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"ecc9ae3d4e27fdfec35503cae9c6b716","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

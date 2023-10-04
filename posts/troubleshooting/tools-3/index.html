@@ -1,0 +1,283 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>【TroubleShooting】故障排除的工具介紹與使用方式--Slowly - Wei's Note</title><meta name=Description content="簡單提一下網路緩慢時的處理方式與工具。"><meta name=keywords content="Infra,Troubleshooting,debug,tools,mtr,tcpdump,iperf,wireshark"><meta property="og:title" content="【TroubleShooting】故障排除的工具介紹與使用方式--Slowly">
+<meta property="og:description" content="簡單提一下網路緩慢時的處理方式與工具。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/troubleshooting/tools-3/"><meta property="og:image" content="http://ekoismylove.github.io/posts/troubleshooting/tools-3/troubleshooting_header_content.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-07-28T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-08-12T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/troubleshooting/tools-3/troubleshooting_header_content.jpg">
+<meta name=twitter:title content="【TroubleShooting】故障排除的工具介紹與使用方式--Slowly">
+<meta name=twitter:description content="簡單提一下網路緩慢時的處理方式與工具。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/troubleshooting/tools-3/><link rel=prev href=http://ekoismylove.github.io/posts/troubleshooting/tools-2/><link rel=next href=http://ekoismylove.github.io/posts/infra/sre-1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"【TroubleShooting】故障排除的工具介紹與使用方式--Slowly","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/tools-3\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/tools-3\/troubleshooting_header_content.jpg","width":2914,"height":966}],"genre":"posts","keywords":"Infra, Troubleshooting, debug, tools, mtr, tcpdump, iperf, wireshark","wordcount":587,"url":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/tools-3\/","datePublished":"2022-07-28T00:00:00+00:00","dateModified":"2022-08-12T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">【TroubleShooting】故障排除的工具介紹與使用方式--Slowly</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>TroubleShooting</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-07-28>2022-07-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;587 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+</div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/troubleshooting/tools-3/troubleshooting_header_content.jpg data-srcset="/posts/troubleshooting/tools-3/troubleshooting_header_content.jpg, /posts/troubleshooting/tools-3/troubleshooting_header_content.jpg 1.5x, /posts/troubleshooting/tools-3/troubleshooting_header_content.jpg 2x" data-sizes=auto alt=/posts/troubleshooting/tools-3/troubleshooting_header_content.jpg title=/posts/troubleshooting/tools-3/troubleshooting_header_content.jpg></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#mtr>mtr</a></li>
+<li><a href=#tcpdump-wireshark>tcpdump, Wireshark</a></li>
+<li><a href=#iperf>iperf</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>簡單提一下網路緩慢時的處理方式與工具。</p>
+<h2 id=前言>前言</h2>
+<p>自己在處理網路緩慢的問題經驗並不多，但基本上自己會先往幾個方向去思考問題點在哪：</p>
+<ul>
+<li>高延遲（High Latency），想一想我們前面提到 3 way handshake 時，假設一來一往，每一個步驟都要花 1000ms，建立一個連線要 3 秒鐘，這樣當然會慢啦。</li>
+<li>使用較小的 MSS，意味著在同樣的時間內所輸的資料較少，這樣也會感覺慢慢的。</li>
+<li>太多人使用，壅塞了！</li>
+<li><del>其他我可能沒想到的原因。</del></li>
+</ul>
+<p>因為緩慢可能會有很多原因，可以透過一些工具來幫助自己釐清這些問題。<br>
+以下會對這些工具做一些簡單的介紹。</p>
+<ul>
+<li>mtr</li>
+<li>tcpdump, wireshark</li>
+<li>iperf</li>
+</ul>
+<h2 id=mtr>mtr</h2>
+<p>mtr 就是把 traceroute(tracert) 跟 ping 組合起來，主要是用來觀察 latancy 或是 packet loss% 的工具。<br>
+其實就很像 traceroute，但 mtr 顯示的資訊更豐富，並會計算所有 hop 回應的百分比與回應時間。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ mtr 8.8.8.8
+</code></pre></div><p>那他會帶你進入一個介面做觀察，按 q 可以離開。</p>
+<figure><a class=lightgallery href=/posts/troubleshooting/tools-3/mtr_1.png title=/posts/troubleshooting/tools-3/mtr_1.png data-thumbnail=/posts/troubleshooting/tools-3/mtr_1.png data-sub-html="<h2>第一次看到 mtr 大概是這樣子</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=mtr_1.png data-srcset="/posts/troubleshooting/tools-3/mtr_1.png, mtr_1.png 1.5x, /posts/troubleshooting/tools-3/mtr_1.png 2x" data-sizes=auto alt=/posts/troubleshooting/tools-3/mtr_1.png width=100%>
+</a><figcaption class=image-caption>第一次看到 mtr 大概是這樣子</figcaption>
+</figure>
+<p>主要可以觀察到 packet 的遺失率，如果說有幾個不連續的幾個 node 掉了幾個封包，其實是不會造成太大的影響，但如果是某一個 node 後所有的 node 都有封包遺失，那一個 node 則會對整個傳輸造成影響，也就會讓使用者感受到緩慢，可以推測那個 node 上有問題。</p>
+<p>另外可以觀察 icmp 封包的傳輸延遲，雖然 traceroute 也做得到，但 mtr 他提供的資訊比較多啦。</p>
+<ul>
+<li>Last : 最後一次的延遲數值</li>
+<li>Avg : 平均的延遲數值</li>
+<li>Best : 最佳的延遲數值（最短）</li>
+<li>Wrst : 最糟的延遲數值（最長）</li>
+<li>StDev : 標準偏差（Standard Deviation），愈大代表這個 node 愈不穩定。</li>
+</ul>
+<p>以上圖的例子來說，第二個點的延遲就有點糟且不太穩定。</p>
+<p>另外可以加入一些參數做不同的使用：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1>## -n 可以強制以 IP address 顯示所有 node</span>
+$ mtr -n 8.8.8.8
+</code></pre></div><a class=lightgallery href=/posts/troubleshooting/tools-3/mtr_2.png title=/posts/troubleshooting/tools-3/mtr_2.png data-thumbnail=/posts/troubleshooting/tools-3/mtr_2.png>
+<img class=lazyload src=/svg/loading.min.svg data-src=mtr_2.png data-srcset="/posts/troubleshooting/tools-3/mtr_2.png, mtr_2.png 1.5x, /posts/troubleshooting/tools-3/mtr_2.png 2x" data-sizes=auto alt=/posts/troubleshooting/tools-3/mtr_2.png width=100%>
+</a>
+<p>前面我們提到 tcptraceroute，那在 mtr 上可以使用 tcp 或 udp 嗎？<br>
+<strong>可以的 !!</strong> 有時候也需要觀察 tcp 或 udp 資料在這段網路上的傳輸品質。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ mtr --tcp 8.8.8.8 
+$ mtr --udp 8.8.8.8
+</code></pre></div><p>我想改變封包的 size 可以嗎？ <code>-s</code> 會幫助你！<br>
+可以透過更改封包的大小來觀察網路使用狀況。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ mtr -s <span class=o>[</span>PACKETSIZE<span class=o>]</span> 8.8.8.8
+</code></pre></div><p>最後，可以透過 <code>-r</code> 這個參數做紀錄。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1>### 預設會送 10 次做觀察。</span>
+$ mtr -r 8.8.8.8 &gt; <span class=o>[</span>filename<span class=o>]</span> 
+<span class=c1>### 透過 -c 調整次數，這樣他就會送 100 次。</span>
+$ mtr -r -c <span class=m>100</span> 8.8.8.8 &gt; <span class=o>[</span>filename<span class=o>]</span> 
+<span class=c1>### 這樣他就會在背景送 1000 次，然後你可以去喝咖啡。</span>
+$ mtr -r -c <span class=m>1000</span> 8.8.8.8 &gt; <span class=o>[</span>filename<span class=o>]</span> <span class=p>&amp;</span> 
+</code></pre></div><h2 id=tcpdump-wireshark>tcpdump, Wireshark</h2>
+<p>tcpdump 是一個功能強大的，而且也是使用最廣泛的 sniffer 與分析工具，用來捕捉或過濾在特定介面上接收或傳輸的 TCP/IP packet。<br>
+基本上在多數的環境中都可以使用，並且可以將捕捉的結果儲存為 <strong>.pcap</strong> 格式，可以透過 Wireshark 做更進一步的分析。<br>
+坦白說，tcpdump 也是會在網路無法連線時使用到，像是 ssl 無法建立，或是 VLAN tag 設定錯之類的情形，我會把它放在這是因為，我自己在看 MSS 時會用到。MMS 的大小會影響傳輸效能。或觀察封包的往來時間。<br>
+Wireshark 也具有相同的功能，並提供圖形化介面做更容易的使用。
+這邊只會介紹 tcpdump，基本上，環境預設是不會有這個工具，所以我們要先自行安裝。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># macOS(OSX)</span>
+$ brew install tcpdump
+<span class=c1># Debian, Ubuntu</span>
+$ sudo apt-get install tcpdump
+</code></pre></div><p>首先，我們可以選擇指定的介面捕捉封包。透過 <code>-i</code> 這個參數可以指定介面。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ tcpdump -i eth0
+16:59:22.920016 IP 172.20.10.4.50011 &gt; a104-115-254-134.deploy.static.akamaitechnologies.com.https: Flags <span class=o>[</span>.<span class=o>]</span>, ack 213539838, win 2048, length <span class=m>0</span>
+16:59:22.920017 IP 172.20.10.4.50007 &gt; a173-222-181-125.deploy.static.akamaitechnologies.com.https: Flags <span class=o>[</span>.<span class=o>]</span>, ack 2165220779, win 2048, length <span class=m>0</span>
+16:59:22.920017 IP 172.20.10.4.50003 &gt; 137.155.120.34.bc.googleusercontent.com.https: Flags <span class=o>[</span>.<span class=o>]</span>, ack 281486443, win 2048, length <span class=m>0</span>
+</code></pre></div><p>那我們要如何知道，有哪些介面可以監聽呢？<del>ifconfig</del><br>
+tcpdump 提供 <code>-D</code> 這個參數，讓我們可以知道可以使用哪些介面。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ tcpdump -D
+
+1.en0 <span class=o>[</span>Up, Running, Wireless, Associated<span class=o>]</span>
+2.p2p0 <span class=o>[</span>Up, Running, Wireless, Not associated<span class=o>]</span>
+3.awdl0 <span class=o>[</span>Up, Running, Wireless, Associated<span class=o>]</span>
+4.llw0 <span class=o>[</span>Up, Running, Wireless, Associated<span class=o>]</span>
+5.utun0 <span class=o>[</span>Up, Running<span class=o>]</span>
+6.utun1 <span class=o>[</span>Up, Running<span class=o>]</span>
+7.lo0 <span class=o>[</span>Up, Running, Loopback<span class=o>]</span>
+8.en1 <span class=o>[</span>Up, Running, Disconnected<span class=o>]</span>
+9.en2 <span class=o>[</span>Up, Running, Disconnected<span class=o>]</span>
+10.gif0 <span class=o>[</span>none<span class=o>]</span>
+11.stf0 <span class=o>[</span>none<span class=o>]</span>
+12.XHC20 <span class=o>[</span>none<span class=o>]</span>
+13.bridge0 <span class=o>[</span>none, Disconnected<span class=o>]</span>
+14.en4 <span class=o>[</span>none, Disconnected<span class=o>]</span>
+</code></pre></div><p>並可以透過 <code>-n</code> 再進一步，只捕獲這個介面上 IP 的封包。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ tcpdump -n -i en0
+</code></pre></div><p>另外還可以透過 <code>-XX</code> 這個參數，顯示封包的數據內容，並以 HEX 與 ASCII 格式顯示。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ tcpdump -XX -i en0
+
+17:04:15.996062 IP6 2001-b400-e35d-11b9-e87c-0c6e-2d6e-27bf.emome-ip6.hinet.net.50145 &gt; 2403:300:a41:b02::7.https: Flags <span class=o>[</span>P.<span class=o>]</span>, seq 3353679317:3353679348, ack 252170061, win 2048, options <span class=o>[</span>nop,nop,TS val <span class=m>2584095760</span> ecr 718123086<span class=o>]</span>, length <span class=m>31</span>
+	0x0000:  feaa <span class=m>8116</span> f864 80e6 501d eed8 86dd 602b  .....d..P.....<span class=sb>`</span>+
+	0x0010:  <span class=m>0700</span> 003f <span class=m>0640</span> <span class=m>2001</span> b400 e35d 11b9 e87c  ...?.@.....<span class=o>]</span>...<span class=p>|</span>
+	0x0020:  0c6e 2d6e 27bf <span class=m>2403</span> <span class=m>0300</span> 0a41 0b02 <span class=m>0000</span>  .n-n<span class=err>&#39;</span>.$....A....
+	0x0030:  <span class=m>0000</span> <span class=m>0000</span> <span class=m>0007</span> c3e1 01bb c7e5 15d5 0f07  ................
+	0x0040:  cf4d <span class=m>8018</span> <span class=m>0800</span> 0bba <span class=m>0000</span> <span class=m>0101</span> 080a 9a06  .M..............
+	0x0050:  2c10 2acd b04e <span class=m>1503</span> <span class=m>0300</span> 1a00 <span class=m>0000</span> <span class=m>0000</span>  ,.*..N..........
+	0x0060:  <span class=m>0000</span> 022b <span class=m>2353</span> 39dc 701e eb0a d4f2 219e  ...+#S9.p.....!.
+	0x0070:  6eca 679d <span class=m>37</span>                             n.g.7
+</code></pre></div><p>前面提到，可以將這些紀錄儲存為 <strong>.pcap</strong> 格式，只需要透過 <code>-w</code> 即可使用。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ tcpdump -w myFileName.pcap -i en0
+</code></pre></div><p>既然可以寫入，那應該也可以讀取吧？<br>
+沒錯，透過 <code>-r</code> 這個參數可以讀取 <strong>.pcap</strong> 檔案。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ tcpdump -r myFileName.pcap
+</code></pre></div><p>接下來是一些更細部的參數，可以讓我們根據情境做調整：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># 只抓 TCP</span>
+$ tcpdump -i en0 tcp
+
+<span class=c1># 只抓某個 port number </span>
+$ tcpdump -i en0 port <span class=m>22</span>
+
+<span class=c1># 只抓來源 IP 為 8.8.8.8 的</span>
+$ tcpdump -i en0 src 8.8.8.8
+<span class=c1># 只抓目的 IP 為 168.95.1.1 的</span>
+$ tcpdump -i en0 src 168.95.1.1
+</code></pre></div><p>因為這篇文章，主要是工具的使用，更細一步的分析，往後有時間會再撰寫吧。</p>
+<h2 id=iperf>iperf</h2>
+<p>iperf 是一種測量網路上最大頻寬的工具，可以調整 timing, buffer 與 protocol(TCP, UDP, ICMP &mldr;)，並產生頻寬與損耗等相關報告。<br>
+一般來說，使用 iperf 要有兩個端點(node)，透過兩個端點進行測量。(Server, Client)</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># Server</span>
+$ iperf3 -s
+
+<span class=c1># Client</span>
+$ iperf3 -c <span class=o>[</span>Server IP address<span class=o>]</span>
+</code></pre></div><p>可&mldr;可是我只有一台電腦，那也可以透過公開的 iperf server 做測試。<a href=https://iperf.fr/iperf-servers.php target=_blank rel="noopener noreffer">連結</a><br>
+不過我自己用了幾個，都是在忙碌中&mldr;</p>
+<p>比較常用的參數有 <code>-p</code>, <code>-u</code> 與 <code>-t</code> 等。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ iperf -p <span class=m>8888</span> -c <span class=o>[</span>server<span class=o>]</span> <span class=c1># 改 port number</span>
+$ iperf -u <span class=m>8888</span> -c <span class=o>[</span>server<span class=o>]</span> <span class=c1># 改用 UDP，預設是 TCP</span>
+$ iperf -t <span class=m>60</span> -c <span class=o>[</span>server<span class=o>]</span> <span class=c1># 更改傳輸的總時間</span>
+</code></pre></div><p>但這個工具我會建議用在做單個點的驗證，因為多個點時，使用 iperf 只會容易知道整體鏈路情況，但實際哪個點或哪幾個點有問題，可能還是要用 mtr 或類似的工具做補助。</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://github.com/traviscross/mtr target=_blank rel="noopener noreffer">mtr</a></li>
+<li><a href=https://www.tcpdump.org target=_blank rel="noopener noreffer">tcpdump</a></li>
+<li><a href=https://www.wireshark.org target=_blank rel="noopener noreffer">wireshark</a></li>
+<li><a href=https://iperf.fr target=_blank rel="noopener noreffer">iperf</a></li>
+<li>各個工具的 <code>-h, --help</code> 指令，<code>man</code> 的說明。</li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-08-12</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/troubleshooting/tools-3/ data-title=【TroubleShooting】故障排除的工具介紹與使用方式--Slowly data-via=wiwi571246 data-hashtags=Infra,Troubleshooting,debug,tools,mtr,tcpdump,iperf,wireshark><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/troubleshooting/tools-3/ data-hashtag=Infra><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/troubleshooting/tools-3/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/troubleshooting/tools-3/ data-title=【TroubleShooting】故障排除的工具介紹與使用方式--Slowly><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/infra/>Infra</a>,&nbsp;<a href=/tags/troubleshooting/>Troubleshooting</a>,&nbsp;<a href=/tags/debug/>debug</a>,&nbsp;<a href=/tags/tools/>tools</a>,&nbsp;<a href=/tags/mtr/>mtr</a>,&nbsp;<a href=/tags/tcpdump/>tcpdump</a>,&nbsp;<a href=/tags/iperf/>iperf</a>,&nbsp;<a href=/tags/wireshark/>wireshark</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/troubleshooting/tools-2/ class=prev rel=prev title=【TroubleShooting】故障排除的工具介紹與使用方式--服務中斷><i class="fas fa-angle-left fa-fw"></i>【TroubleShooting】故障排除的工具介紹與使用方式--服務中斷</a>
+<a href=/posts/infra/sre-1/ class=next rel=next title="Site Reliability Engineering - Introduction">Site Reliability Engineering - Introduction<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

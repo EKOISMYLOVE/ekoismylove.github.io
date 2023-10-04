@@ -1,0 +1,383 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Ansible - Roles - Wei's Note</title><meta name=Description content="這篇文章會簡單說明 roles 是什麼， roles 的結構與如何設計一個簡單的 roles，另外會稍微說明 ansible-galaxy，一個知名的共享 roles 工具。"><meta name=keywords content="Ansible,Infra,roles,ansible-galaxy"><meta property="og:title" content="Ansible - Roles">
+<meta property="og:description" content="這篇文章會簡單說明 roles 是什麼， roles 的結構與如何設計一個簡單的 roles，另外會稍微說明 ansible-galaxy，一個知名的共享 roles 工具。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/08-roles/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/08-roles/ansible-logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-07-07T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-07-07T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/08-roles/ansible-logo.png">
+<meta name=twitter:title content="Ansible - Roles">
+<meta name=twitter:description content="這篇文章會簡單說明 roles 是什麼， roles 的結構與如何設計一個簡單的 roles，另外會稍微說明 ansible-galaxy，一個知名的共享 roles 工具。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/08-roles/><link rel=prev href=http://ekoismylove.github.io/posts/troubleshooting/squid-utf8bom/><link rel=next href=http://ekoismylove.github.io/posts/ansible/10-faster/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Roles","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08-roles\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08-roles\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra, roles, ansible-galaxy","wordcount":723,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/08-roles\/","datePublished":"2023-07-07T00:00:00+00:00","dateModified":"2023-07-07T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Roles</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-07-07>2023-07-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;723 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#roles>Roles</a>
+<ul>
+<li><a href=#產生-roles>產生 roles</a></li>
+<li><a href=#基本架構>基本架構</a></li>
+<li><a href=#task>task</a></li>
+<li><a href=#default-var>default, var</a></li>
+</ul>
+</li>
+<li><a href=#ansible-galaxy>Ansible-galaxy</a>
+<ul>
+<li><a href=#list>List</a></li>
+<li><a href=#remove>Remove</a></li>
+<li><a href=#上傳-roles>上傳 roles</a></li>
+</ul>
+</li>
+<li><a href=#requirements>Requirements</a></li>
+<li><a href=#結論>結論</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>這篇文章會簡單說明 roles 是什麼， roles 的結構與如何設計一個簡單的 roles，另外會稍微說明 ansible-galaxy，一個知名的共享 roles 工具。</p>
+<h2 id=roles>Roles</h2>
+<p>Roles 可以讓我們根據已知的資訊，自動載入相關的變數、文件與 task 等。<br>
+透過 Roles 可以讓我們更容易重複使用，也方便與他人分享。</p>
+<h3 id=產生-roles>產生 roles</h3>
+<p>我們先用 <code>ansible-galaxy</code> 來產生一個 roles <del>（這樣比較快啦）</del>。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-galaxy role init --init-path playbooks/roles database
+- Role database was created successfully
+</code></pre></div><p>這樣會以 database 為名稱，初始化一個 roles。<br>
+ansible-galaxy 是一個很好用的工具，後面會提到他。</p>
+<h3 id=基本架構>基本架構</h3>
+<p>基本上每一個 role 都會有一個名稱，並且會放置在 roles 這個目錄底下。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ tree   <span class=c1># 這邊我拿之前實驗的目錄當例子。</span>
+roles
+├── database
+│   ├── README.md
+│   ├── defaults
+│   │   └── main.yml
+│   ├── files
+│   ├── handlers
+│   │   └── main.yml
+│   ├── meta
+│   │   └── main.yml
+│   ├── tasks
+│   │   └── main.yml
+│   ├── templates
+│   ├── tests
+│   │   ├── inventory
+│   │   └── test.yml
+│   └── vars
+│       └── main.yml
+</code></pre></div><p>基本上不同的目錄代表不同的含義：</p>
+<ul>
+<li>task : 主要的 task ，這邊會是 roles 執行的入口。</li>
+<li>file : 這邊會存放要上傳到 host 的檔案或 script。</li>
+<li>templete : 這邊保存要上傳到 host 的 Jinja2 template。</li>
+<li>handler : 主要的 handler。</li>
+<li>vars : 通常不該被改變的變數。</li>
+<li>defaults : 可以更改的預設變數。</li>
+<li>meta : 有關這個 role 的資訊。</li>
+<li>test : 測試的地方。</li>
+</ul>
+<p>每個單獨的檔案都是可選的，例如說我們的 role 沒有 handler，就不需要去建立一個空的。</p>
+<p>另外許多功能先前已經說明過，這邊只會先介紹最基本的 task 跟 variable，如果其他的功能不太熟悉，可以看先前的文章，或是後面待會說明 ansible-galaxy 時，下載其他大神的 roles 來參考。<del>(偷懶啊！)</del></p>
+<h3 id=task>task</h3>
+<p>前面提到 task 是 roles 執行的入口。我們先修改 task 中的 main.yml，並讓他 print 一些系統資訊。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nn>---</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Echo some message.</span><span class=w>
+</span><span class=w>  </span><span class=nt>debug</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>msg</span><span class=p>:</span><span class=w> </span><span class=p>&gt;-</span><span class=sd>
+</span><span class=sd>      os_family:
+</span><span class=sd>      {{ ansible_facts.os_family }},
+</span><span class=sd>      distro:
+</span><span class=sd>      {{ ansible_facts.distribution }}
+</span><span class=sd>      {{ ansible_facts.distribution_version }},
+</span><span class=sd>      kernel:
+</span><span class=sd>      {{ ansible_facts.kernel }}</span><span class=w>      
+</span></code></pre></div><p>接著修改或是新增 playbook，我這邊是又新增 <code>roles.yml</code> 來測試。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nn>---</span><span class=w>
+</span><span class=w>  </span>- <span class=nt>hosts</span><span class=p>:</span><span class=w> </span><span class=l>vagrant1</span><span class=w>
+</span><span class=w>    </span><span class=nt>roles</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>database</span><span class=w>
+</span></code></pre></div><p>然後使用 <code>ansible-playbook</code> 執行 <code>roles.yml</code>，可以看到該台主機相關的資訊。<br>
+<div class="details admonition question open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-question-circle fa-fw"></i>Question<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>這樣跟我們之前用的有什麼不同，不就只是把 playbook 換個地方然後引進來使用嗎？</div>
+</div>
+</div>
+我們目前就只有數個 playbook，管理三台由 vagrant 產生的機器，如果我們有數百甚至數千的 playbook 跟 host，那使用上可能會遇到大量的重複使用，且在管理上也是要花費很多時間且難以理解。 <br>
+將做好的功能做成 role，來讓其他 playbook 可以重複使用，以提高 ansible 使用上的靈活度。</p>
+<h3 id=default-var>default, var</h3>
+<p>前面提到，這兩個地方是放置變數的，差別只在一個經常變動，另一個則不經常變動。
+我們修改 default 跟 var 中的 main.yml</p>
+<p><code>default/main.yml</code></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nn>---</span><span class=w>
+</span><span class=w></span><span class=c># defaults file for database</span><span class=w>
+</span><span class=w></span><span class=nt>default_test</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;I am default&#34;</span><span class=w>
+</span></code></pre></div><p><code>vars/main.yml</code></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nn>---</span><span class=w>
+</span><span class=w></span><span class=c># vars file for database</span><span class=w>
+</span><span class=w></span><span class=nt>vars_test</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;I am vars&#34;</span><span class=w>
+</span></code></pre></div><p>然後再修改前面所用的 <code>task/main.yml</code></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nn>---</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Echo some message.</span><span class=w>
+</span><span class=w>  </span><span class=nt>debug</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>msg</span><span class=p>:</span><span class=w> </span><span class=p>&gt;-</span><span class=sd>
+</span><span class=sd>      test:
+</span><span class=sd>      {{ default_test }}
+</span><span class=sd>      {{ vars_test }}</span><span class=w>      
+</span></code></pre></div><p>接著執行 playbook，你應該可以看到 default 跟 vars 中的變數內容 <del>(連在一起了啦)</del>：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook -C roles.yml
+
+PLAY <span class=o>[</span>vagrant1<span class=o>]</span> ****************************************************************
+
+TASK <span class=o>[</span>Gathering Facts<span class=o>]</span> *********************************************************
+ok: <span class=o>[</span>vagrant1<span class=o>]</span>
+
+TASK <span class=o>[</span>database : Echo some message.<span class=o>]</span> *******************************************
+ok: <span class=o>[</span>vagrant1<span class=o>]</span> <span class=o>=</span>&gt; <span class=o>{}</span>
+
+MSG:
+
+test: I am default I am vars
+
+PLAY RECAP *********************************************************************
+vagrant1                   : <span class=nv>ok</span><span class=o>=</span><span class=m>2</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>0</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+</code></pre></div><div class="details admonition Info open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-pencil-alt fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>通常我們改變數只會改 default 中的變數，vars 比較不會去動它。<br>
+另外在優先權的部分，default 是最小的，所以 vars 或是其他檔案中有相同名稱的變數，則會覆蓋掉 default 中的變數。<br>
+由於 vars 的優先權極高，建議是在 task 執行時進行傳遞或是覆蓋。</div>
+</div>
+</div>
+<h2 id=ansible-galaxy>Ansible-galaxy</h2>
+<p><code>ansible-galaxy</code> 主要的目的是使用社群上大家所分享的 role。 另外也可以初始化 roles，提供一個簡單的目錄給我們開發，就像前面使用的功能。</p>
+<p>ansible-galaxy的指令有搜尋、安裝與移除等：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-galaxy search database
+Found <span class=m>1997</span> roles matching your search. Showing first 1000.
+
+ Name                                                 Description
+ ----                                                 -----------
+ 0x0i.grafana                                         Grafana - an analytics and monitoring observability platform
+ 0x0i.prometheus                                      Prometheus - a multi-dimensional time-series data monitoring and alerting toolkit
+ 0x5a17ed.ansible_role_netbox                         Installs and configures NetBox, a DCIM suite, in a production setting.
+ 0x_peace.mariadb                                     Mariadb role
+ 123mwanjemike.ansible_mongodb                        Configure the components of a MongoDB Cluster
+ 1it.riak                                             Installs and configures Riak KV and TS, a distributed, highly available NoSQL and TimeSeries database.
+ 1mr.timezone                                         change timezone
+ ...
+</code></pre></div><p>如果有找到喜歡的，我們可以用 <code>install</code> 進行安裝，這邊我就以安裝 0x_peace.mariadb 為例子：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-galaxy install 0x_peace.mariadb
+Starting galaxy role install process
+- downloading role <span class=s1>&#39;mariadb&#39;</span>, owned by 0x_peace
+- downloading role from https://github.com/0x-peace/mariadb/archive/master.tar.gz
+- extracting 0x_peace.mariadb to /Users/user/.ansible/roles/0x_peace.mariadb
+- 0x_peace.mariadb <span class=o>(</span>master<span class=o>)</span> was installed successfully
+
+<span class=c1># 我想要換路徑啦！那就用下面這個！</span>
+$ ansible-galaxy install -f -p <span class=o>[</span>path<span class=o>]</span> 0x_peace.mariadb
+</code></pre></div><h3 id=list>List</h3>
+<p>list 可以讓我們知道已經安裝了哪一些 roles，在我的環境中，他會去抓一些預設的路徑。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-galaxy list
+<span class=c1># /Users/user/.ansible/roles</span>
+- 0x_peace.mariadb, master
+<span class=o>[</span>WARNING<span class=o>]</span>: - the configured path /usr/share/ansible/roles does not exist.
+<span class=o>[</span>WARNING<span class=o>]</span>: - the configured path /etc/ansible/roles does not exist.
+
+<span class=c1># 一樣也可以指定路徑。</span>
+$ ansible-galaxy list -p <span class=o>[</span>path<span class=o>]</span>
+<span class=c1># /Users/user/Desktop/playbooks/roles</span>
+- 0x_peace.mariadb, master
+<span class=c1># /Users/user/.ansible/roles</span>
+- 0x_peace.mariadb, master
+<span class=o>[</span>WARNING<span class=o>]</span>: - the configured path /usr/share/ansible/roles does not exist.
+<span class=o>[</span>WARNING<span class=o>]</span>: - the configured path /etc/ansible/roles does not exist.
+</code></pre></div><h3 id=remove>Remove</h3>
+<p><del>知道了我們有裝哪些 roles 後可以幹嘛呢？沒錯就是要來把它刪掉</del>
+Remove 就如同字面上，用來把想刪的 roles 刪除！</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-galaxy remove 0x_peace.mariadb
+- successfully removed 0x_peace.mariadb
+
+<span class=c1># 一樣可以用 -p 來指定路徑</span>
+$ ansible-galaxy remove -p <span class=o>[</span>path <span class=o>]</span>0x_peace.mariadb
+- successfully removed 0x_peace.mariadb
+</code></pre></div><h3 id=上傳-roles>上傳 roles</h3>
+<p><em>我寫好了，我想上傳跟大家分享！</em></p>
+<p>上傳 roles 的話，首先要有一個 github 帳號，然後把你的 roles push 到 github 上。</p>
+<p>接著登入到 <a href=https://galaxy.ansible.com/ target=_blank rel="noopener noreffer">Galaxy Ansible</a>，網站會幫你同步你的 repository，你只要把你存放 roles 的 repository 權限打開即可。</p>
+<p>因為網站經常改版，雖然步驟都是一樣但功能的相對位置會改變，這邊就不附上圖片說明。</p>
+<h2 id=requirements>Requirements</h2>
+<p>有時候你會發現 role 內有一個 requirements.yml，這個是用來列出這個 role 的依賴項，通常會在 roles 內，如果是使用 AWX 或是 Ansible Tower 時會自動安裝列出的依賴項。<br>
+這邊可以使用 galaxy 中的 role 或是其他 repository 中的 role。<br>
+不同的來源在 requirements 中用法也不同，這邊可以參考<a href=https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#install-multiple-collections-with-a-requirements-file target=_blank rel="noopener noreffer">官方的說明文件</a>，我在這也附上相關用法。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=c># from galaxy</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>yatesr.timezone</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from locally cloned git repository (git+file:// requires full paths)</span><span class=w>
+</span><span class=w></span>- <span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>git+file:///home/bennojoy/nginx</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from GitHub</span><span class=w>
+</span><span class=w></span>- <span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>https://github.com/bennojoy/nginx</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from GitHub, overriding the name and specifying a specific tag</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx_role</span><span class=w>
+</span><span class=w>  </span><span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>https://github.com/bennojoy/nginx</span><span class=w>
+</span><span class=w>  </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=l>main</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from GitHub, specifying a specific commit hash</span><span class=w>
+</span><span class=w></span>- <span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>https://github.com/bennojoy/nginx</span><span class=w>
+</span><span class=w>  </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;ee8aa41&#34;</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from a webserver, where the role is packaged in a tar.gz</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>http-role-gz</span><span class=w>
+</span><span class=w>  </span><span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>https://some.webserver.example.com/files/main.tar.gz</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from a webserver, where the role is packaged in a tar.bz2</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>http-role-bz2</span><span class=w>
+</span><span class=w>  </span><span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>https://some.webserver.example.com/files/main.tar.bz2</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from a webserver, where the role is packaged in a tar.xz (Python 3.x only)</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>http-role-xz</span><span class=w>
+</span><span class=w>  </span><span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>https://some.webserver.example.com/files/main.tar.xz</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from Bitbucket</span><span class=w>
+</span><span class=w></span>- <span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>git+https://bitbucket.org/willthames/git-ansible-galaxy</span><span class=w>
+</span><span class=w>  </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=l>v1.4</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from Bitbucket, alternative syntax and caveats</span><span class=w>
+</span><span class=w></span>- <span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>https://bitbucket.org/willthames/hg-ansible-galaxy</span><span class=w>
+</span><span class=w>  </span><span class=nt>scm</span><span class=p>:</span><span class=w> </span><span class=l>hg</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># from GitLab or other git-based scm, using git+ssh</span><span class=w>
+</span><span class=w></span>- <span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>git@gitlab.company.com:mygroup/ansible-core.git</span><span class=w>
+</span><span class=w>  </span><span class=nt>scm</span><span class=p>:</span><span class=w> </span><span class=l>git</span><span class=w>
+</span><span class=w>  </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;0.1&#34;</span><span class=w>  </span><span class=c># quoted, so YAML doesn&#39;t parse this as a floating-point value</span><span class=w>
+</span></code></pre></div><h2 id=結論>結論</h2>
+<p>role 是組織 playbook 的好方法，這篇文章介紹了如何使用 role，如何設計自己的 role 跟使用別人所設計的 role。</p>
+<p>這篇筆記是自己受傷後所寫的第一篇，希望自己能趕快恢復狀況，維持持續學習的習慣。</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://www.amazon.com/Ansible-Automating-Configuration-Management-Deployment/dp/1491979801 target=_blank rel="noopener noreffer">Ansible: Up and Running: Automating Configuration Management and Deployment the Easy Way (3rd edition)</a></li>
+<li><a href=https://docs.ansible.com/ansible/latest/galaxy/user_guide.html target=_blank rel="noopener noreffer">Galaxy User Guide</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2023-07-07</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/ansible/08-roles/ data-title="Ansible - Roles" data-via=wiwi571246 data-hashtags=Ansible,Infra,roles,ansible-galaxy><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/ansible/08-roles/ data-hashtag=Ansible><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/ansible/08-roles/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/ansible/08-roles/ data-title="Ansible - Roles"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/ansible/>Ansible</a>,&nbsp;<a href=/tags/infra/>Infra</a>,&nbsp;<a href=/tags/roles/>roles</a>,&nbsp;<a href=/tags/ansible-galaxy/>ansible-galaxy</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/troubleshooting/squid-utf8bom/ class=prev rel=prev title="【TroubleShooting】Invalid Response on Squid(Duo to BOM)"><i class="fas fa-angle-left fa-fw"></i>【TroubleShooting】Invalid Response on Squid(Duo to BOM)</a>
+<a href=/posts/ansible/10-faster/ class=next rel=next title="Ansible - How to go faster">Ansible - How to go faster<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
