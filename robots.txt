@@ -1,4 +1,8 @@
+User-agent: Googlebot
+Disallow: /tags/
+Disallow: /categories/ 
+
 User-agent: *
-Disallow:
+Allow: /
 Sitemap: https://ekoismylove.github.io/sitemap.xml
 Host: ekoismylove.github.io
