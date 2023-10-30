@@ -16,7 +16,7 @@
 <meta name=application-name content="Wei's Note">
 <meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/analysis-and-application-of-http-404/><link rel=prev href=http://ekoismylove.github.io/posts/blog/blog-auto-deploy/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"沒有資源卻還有頁面？HTTP 404 的解析與應用","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/analysis-and-application-of-http-404\/"},"genre":"posts","keywords":"HTTP, 404, rewrite","wordcount":349,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/analysis-and-application-of-http-404\/","datePublished":"2023-10-30T00:00:00+00:00","dateModified":"2023-10-30T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/analysis-and-application-of-http-404/><link rel=prev href=http://ekoismylove.github.io/posts/blog/blog-auto-deploy/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"沒有資源卻還有頁面？HTTP 404 的解析與應用","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/analysis-and-application-of-http-404\/"},"genre":"posts","keywords":"HTTP, 404, rewrite","wordcount":352,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/analysis-and-application-of-http-404\/","datePublished":"2023-10-30T00:00:00+00:00","dateModified":"2023-10-30T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -84,7 +84,7 @@ Cancel
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">沒有資源卻還有頁面？HTTP 404 的解析與應用</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-10-30>2023-10-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;349 words&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-10-30>2023-10-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;352 words&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
 </div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -120,9 +120,9 @@ Cancel
 <p>在提到 404 之前，我們先來看我覺得是status code聖經本的連結 :<br>
 <a href=https://developer.mozilla.org/en-US/docs/Web/HTTP/Status target=_blank rel="noopener noreffer">HTTP response status codes</a></p>
 <p>然後把 404 找出來吧(Ctrl + F)</p>
-<pre tabindex=0><code>404 Not Found
-    The server cannot find the requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 Forbidden to hide the existence of a resource from an unauthorized client. This response code is probably the most well known due to its frequent occurrence on the web.
-</code></pre><p>簡單來說就是找不到你要的東西啦。<br>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-html data-lang=html>404 Not Found
+The server cannot find the requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 Forbidden to hide the existence of a resource from an unauthorized client. This response code is probably the most well known due to its frequent occurrence on the web.
+</code></pre></div><p>簡單來說就是找不到你要的東西啦。<br>
 好比你給我一間很好吃的牛肉麵店的地址，我依據你給的地址去到目的地時，發現該牛肉麵店已經關了(或是換地方開店，現在店租貴得要命)，這時候我就會跟你說</p>
 <pre tabindex=0><code>欸，沒有這家店阿!
 </code></pre><p>404 Not Found 應該也像這個意思。</p>
@@ -130,38 +130,39 @@ Cancel
 <p>好，那明明就沒有找到資源，為甚麼我連到不存在的資源時，又會給我一個自定義的 404.html 呢？</p>
 <p>在伺服器端，我們可以在傳送 status code 404 後，透過 rewrite 的方式緊接著傳送 404.html，合併在同一個 response 中，這個 404.html 讓使用者不會只看到一個由 browser 產生的頁面，而是自己定義的頁面，這個頁面就可以加入許多自己想放的內容，站台的 Logo，sitemap 與廣告等。</p>
 <p>下面是 curl 的結果，你可以發現雖然給我 status code 404，但後續有給我 404.html 的內容。</p>
-<pre tabindex=0><code>HTTP/1.1 404 Not Found
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ curl https://ekoismylove.github.io/test.html
+HTTP/1.1 <span class=m>404</span> Not Found
 Connection: keep-alive
-Content-Length: 2332
+Content-Length: <span class=m>2332</span>
 Server: GitHub.com
-Content-Type: text/html; charset=utf-8
-permissions-policy: interest-cohort=()
+Content-Type: text/html<span class=p>;</span> <span class=nv>charset</span><span class=o>=</span>utf-8
+permissions-policy: interest-cohort<span class=o>=()</span>
 Access-Control-Allow-Origin: *
-Strict-Transport-Security: max-age=31556952
-ETag: W/&quot;652d3b5a-1c9a&quot;
+Strict-Transport-Security: max-age<span class=o>=</span><span class=m>31556952</span>
+ETag: W/<span class=s2>&#34;652d3b5a-1c9a&#34;</span>
 Content-Encoding: gzip
 x-proxy-cache: MISS
 X-GitHub-Request-Id: 599C:57EC:24D998A:3342522:653F9743
 Accept-Ranges: bytes
-Date: Mon, 30 Oct 2023 11:45:07 GMT
+Date: Mon, <span class=m>30</span> Oct <span class=m>2023</span> 11:45:07 GMT
 Via: 1.1 varnish
-Age: 0
+Age: <span class=m>0</span>
 X-Served-By: cache-ewr18167-EWR
 X-Cache: MISS
-X-Cache-Hits: 0
+X-Cache-Hits: <span class=m>0</span>
 X-Timer: S1698666308.830006,VS0,VE22
 Vary: Accept-Encoding
 X-Fastly-Request-ID: c9219940daf0e76b1973ff262dd5712fd3b0576d
 
-&lt;!doctype html&gt;&lt;html lang=zh-tw&gt;
+&lt;!doctype html&gt;&lt;html <span class=nv>lang</span><span class=o>=</span>zh-tw&gt;
 &lt;head&gt;
-&lt;meta charset=utf-8&gt;
-&lt;meta name=viewport content=&quot;width=device-width,initial-scale=1&quot;&gt;
-&lt;meta name=robots content=&quot;noodp&quot;&gt;
-&lt;meta http-equiv=x-ua-compatible content=&quot;IE=edge, chrome=1&quot;&gt;
-&lt;title&gt;404 Page not found - Wei's Note&lt;/title&gt;&lt;meta name=Description content&gt;&lt;meta name=keywords content=&quot;go,ansible,infra,linux,blog&quot;&gt;&lt;meta property=&quot;og:title&quot; content=&quot;404 Page not found&quot;&gt;
-以下被小精靈吃掉了 ... 030
-</code></pre><h2 id=soft-404>Soft 404</h2>
+&lt;meta <span class=nv>charset</span><span class=o>=</span>utf-8&gt;
+&lt;meta <span class=nv>name</span><span class=o>=</span>viewport <span class=nv>content</span><span class=o>=</span><span class=s2>&#34;width=device-width,initial-scale=1&#34;</span>&gt;
+&lt;meta <span class=nv>name</span><span class=o>=</span>robots <span class=nv>content</span><span class=o>=</span><span class=s2>&#34;noodp&#34;</span>&gt;
+&lt;meta http-equiv<span class=o>=</span>x-ua-compatible <span class=nv>content</span><span class=o>=</span><span class=s2>&#34;IE=edge, chrome=1&#34;</span>&gt;
+&lt;title&gt;404 Page not found - Wei<span class=err>&#39;</span>s Note&lt;/title&gt;&lt;meta <span class=nv>name</span><span class=o>=</span>Description content&gt;&lt;meta <span class=nv>name</span><span class=o>=</span>keywords <span class=nv>content</span><span class=o>=</span><span class=s2>&#34;go,ansible,infra,linux,blog&#34;</span>&gt;&lt;meta <span class=nv>property</span><span class=o>=</span><span class=s2>&#34;og:title&#34;</span> <span class=nv>content</span><span class=o>=</span><span class=s2>&#34;404 Page not found&#34;</span>&gt;
+以下被小精靈吃掉了 ... <span class=m>030</span>
+</code></pre></div><h2 id=soft-404>Soft 404</h2>
 <p>有些站台在找不到資源時，會使用 <code>200 OK</code> 並加入 404.html 合併為一個 response 給 Client。</p>
 <pre tabindex=0><code>明明就沒有該資源，還回覆 200 OK?
 </code></pre><p>我們稱這個為 Soft 404(軟 404)，因為這樣做並不是不對，我的站台正確的給了 404.html，故回覆 200 OK 很正常吧 !<br>
