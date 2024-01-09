@@ -1,0 +1,438 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Ansible - Debug - Wei's Note</title><meta name=description content="錯誤經常發生，不論是在 playbook 或是 configuration 上，出錯是正常的，我們要知道的是問題點在哪，並找出方法解決問題。本篇文章將介紹一些在 Ansible 上的故障排除方法與工具。"><meta name=keywords content="Ansible,Infra,debug"><meta property="og:title" content="Ansible - Debug">
+<meta property="og:description" content="錯誤經常發生，不論是在 playbook 或是 configuration 上，出錯是正常的，我們要知道的是問題點在哪，並找出方法解決問題。本篇文章將介紹一些在 Ansible 上的故障排除方法與工具。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/ansible/ansible-debug/"><meta property="og:image" content="http://ekoismylove.github.io/posts/ansible/ansible-debug/ansible-logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-03-04T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-03-04T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/ansible/ansible-debug/ansible-logo.png">
+<meta name=twitter:title content="Ansible - Debug">
+<meta name=twitter:description content="錯誤經常發生，不論是在 playbook 或是 configuration 上，出錯是正常的，我們要知道的是問題點在哪，並找出方法解決問題。本篇文章將介紹一些在 Ansible 上的故障排除方法與工具。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/ansible/ansible-debug/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible-variables-%E8%88%87-facts/><link rel=next href=http://ekoismylove.github.io/posts/troubleshooting/invalid-response-on-squidduo-to-bom/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible - Debug","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible-debug\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible-debug\/ansible-logo.png","width":1200,"height":600}],"genre":"posts","keywords":"Ansible, Infra, debug","wordcount":641,"url":"http:\/\/ekoismylove.github.io\/posts\/ansible\/ansible-debug\/","datePublished":"2023-03-04T00:00:00+00:00","dateModified":"2023-03-04T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Ansible - Debug</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-03-04>2023-03-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;641 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#error-message>Error Message</a></li>
+<li><a href=#troubleshooting>Troubleshooting</a>
+<ul>
+<li><a href=#module>module</a></li>
+<li><a href=#-v>-v</a></li>
+</ul>
+</li>
+<li><a href=#debugger>debugger</a></li>
+<li><a href=#assert>assert</a></li>
+<li><a href=#check-playbook>Check playbook</a>
+<ul>
+<li><a href=#語法檢查--syntax-check>語法檢查（&ndash;syntax-check）</a></li>
+<li><a href=#列出主機--list-hosts>列出主機（&ndash;list-hosts）</a></li>
+<li><a href=#列出任務--list-tasks>列出任務（&ndash;list-tasks）</a></li>
+<li><a href=#diff>Diff</a></li>
+</ul>
+</li>
+<li><a href=#結論>結論</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>錯誤經常發生，不論是在 playbook 或是 configuration 上，出錯是正常的，我們要知道的是問題點在哪，並找出方法解決問題。本篇文章將介紹一些在 Ansible 上的故障排除方法與工具。</p>
+<h2 id=error-message>Error Message</h2>
+<p>舉例來說，我使用上次 show.yml 那個為範例，我將相關的設備關機後並執行：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook show.yml
+
+PLAY <span class=o>[</span>Do something to host<span class=o>]</span> *************************************************************
+
+TASK <span class=o>[</span>Gathering Facts<span class=o>]</span> ******************************************************************
+fatal: <span class=o>[</span>vagrant1<span class=o>]</span>: UNREACHABLE! <span class=o>=</span>&gt; <span class=o>{</span><span class=s2>&#34;changed&#34;</span>: false, <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;Failed to connect to the host via ssh: &#34;</span>, <span class=s2>&#34;unreachable&#34;</span>: true<span class=o>}</span>
+fatal: <span class=o>[</span>vagrant3<span class=o>]</span>: UNREACHABLE! <span class=o>=</span>&gt; <span class=o>{</span><span class=s2>&#34;changed&#34;</span>: false, <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;Failed to connect to the host via ssh: &#34;</span>, <span class=s2>&#34;unreachable&#34;</span>: true<span class=o>}</span>
+
+PLAY RECAP ******************************************************************************
+vagrant1                   : <span class=nv>ok</span><span class=o>=</span><span class=m>0</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>1</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+vagrant3                   : <span class=nv>ok</span><span class=o>=</span><span class=m>0</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>1</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+</code></pre></div><p>你可以發現到 ansible 回報了錯誤，並提供一些相關資訊，在最下方也有相關的紀錄。（unreachable）</p>
+<p>我們可以透過修改 ansible.cfg 中的 <code>[default]</code>，加入<code>stdout_callback = debug</code> 讓訊息更容易閱讀：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=p>[</span><span class=l>defaults]</span><span class=w>
+</span><span class=w></span><span class=l>inventory = inventory</span><span class=w>
+</span><span class=w></span><span class=l>stdout_callback = debug</span><span class=w>
+</span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook show.yml
+
+PLAY <span class=o>[</span>Do something to host<span class=o>]</span> *************************************************************
+
+TASK <span class=o>[</span>Gathering Facts<span class=o>]</span> ******************************************************************
+fatal: <span class=o>[</span>vagrant1<span class=o>]</span>: UNREACHABLE! <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;changed&#34;</span>: false,
+    <span class=s2>&#34;unreachable&#34;</span>: <span class=nb>true</span>
+<span class=o>}</span>
+
+MSG:
+
+Failed to connect to the host via ssh:
+fatal: <span class=o>[</span>vagrant3<span class=o>]</span>: UNREACHABLE! <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;changed&#34;</span>: false,
+    <span class=s2>&#34;unreachable&#34;</span>: <span class=nb>true</span>
+<span class=o>}</span>
+
+MSG:
+
+Failed to connect to the host via ssh:
+
+PLAY RECAP ******************************************************************************
+vagrant1                   : <span class=nv>ok</span><span class=o>=</span><span class=m>0</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>1</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+vagrant3                   : <span class=nv>ok</span><span class=o>=</span><span class=m>0</span>    <span class=nv>changed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>unreachable</span><span class=o>=</span><span class=m>1</span>    <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>    <span class=nv>skipped</span><span class=o>=</span><span class=m>0</span>    <span class=nv>rescued</span><span class=o>=</span><span class=m>0</span>    <span class=nv>ignored</span><span class=o>=</span><span class=m>0</span>
+</code></pre></div><h2 id=troubleshooting>Troubleshooting</h2>
+<h3 id=module>module</h3>
+<p>我們可以透過 -m 這個參數，來使用 module 中的一些指令進行 Troubleshooting :</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible vagrant1 -m ping
+vagrant1 <span class=p>|</span> UNREACHABLE! <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;changed&#34;</span>: false,
+    <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;Failed to connect to the host via ssh: &#34;</span>,
+    <span class=s2>&#34;unreachable&#34;</span>: <span class=nb>true</span>
+<span class=o>}</span>
+</code></pre></div><div class="details admonition question open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-question-circle fa-fw"></i>Question<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>那這樣跟我直接用 $ ping vagrant1 有什麼不一樣？我還要打更多的字耶！</div>
+</div>
+</div>
+<p>的確是沒有什麼不一樣，但如果你有上百台機器要處理呢？還記得我們前面提到的 Group 嗎？你甚至可以使用 <code>all</code> 來協助你同時處理更多機器！</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible all -m ping
+vagrant1 <span class=p>|</span> UNREACHABLE! <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;changed&#34;</span>: false,
+    <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;Failed to connect to the host via ssh: &#34;</span>,
+    <span class=s2>&#34;unreachable&#34;</span>: <span class=nb>true</span>
+<span class=o>}</span>
+vagrant2 <span class=p>|</span> UNREACHABLE! <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;changed&#34;</span>: false,
+    <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;Failed to connect to the host via ssh: &#34;</span>,
+    <span class=s2>&#34;unreachable&#34;</span>: <span class=nb>true</span>
+<span class=o>}</span>
+vagrant3 <span class=p>|</span> UNREACHABLE! <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;changed&#34;</span>: false,
+    <span class=s2>&#34;msg&#34;</span>: <span class=s2>&#34;Failed to connect to the host via ssh: &#34;</span>,
+    <span class=s2>&#34;unreachable&#34;</span>: <span class=nb>true</span>
+<span class=o>}</span>
+</code></pre></div><p>當然還有許多好用的 module，像是 <code>command</code>, <code>file</code>, <code>stat</code>, <code>service</code> 等等。<br>
+官方文件有提供所有的內建 module，有空可以參考（因為真的太多啦！）</p>
+<ul>
+<li><a href=https://docs.ansible.com/ansible/2.9/modules/list_of_all_modules.html target=_blank rel="noopener noreffer">All modules</a></li>
+</ul>
+<h3 id=-v>-v</h3>
+<p>這個參數可以提供給我們更多的資訊來進行 troubleshooting：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible all -v -m ping
+</code></pre></div><div class="details admonition question open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-question-circle fa-fw"></i>Question<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>你可以試試看 <code>-v</code>, <code>-vv</code>, <code>-vvv</code>, <code>-vvvv</code> 有什麼不同？</div>
+</div>
+</div>
+<p>知道相關資訊之後，可以開始推測原因，也許是我們根本沒辦法到目的機器，也許是機器上的 port 被關了，也許只是網路一時抽筋等等，後續的 troubleshooting 又是另一個世界了。<br>
+一些 troubleshooting 的方式與工具可以參考我的文章。</p>
+<ul>
+<li><a href=https://ekoismylove.github.io/posts/troubleshooting/tools-1/ target=_blank rel="noopener noreffer">網路中斷</a></li>
+<li><a href=https://ekoismylove.github.io/posts/troubleshooting/tools-2/ target=_blank rel="noopener noreffer">服務中斷</a></li>
+<li><a href=https://ekoismylove.github.io/posts/troubleshooting/tools-3/ target=_blank rel="noopener noreffer">Slowly</a></li>
+</ul>
+<h2 id=debugger>debugger</h2>
+<p>在 ansible 2.5 以後的版本中，加入的 debugger 這個功能，讓我們可以逐步執行 playbook。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Do something to host</span><span class=w>
+</span><span class=w>  </span><span class=nt>hosts</span><span class=p>:</span><span class=w> 
+</span><span class=w>    </span>- <span class=l>vagrant1</span><span class=w>
+</span><span class=w>    </span>- <span class=l>vagrant3</span><span class=w>
+</span><span class=w>  </span><span class=nt>debugger</span><span class=p>:</span><span class=w> </span><span class=l>always</span><span class=w>
+</span></code></pre></div><p>你可以輸入 <code>c</code> 讓他進行下一步。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook show.yml
+
+PLAY <span class=o>[</span>Do something to host<span class=o>]</span> *************************************************************
+
+TASK <span class=o>[</span>Gathering Facts<span class=o>]</span> ******************************************************************
+ok: <span class=o>[</span>vagrant3<span class=o>]</span>
+<span class=o>[</span>vagrant3<span class=o>]</span> TASK: Gathering Facts <span class=o>(</span>debug<span class=o>)</span>&gt;
+</code></pre></div><p>這邊提供一些 debugger 支援的指令：</p>
+<table>
+<thead>
+<tr>
+<th style=text-align:center>Command</th>
+<th style=text-align:center>key</th>
+<th style=text-align:left>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:center>print</td>
+<td style=text-align:center>p</td>
+<td style=text-align:left>印出 task 的相關資訊</td>
+</tr>
+<tr>
+<td style=text-align:center>update-task</td>
+<td style=text-align:center>u</td>
+<td style=text-align:left>使用新的 vars 來重新建立 task</td>
+</tr>
+<tr>
+<td style=text-align:center>redo</td>
+<td style=text-align:center>r</td>
+<td style=text-align:left>重新執行 task</td>
+</tr>
+<tr>
+<td style=text-align:center>continue</td>
+<td style=text-align:center>c</td>
+<td style=text-align:left>繼續執行下個 task</td>
+</tr>
+<tr>
+<td style=text-align:center>quit</td>
+<td style=text-align:center>q</td>
+<td style=text-align:left>離開 debugger</td>
+</tr>
+</tbody>
+</table>
+<p>其中 <code>p</code> 後面還可以加上變數來印出所需的訊息。</p>
+<table>
+<thead>
+<tr>
+<th style=text-align:left>Variable</th>
+<th style=text-align:left>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:left><code>p task</code></td>
+<td style=text-align:left>失敗的 task 名稱</td>
+</tr>
+<tr>
+<td style=text-align:left><code>p task.args</code></td>
+<td style=text-align:left>Modules 的參數</td>
+</tr>
+<tr>
+<td style=text-align:left><code>p result</code></td>
+<td style=text-align:left>失敗的 task 返回的結果</td>
+</tr>
+<tr>
+<td style=text-align:left><code>p vars</code></td>
+<td style=text-align:left>所有的 vars</td>
+</tr>
+<tr>
+<td style=text-align:left><code>p vars[key]</code></td>
+<td style=text-align:left>特定 variable 的值</td>
+</tr>
+</tbody>
+</table>
+<h2 id=assert>assert</h2>
+<p>assert 通常是用來做檢查的工具，如果 assert 不滿足指定條件，那就會發生錯誤並終止。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>task</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=nt>assert</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>that</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span>- <span class=m>1</span><span class=w> </span><span class=l>&gt; 2</span><span class=w>
+</span></code></pre></div><p>因為這個條件不成立，所以會發生錯誤：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>TASK <span class=o>[</span>assert<span class=o>]</span> ***************************************************************************
+fatal: <span class=o>[</span>vagrant1<span class=o>]</span>: FAILED! <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;assertion&#34;</span>: <span class=s2>&#34;1 &gt; 2&#34;</span>,
+    <span class=s2>&#34;changed&#34;</span>: false,
+    <span class=s2>&#34;evaluated_to&#34;</span>: <span class=nb>false</span>
+<span class=o>}</span>
+</code></pre></div><p>我們可以用這個方式，來檢查一些 vars 或是 result 是否為我們所想要的數值。<br>
+這邊以 stat 來舉例，把這些 code 放到上次用到的 <code>show.yml</code> 後面並做測試。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nn>---</span><span class=w>
+</span><span class=w>
+</span><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Do something to host</span><span class=w>
+</span><span class=w>  </span><span class=nt>hosts</span><span class=p>:</span><span class=w> 
+</span><span class=w>    </span>- <span class=l>vagrant1</span><span class=w>
+</span><span class=w>    </span>- <span class=l>vagrant3</span><span class=w>
+</span><span class=w>  </span><span class=nt>gather_facts</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>  </span><span class=nt>tasks</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Print system details</span><span class=w>
+</span><span class=w>      </span><span class=nt>debug</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>msg</span><span class=p>:</span><span class=w> </span><span class=p>&gt;-</span><span class=sd>
+</span><span class=sd>          os_family:
+</span><span class=sd>          {{ ansible_facts.os_family }},
+</span><span class=sd>          distro:
+</span><span class=sd>          {{ ansible_facts.distribution }}
+</span><span class=sd>          {{ ansible_facts.distribution_version }},
+</span><span class=sd>          kernel:
+</span><span class=sd>          {{ ansible_facts.kernel }}</span><span class=w>          
+</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Print ip address by hostvar</span><span class=w>
+</span><span class=w>      </span><span class=nt>debug</span><span class=p>:</span><span class=w> </span><span class=l>var=hostvars[inventory_hostname][&#39;ansible_default_ipv4&#39;]</span><span class=w>
+</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>stat</span><span class=p>:</span><span class=w> 
+</span><span class=w>        </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/boot/grub</span><span class=w>
+</span><span class=w>      </span><span class=nt>register</span><span class=p>:</span><span class=w> </span><span class=l>p</span><span class=w>
+</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>assert</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>that</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span>- <span class=l>p.stat.exists and p.stat.isdir</span><span class=w>
+</span><span class=w></span><span class=nn>...</span><span class=w>
+</span></code></pre></div><p>測試結果：<del>原來Ubuntu 跟 CentOS 的 grub 不一樣呀</del></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>TASK <span class=o>[</span>assert<span class=o>]</span> ***************************************************************************
+ok: <span class=o>[</span>vagrant1<span class=o>]</span> <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;changed&#34;</span>: <span class=nb>false</span>
+<span class=o>}</span>
+
+MSG:
+
+All assertions passed
+fatal: <span class=o>[</span>vagrant3<span class=o>]</span>: FAILED! <span class=o>=</span>&gt; <span class=o>{</span>
+    <span class=s2>&#34;assertion&#34;</span>: <span class=s2>&#34;p.stat.exists and p.stat.isdir&#34;</span>,
+    <span class=s2>&#34;changed&#34;</span>: false,
+    <span class=s2>&#34;evaluated_to&#34;</span>: <span class=nb>false</span>
+<span class=o>}</span>
+
+MSG:
+
+Assertion failed
+</code></pre></div><p>這邊我們看到了 MSG，感覺就是可以修改 MSG 嘛！<br>
+我們可以透過 <code>fail_msg</code> 跟 <code>success_msg</code> 來顯示對應的訊息。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>assert</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>that</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=l>p.stat.exists and p.stat.isdir</span><span class=w>
+</span><span class=w>  </span><span class=nt>fail_msg</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;It&#39;s failed.&#34;</span><span class=w>
+</span><span class=w>  </span><span class=nt>success_msg</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;It&#39;s fine.&#34;</span><span class=w>
+</span></code></pre></div><h2 id=check-playbook>Check playbook</h2>
+<p>在用 playbook 之前呢，我們可以先做一些檢查。</p>
+<h3 id=語法檢查--syntax-check>語法檢查（&ndash;syntax-check）</h3>
+<p>可以使用 <code>--syntax-check</code> 來檢查語法是否有效：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook --syntax-check show.yml
+</code></pre></div><h3 id=列出主機--list-hosts>列出主機（&ndash;list-hosts）</h3>
+<p>透過 <code>--list-hosts</code> 可以列出這個 playbook 會用到的 host：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook --list-hosts show.yml
+</code></pre></div><p>那如果我是用 Dynamic 的呢？？<br>
+那就也把他加進來一起檢查囉！你可以在我們在介紹 inventory 時所用的環境做測試。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook --list-hosts -i <span class=o>[</span>script<span class=o>]</span> <span class=o>[</span>your.yml<span class=o>]</span>
+</code></pre></div><h3 id=列出任務--list-tasks>列出任務（&ndash;list-tasks）</h3>
+<p>透過 <code>--list-tasks</code> 可以列出 task :</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook --list-tasks show.yml
+</code></pre></div><h3 id=diff>Diff</h3>
+<p>如果你的 playbook 會在 host 上做修改，你可以使用 <code>diff</code> 來觀察修改的情況，他會以 lineinfile 的方式呈現。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ansible-playbook -D --check playbook.yml
+</code></pre></div><h2 id=結論>結論</h2>
+<p>這次簡單介紹了一些 troubleshooting 的方式，還有在運行 playbook 前可以做哪一些檢查。<br>
+因為 troubleshooting 的方式又是另一個世界，不同的問題需要用不同的方式來找出問題點，並進行近一步的排除，很難針對所有情況來做介紹。<br>
+先前有介紹一些工具可以協助 troubleshooting，如果有空可以去參考一下。</p>
+<p>在 playbook 部分有說明的 assert ，可以幫助我們在開發時檢查 vars 跟 result，另外也可以在運行前透過一些方式來檢查 playbook，畢竟建立 connection 也是需要時間。</p>
+<p>最後希望大家可以不常常做故障排除。<del>傷心傷身</del></p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://www.amazon.com/Ansible-Automating-Configuration-Management-Deployment/dp/1491979801 target=_blank rel="noopener noreffer">Ansible: Up and Running: Automating Configuration Management and Deployment the Easy Way (3rd edition)</a></li>
+<li><a href=https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assert_module.html target=_blank rel="noopener noreffer">ansible.builtin.assert module – Asserts given expressions are true</a></li>
+<li><a href=https://docs.ansible.com/ansible/2.9/modules/list_of_all_modules.html target=_blank rel="noopener noreffer">All modules</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2023-03-04</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/ansible/ansible-debug/ data-title="Ansible - Debug" data-via=wiwi571246 data-hashtags=Ansible,Infra,debug><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/ansible/ansible-debug/ data-hashtag=Ansible><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/ansible/ansible-debug/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/ansible/ansible-debug/ data-title="Ansible - Debug"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/ansible/>Ansible</a>,&nbsp;<a href=/tags/infra/>Infra</a>,&nbsp;<a href=/tags/debug/>debug</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/ansible/ansible-variables-%E8%88%87-facts/ class=prev rel=prev title="Ansible - Variables 與 facts"><i class="fas fa-angle-left fa-fw"></i>Ansible - Variables 與 facts</a>
+<a href=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/ class=next rel=next title="【TroubleShooting】Invalid Response on Squid(Duo to BOM)">【TroubleShooting】Invalid Response on Squid(Duo to BOM)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

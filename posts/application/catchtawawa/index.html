@@ -1,285 +1,344 @@
-<!doctype html><html lang=zh-tw>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=robots content="noodp">
-<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
-<title>星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一 - Wei's Note</title><meta name=description content="本篇文章將說明如何透過 Github Actions、Telegram bot 與 Twitter stream，定時監聽特定的 Tweet 後發送訊息給 User。"><meta name=keywords content="Github Actions,Telegram bot,Twitter"><meta property="og:title" content="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一">
-<meta property="og:description" content="本篇文章將說明如何透過 Github Actions、Telegram bot 與 Twitter stream，定時監聽特定的 Tweet 後發送訊息給 User。">
-<meta property="og:type" content="article">
-<meta property="og:url" content="http://ekoismylove.github.io/posts/application/catchtawawa/"><meta property="og:image" content="http://ekoismylove.github.io/posts/application/catchtawawa/tawawa.jpeg"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2022-03-14T00:00:00+00:00">
-<meta property="article:modified_time" content="2023-02-08T00:00:00+00:00">
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="http://ekoismylove.github.io/posts/application/catchtawawa/tawawa.jpeg">
-<meta name=twitter:title content="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一">
-<meta name=twitter:description content="本篇文章將說明如何透過 Github Actions、Telegram bot 與 Twitter stream，定時監聽特定的 Tweet 後發送訊息給 User。">
-<meta name=application-name content="Wei's Note">
-<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/application/catchtawawa/><link rel=prev href=http://ekoismylove.github.io/posts/go/06-pointer/><link rel=next href=http://ekoismylove.github.io/posts/go/07-type-methods-interfaces/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/tawawa.jpeg","width":1280,"height":720}],"genre":"posts","keywords":"Github Actions, Telegram bot, Twitter","wordcount":425,"url":"http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/","datePublished":"2022-03-14T00:00:00+00:00","dateModified":"2023-02-08T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
-<body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
-<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
-<div class=header-wrapper>
-<div class=header-title>
-<a href=/ title="Wei's Note">Wei's Note</a>
-</div>
-<div class=menu>
-<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
-<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
-<i class="fas fa-search fa-fw"></i>
-</a>
-<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
-<i class="fas fa-times-circle fa-fw"></i>
-</a>
-<span class="search-button search-loading" id=search-loading-desktop>
-<i class="fas fa-spinner fa-fw fa-spin"></i>
-</span>
-</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw"></i>
-</a>
-</div>
-</div>
-</div>
-</header><header class=mobile id=header-mobile>
-<div class=header-container>
-<div class=header-wrapper>
-<div class=header-title>
-<a href=/ title="Wei's Note">Wei's Note</a>
-</div>
-<div class=menu-toggle id=menu-toggle-mobile>
-<span></span><span></span><span></span>
-</div>
-</div>
-<div class=menu id=menu-mobile><div class=search-wrapper>
-<div class="search mobile" id=search-mobile>
-<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
-<i class="fas fa-search fa-fw"></i>
-</a>
-<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
-<i class="fas fa-times-circle fa-fw"></i>
-</a>
-<span class="search-button search-loading" id=search-loading-mobile>
-<i class="fas fa-spinner fa-fw fa-spin"></i>
-</span>
-</div>
-<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
-Cancel
-</a>
-</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
-<i class="fas fa-adjust fa-fw"></i>
-</a></div>
-</div>
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一 - Wei&#39;s Note</title><meta name="description" content="本篇文章將說明如何透過 Github Actions、Telegram bot 與 Twitter stream，定時監聽特定的 Tweet 後發送訊息給 User。"><meta name="keywords" content='Github Actions, Telegram bot, Twitter' /><meta property="og:title" content="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一" />
+<meta property="og:description" content="本篇文章將說明如何透過 Github Actions、Telegram bot 與 Twitter stream，定時監聽特定的 Tweet 後發送訊息給 User。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://ekoismylove.github.io/posts/application/catchtawawa/" /><meta property="og:image" content="http://ekoismylove.github.io/posts/application/catchtawawa/tawawa.jpeg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-02-08T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://ekoismylove.github.io/posts/application/catchtawawa/tawawa.jpeg"/>
+<meta name="twitter:title" content="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一"/>
+<meta name="twitter:description" content="本篇文章將說明如何透過 Github Actions、Telegram bot 與 Twitter stream，定時監聽特定的 Tweet 後發送訊息給 User。"/>
+<meta name="application-name" content="Wei&#39;s Note">
+<meta name="apple-mobile-web-app-title" content="Wei&#39;s Note"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://ekoismylove.github.io/posts/application/catchtawawa/" /><link rel="prev" href="http://ekoismylove.github.io/posts/go/06-pointer/" /><link rel="next" href="http://ekoismylove.github.io/posts/go/07-type-methods-interfaces/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/tawawa.jpeg",
+                            "width":  1280 ,
+                            "height":  720 
+                        }],"genre": "posts","keywords": "Github Actions, Telegram bot, Twitter","wordcount":  425 ,
+        "url": "http:\/\/ekoismylove.github.io\/posts\/application\/catchtawawa\/","datePublished": "2022-03-14T00:00:00+00:00","dateModified": "2023-02-08T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": "Wei","logo": "http:\/\/ekoismylove.github.io\/favicon.ico"},"author": {
+                "@type": "Person",
+                "name": "Wei"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="auto" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Wei&#39;s Note">Wei&#39;s Note</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
 </header>
 <div class="search-dropdown desktop">
-<div id=search-dropdown-desktop></div>
+    <div id="search-dropdown-desktop"></div>
 </div>
 <div class="search-dropdown mobile">
-<div id=search-dropdown-mobile></div>
+    <div id="search-dropdown-mobile"></div>
 </div>
-<main class=main>
-<div class=container><div class=toc id=toc-auto>
-<h2 class=toc-title>Contents</h2>
-<div class=toc-content id=toc-content-auto></div>
-</div><article class="page single"><h1 class="single-title animated flipInX">星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一</h1><div class=post-meta>
-<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/application/><i class="far fa-folder fa-fw"></i>Application</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;425 words&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
-</div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/application/catchtawawa/tawawa.jpeg data-srcset="/posts/application/catchtawawa/tawawa.jpeg, /posts/application/catchtawawa/tawawa.jpeg 1.5x, /posts/application/catchtawawa/tawawa.jpeg 2x" data-sizes=auto alt=/posts/application/catchtawawa/tawawa.jpeg title=/posts/application/catchtawawa/tawawa.jpeg></div><div class="details toc" id=toc-static kept>
-<div class="details-summary toc-title">
-<span>Contents</span>
-<span><i class="details-icon fas fa-angle-right"></i></span>
-</div>
-<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
-<ul>
-<li><a href=#建立帳號>建立帳號</a></li>
-<li><a href=#telegram-bot>Telegram bot</a>
-<ul>
-<li><a href=#建立-bot>建立 bot</a></li>
-<li><a href=#取得-userid-與-chatidgroup>取得 UserID 與 ChatID(group)</a></li>
-</ul>
-</li>
-<li><a href=#建立-twitter-開發專案>建立 Twitter 開發專案</a>
-<ul>
-<li><a href=#sign-up-twitter-developer-platform>Sign up Twitter Developer Platform</a></li>
-<li><a href=#建立專案並取得-bearer-token>建立專案並取得 bearer token</a></li>
-</ul>
-</li>
-<li><a href=#github-actions>Github Actions</a>
-<ul>
-<li><a href=#workflowmainyml>workflow/main.yml</a></li>
-<li><a href=#secrets-and-environments>Secrets and Environments</a></li>
-</ul>
-</li>
-<li><a href=#twitter-stream>Twitter Stream</a></li>
-<li><a href=#reference>Reference</a></li>
-</ul>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class="post-category">included in <a href="/categories/application/"><i class="far fa-folder fa-fw"></i>Application</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-14">2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;425 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/posts/application/catchtawawa/tawawa.jpeg"
+        data-srcset="/posts/application/catchtawawa/tawawa.jpeg, /posts/application/catchtawawa/tawawa.jpeg 1.5x, /posts/application/catchtawawa/tawawa.jpeg 2x"
+        data-sizes="auto"
+        alt="/posts/application/catchtawawa/tawawa.jpeg"
+        title="/posts/application/catchtawawa/tawawa.jpeg" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#建立帳號">建立帳號</a></li>
+    <li><a href="#telegram-bot">Telegram bot</a>
+      <ul>
+        <li><a href="#建立-bot">建立 bot</a></li>
+        <li><a href="#取得-userid-與-chatidgroup">取得 UserID 與 ChatID(group)</a></li>
+      </ul>
+    </li>
+    <li><a href="#建立-twitter-開發專案">建立 Twitter 開發專案</a>
+      <ul>
+        <li><a href="#sign-up-twitter-developer-platform">Sign up Twitter Developer Platform</a></li>
+        <li><a href="#建立專案並取得-bearer-token">建立專案並取得 bearer token</a></li>
+      </ul>
+    </li>
+    <li><a href="#github-actions">Github Actions</a>
+      <ul>
+        <li><a href="#workflowmainyml">workflow/main.yml</a></li>
+        <li><a href="#secrets-and-environments">Secrets and Environments</a></li>
+      </ul>
+    </li>
+    <li><a href="#twitter-stream">Twitter Stream</a></li>
+    <li><a href="#reference">Reference</a></li>
+  </ul>
 </nav></div>
-</div><div class=content id=content><p>本篇文章將說明如何透過 Github Actions、Telegram bot 與 Twitter stream，定時監聽特定的 Tweet 後發送訊息給 User。</p>
-<p><strong>2023/02/08 更新 : 因為 twitter API 於 2023/02/09 停止了免費存取，參考這篇文章開發時需要考慮到費用問題，或是選擇其他方式。<a href=https://twitter.com/TwitterDev/status/1621026986784337922 target=_blank rel="noopener noreffer">Link</a></strong></p>
-<p>因為朋友的關係，知道 Twitter上有一位作家 比村奇石<a href=https://twitter.com/Strangestone target=_blank rel="noopener noreffer">@Strangestone</a>，而他筆下的 月曜日のたわわ 非常的好(?)。比村老師每週一早上都會在 Twitter 更新，故每週一早上都可以透過推特看到新的作品。月曜日のたわわ是我與朋友們週一時的話題，然而若當天忘記開 Twitter，當下會不知道如何與朋友們討論，或是大家直接忘記有月曜日のたわわ可以看。</p>
-<p>為了改善這個問題。朋友開發出了 <a href=https://github.com/MDSK-UltraIN/TawawaBot_forTelegram target=_blank rel="noopener noreffer">TawawaBot</a>。使用 Telegram bot開發是因為我們主要用 Telegram 聯繫彼此，不過同學是使用 Twitter API v1.1 開發，現在已經有 v2.0 的 API。且同學使用的平台 heroku 最近不知為何，經常會發生問題而使 bot 無法正常執行，<del>月曜日的動力就這樣不見了</del>。</p>
+            </div><div class="content" id="content"><p>本篇文章將說明如何透過 Github Actions、Telegram bot 與 Twitter stream，定時監聽特定的 Tweet 後發送訊息給 User。</p>
+<p><strong>2023/02/08 更新 : 因為 twitter API 於 2023/02/09 停止了免費存取，參考這篇文章開發時需要考慮到費用問題，或是選擇其他方式。<a href="https://twitter.com/TwitterDev/status/1621026986784337922" target="_blank" rel="noopener noreffer">Link</a></strong></p>
+<p>因為朋友的關係，知道 Twitter上有一位作家 比村奇石<a href="https://twitter.com/Strangestone" target="_blank" rel="noopener noreffer">@Strangestone</a>，而他筆下的 月曜日のたわわ 非常的好(?)。比村老師每週一早上都會在 Twitter 更新，故每週一早上都可以透過推特看到新的作品。月曜日のたわわ是我與朋友們週一時的話題，然而若當天忘記開 Twitter，當下會不知道如何與朋友們討論，或是大家直接忘記有月曜日のたわわ可以看。</p>
+<p>為了改善這個問題。朋友開發出了 <a href="https://github.com/MDSK-UltraIN/TawawaBot_forTelegram" target="_blank" rel="noopener noreffer">TawawaBot</a>。使用 Telegram bot開發是因為我們主要用 Telegram 聯繫彼此，不過同學是使用 Twitter API v1.1 開發，現在已經有 v2.0 的 API。且同學使用的平台 heroku 最近不知為何，經常會發生問題而使 bot 無法正常執行，<del>月曜日的動力就這樣不見了</del>。</p>
 <p>基於下列兩個原因，才有了這個應用的誕生，</p>
 <ul>
 <li>第一點是想用 Twitter API v2，因為不知道 v1.1 何時會被棄用而無法運作。</li>
 <li>第二點是想使用 Github Actions，一來是我不必另外準備環境，開發完成後，透過 Github Action 就會自動執行；二來是不用一直開啟設備，只要在週一的早上 Action 即可，降低一些資源的使用量。</li>
 </ul>
-<h2 id=建立帳號>建立帳號</h2>
+<h2 id="建立帳號">建立帳號</h2>
 <p>前面提到了三個服務，理所當然的要建立三個服務的帳號。</p>
 <ul>
-<li><a href=https://web.telegram.org/ target=_blank rel="noopener noreffer">Telegram</a></li>
-<li><a href=https://twitter.com/ target=_blank rel="noopener noreffer">Twitter</a></li>
-<li><a href=https://github.com/ target=_blank rel="noopener noreffer">Github</a></li>
+<li><a href="https://web.telegram.org/" target="_blank" rel="noopener noreffer">Telegram</a></li>
+<li><a href="https://twitter.com/" target="_blank" rel="noopener noreffer">Twitter</a></li>
+<li><a href="https://github.com/" target="_blank" rel="noopener noreffer">Github</a></li>
 </ul>
-<h2 id=telegram-bot>Telegram bot</h2>
+<h2 id="telegram-bot">Telegram bot</h2>
 <p>基本上當您建立好帳號後，我們要做兩件事情：</p>
 <ol>
-<li>透過 <a href=https://t.me/BotFather target=_blank rel="noopener noreffer">BotFather</a> 建立 bot。</li>
+<li>透過 <a href="https://t.me/BotFather" target="_blank" rel="noopener noreffer">BotFather</a> 建立 bot。</li>
 <li>取得自己的 UserID，或是群組的 ChatID。</li>
 </ol>
-<h3 id=建立-bot>建立 bot</h3>
+<h3 id="建立-bot">建立 bot</h3>
 <p>建立 bot 的方式很簡單，請找 <code>BotFather</code> 使用下面三招：</p>
 <ol>
 <li>/newbot</li>
 <li>輸入 bot 的顯示名稱( name )</li>
 <li>輸入 bot 的 ID，這邊要注意的是必須以 Bot 或是 _bot 做為結尾，建立完成後會給您這個 bot 的 token，請盡量不要給任何人這個 token，當有這個 token 就可以任意存取你的 bot。</li>
 </ol>
-<figure><a class=lightgallery href=/posts/application/catchtawawa/botfather.png title=/posts/application/catchtawawa/botfather.png data-thumbnail=/posts/application/catchtawawa/botfather.png data-sub-html="<h2>建立完成後，應該會看到這樣的訊息。</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=botfather.png data-srcset="/posts/application/catchtawawa/botfather.png, botfather.png 1.5x, /posts/application/catchtawawa/botfather.png 2x" data-sizes=auto alt=/posts/application/catchtawawa/botfather.png width=100%>
-</a><figcaption class=image-caption>建立完成後，應該會看到這樣的訊息。</figcaption>
-</figure>
-<h3 id=取得-userid-與-chatidgroup>取得 UserID 與 ChatID(group)</h3>
+<figure><a class="lightgallery" href="/posts/application/catchtawawa/botfather.png" title="/posts/application/catchtawawa/botfather.png" data-thumbnail="/posts/application/catchtawawa/botfather.png" data-sub-html="<h2>建立完成後，應該會看到這樣的訊息。</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="botfather.png"
+            data-srcset="/posts/application/catchtawawa/botfather.png, botfather.png 1.5x, /posts/application/catchtawawa/botfather.png 2x"
+            data-sizes="auto"
+            alt="/posts/application/catchtawawa/botfather.png" width="100%" />
+    </a><figcaption class="image-caption">建立完成後，應該會看到這樣的訊息。</figcaption>
+    </figure>
+<h3 id="取得-userid-與-chatidgroup">取得 UserID 與 ChatID(group)</h3>
 <p>取得 UserID 的方式，先向自己剛剛建立的 bot 傳送一個簡單的訊息，然後更改下面的 url 並透過瀏覽器瀏覽，就可以得到 UserID。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-http data-lang=http><span class=err># YourBOTToken 改成 剛剛拿到的 token，前後的&lt;&gt;符號要拿掉。 
-</span><span class=err>https://api.telegram.org/bot&lt;YourBOTToken&gt;/getUpdates
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err"># YourBOTToken 改成 剛剛拿到的 token，前後的&lt;&gt;符號要拿掉。 
+</span><span class="err">https://api.telegram.org/bot&lt;YourBOTToken&gt;/getUpdates
 </span></code></pre></div><p>至於 chatID，則是要先將 bot 邀請到群組內，如果是管理員就直接加入即可，如果不是管理員，請有禮貌地向管理員說明。加入後簡單傳個訊息，並透過上述的方法，就能夠取得 chatID。</p>
-<h2 id=建立-twitter-開發專案>建立 Twitter 開發專案</h2>
-<h3 id=sign-up-twitter-developer-platform>Sign up Twitter Developer Platform</h3>
-<p>我們先到<a href=https://developer.twitter.com/en target=_blank rel="noopener noreffer">這裡</a> Sign up，接著應該會導入您剛剛註冊 Twitter 的資訊。並填寫其他資訊。</p>
+<h2 id="建立-twitter-開發專案">建立 Twitter 開發專案</h2>
+<h3 id="sign-up-twitter-developer-platform">Sign up Twitter Developer Platform</h3>
+<p>我們先到<a href="https://developer.twitter.com/en" target="_blank" rel="noopener noreffer">這裡</a> Sign up，接著應該會導入您剛剛註冊 Twitter 的資訊。並填寫其他資訊。</p>
 <p>關於 What&rsquo;s your use case? 這個問題，因為我們是要製作 bot ，所以選擇 Making a bot 這個選項即可。
 <div class="details admonition info open">
-<div class="details-summary admonition-title">
-<i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
-</div>
-<div class=details-content>
-<div class=admonition-content>這個選項請不要亂填，若審核沒過，這個帳號以後就不能再申請的樣子。</div>
-</div>
-</div></p>
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">這個選項請不要亂填，若審核沒過，這個帳號以後就不能再申請的樣子。</div>
+        </div>
+    </div></p>
 <p>關於 Will you make Twitter content or derived information available to a government entity or a government affiliated entity? 這個問題，選擇 No 即可。</p>
-<a class=lightgallery href=/posts/application/catchtawawa/twitter1.png title=/posts/application/catchtawawa/twitter1.png data-thumbnail=/posts/application/catchtawawa/twitter1.png>
-<img class=lazyload src=/svg/loading.min.svg data-src=twitter1.png data-srcset="/posts/application/catchtawawa/twitter1.png, twitter1.png 1.5x, /posts/application/catchtawawa/twitter1.png 2x" data-sizes=auto alt=/posts/application/catchtawawa/twitter1.png width=100%>
-</a>
+<a class="lightgallery" href="/posts/application/catchtawawa/twitter1.png" title="/posts/application/catchtawawa/twitter1.png" data-thumbnail="/posts/application/catchtawawa/twitter1.png">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="twitter1.png"
+            data-srcset="/posts/application/catchtawawa/twitter1.png, twitter1.png 1.5x, /posts/application/catchtawawa/twitter1.png 2x"
+            data-sizes="auto"
+            alt="/posts/application/catchtawawa/twitter1.png" width="100%" />
+    </a>
 <p>接著就是開發者的協議與政策，請閱讀過後點選下方的 checkbox。<del>我知道很多人都直接點。</del>
 這個步驟結束後，應該就可以建立 project 了。</p>
-<h3 id=建立專案並取得-bearer-token>建立專案並取得 bearer token</h3>
+<h3 id="建立專案並取得-bearer-token">建立專案並取得 bearer token</h3>
 <p>請到 Developer Portal 並建立 Project 與 APP，建立完成後應該會給您 bearer token 與其他的 token，但我們只需要使用 bearer token 即可
 如果忘記了，進入 APP 後點選 Key and Tokens 的標籤頁，點選 regenerate 後會重新產生一組 bearer token 給您。</p>
 <div class="details admonition warning open">
-<div class="details-summary admonition-title">
-<i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
-</div>
-<div class=details-content>
-<div class=admonition-content>token 務必保存好不要外流，有這個 token 就可以對你的 APP 做一些壞壞的事。</div>
-</div>
-</div>
-<figure><a class=lightgallery href=/posts/application/catchtawawa/twitter2.png title=/posts/application/catchtawawa/twitter2.png data-thumbnail=/posts/application/catchtawawa/twitter2.png data-sub-html="<h2>忘記了嗎？點黑底白字的不是點白底黑字的唷</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=twitter2.png data-srcset="/posts/application/catchtawawa/twitter2.png, twitter2.png 1.5x, /posts/application/catchtawawa/twitter2.png 2x" data-sizes=auto alt=/posts/application/catchtawawa/twitter2.png width=100%>
-</a><figcaption class=image-caption>忘記了嗎？點黑底白字的不是點白底黑字的唷</figcaption>
-</figure>
-<h2 id=github-actions>Github Actions</h2>
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">token 務必保存好不要外流，有這個 token 就可以對你的 APP 做一些壞壞的事。</div>
+        </div>
+    </div>
+<figure><a class="lightgallery" href="/posts/application/catchtawawa/twitter2.png" title="/posts/application/catchtawawa/twitter2.png" data-thumbnail="/posts/application/catchtawawa/twitter2.png" data-sub-html="<h2>忘記了嗎？點黑底白字的不是點白底黑字的唷</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="twitter2.png"
+            data-srcset="/posts/application/catchtawawa/twitter2.png, twitter2.png 1.5x, /posts/application/catchtawawa/twitter2.png 2x"
+            data-sizes="auto"
+            alt="/posts/application/catchtawawa/twitter2.png" width="100%" />
+    </a><figcaption class="image-caption">忘記了嗎？點黑底白字的不是點白底黑字的唷</figcaption>
+    </figure>
+<h2 id="github-actions">Github Actions</h2>
 <p>Github Actions 可以用來自動化、自定義和執行您的軟體開發工作流程，許多人用來做 CI/CD使用。
 基本上每一個 Job 可以執行 6 小時，透過 twitter stream 來接收比村老師的推文已經足夠了。
 另外有 cron 功能，可以安排行程在我們想要的時間執行，不過時間不太準確就是了。（我設定九點執行，實際到了十點多才執行呢～）</p>
-<h3 id=workflowmainyml>workflow/main.yml</h3>
+<h3 id="workflowmainyml">workflow/main.yml</h3>
 <p>先在 github 上建立一個專案，待會要設定 Github Actions 進行 schedule 的相關設定。</p>
-<p>建立完成後，請到專案的 Actions，點選 &ldquo;New workflow&rdquo;，會進入到 Choose a workflow 這個頁面，直接點選下方的 " set up a workflow yourself &ldquo;，此時 Github 會自動幫你建立一個新的 main.yml，待會就是要編輯這個檔案，透過 Github Actions 進行排程與相關的工作。</p>
-<p>我這邊直接提供我的 main.yml 給各位。 <a href=https://github.com/EKOISMYLOVE/CatchTawawa/blob/master/.github/workflows/main.yml target=_blank rel="noopener noreffer">連結</a></p>
+<p>建立完成後，請到專案的 Actions，點選 &ldquo;New workflow&rdquo;，會進入到 Choose a workflow 這個頁面，直接點選下方的 &quot; set up a workflow yourself &ldquo;，此時 Github 會自動幫你建立一個新的 main.yml，待會就是要編輯這個檔案，透過 Github Actions 進行排程與相關的工作。</p>
+<p>我這邊直接提供我的 main.yml 給各位。 <a href="https://github.com/EKOISMYLOVE/CatchTawawa/blob/master/.github/workflows/main.yml" target="_blank" rel="noopener noreffer">連結</a></p>
 <p>如果有使用我的 main.yml，建議先把下列兩行<strong>反註解</strong>，這樣每一次 push 時都會即時進行 Action，等確認沒問題再註解即可。</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=w> </span><span class=c>#  push: </span><span class=w>
-</span><span class=w> </span><span class=c>#    branches: [ main ]</span><span class=w>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w"> </span><span class="c">#  push: </span><span class="w">
+</span><span class="w"> </span><span class="c">#    branches: [ main ]</span><span class="w">
 </span></code></pre></div><p>另外，Telegram bot 傳送的部分訊息由該檔案產生，要修改傳送的訊息，請修改這裡與後續 Twitter Stream 使用到的程式碼。</p>
-<h3 id=secrets-and-environments>Secrets and Environments</h3>
+<h3 id="secrets-and-environments">Secrets and Environments</h3>
 <p>前面提到的 userID(chatID), telegram bot token 與 twitter bearer token，因為這些 token 直接放到 repo 中，就是赤裸裸地給人家看。 Github 提供了 Secret 功能，Secret 是在 repo 中的加密環境變數，可以在 Github Actions 中做使用而不被其他人知道。</p>
-<p>請到專案中的 setting 並點選左方的 Secrets -> Actions，並依照以下名稱建立三個 secrets。</p>
+<p>請到專案中的 setting 並點選左方的 Secrets -&gt; Actions，並依照以下名稱建立三個 secrets。</p>
 <ul>
 <li>TELEGRAM_TO : Your telegram userId or chatId.</li>
 <li>TELEGRAM_TOKEN : Your telegram bot token.</li>
 <li>TWITTER_BEARER_TOKEN : Your twitter bearer_token.</li>
 </ul>
 <div class="details admonition tips open">
-<div class="details-summary admonition-title">
-<i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
-</div>
-<div class=details-content>
-<div class=admonition-content>因為 main.yml 我已經寫好的關係，這裡有要求名稱。使用上是可以更改名稱的，只要 main.yml 內的變數與 Repository secrets 有符合即可。</div>
-</div>
-</div>
-<h2 id=twitter-stream>Twitter Stream</h2>
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">因為 main.yml 我已經寫好的關係，這裡有要求名稱。使用上是可以更改名稱的，只要 main.yml 內的變數與 Repository secrets 有符合即可。</div>
+        </div>
+    </div>
+<h2 id="twitter-stream">Twitter Stream</h2>
 <p>Twitter API 會透過 Stream 的方式，即時地把符合規則的 tweet 經過 stream 送給我們。<br>
-我直接提供我的的 code。<a href=https://github.com/EKOISMYLOVE/CatchTawawa/blob/master/tawawa.py target=_blank rel="noopener noreffer">連結</a><br>
-如果有要更改規則，請修改 <code>set_rules()</code> 這個函式內的規則。規則可以參考<a href=https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule target=_blank rel="noopener noreffer">官方文件</a>。<br>
+我直接提供我的的 code。<a href="https://github.com/EKOISMYLOVE/CatchTawawa/blob/master/tawawa.py" target="_blank" rel="noopener noreffer">連結</a><br>
+如果有要更改規則，請修改 <code>set_rules()</code> 這個函式內的規則。規則可以參考<a href="https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule" target="_blank" rel="noopener noreffer">官方文件</a>。<br>
 如果想對推文內容進行進一步的過濾，可以到 <code>get_stream()</code> 內修改成更詳細的規則。<br>
 Telegram bot 發送的訊息由這個程式產生，若想要修改的話，請修改 <code>fp.write()</code> 的傳入參數內容即可。<br>
 測試時，先建議把規則改成自己的 twitter ID 再上傳程式，確認 Github Actions 正常執行後，再推一篇符合規則的 tweet， Telegram bot 應該就會發送 tweet 的內容。</p>
 <p><del>完成了，期待週一吧！</del></p>
-<figure><a class=lightgallery href=/posts/application/catchtawawa/result.png title=/posts/application/catchtawawa/result.png data-thumbnail=/posts/application/catchtawawa/result.png data-sub-html="<h2>如果你看到類似的訊息，代表你的程式正常。</h2>">
-<img class=lazyload src=/svg/loading.min.svg data-src=result.png data-srcset="/posts/application/catchtawawa/result.png, result.png 1.5x, /posts/application/catchtawawa/result.png 2x" data-sizes=auto alt=/posts/application/catchtawawa/result.png width=100%>
-</a><figcaption class=image-caption>如果你看到類似的訊息，代表你的程式正常。</figcaption>
-</figure>
-<h2 id=reference>Reference</h2>
+<figure><a class="lightgallery" href="/posts/application/catchtawawa/result.png" title="/posts/application/catchtawawa/result.png" data-thumbnail="/posts/application/catchtawawa/result.png" data-sub-html="<h2>如果你看到類似的訊息，代表你的程式正常。</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="result.png"
+            data-srcset="/posts/application/catchtawawa/result.png, result.png 1.5x, /posts/application/catchtawawa/result.png 2x"
+            data-sizes="auto"
+            alt="/posts/application/catchtawawa/result.png" width="100%" />
+    </a><figcaption class="image-caption">如果你看到類似的訊息，代表你的程式正常。</figcaption>
+    </figure>
+<h2 id="reference">Reference</h2>
 <ul>
 <li>我的朋友 : MDSK-UltraIN</li>
-<li><a href=https://core.telegram.org/bots#6-botfather target=_blank rel="noopener noreffer">How to Create telegram bot</a></li>
-<li><a href=https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id target=_blank rel="noopener noreffer">StackOverflow - Telegram Bot - how to get a group chat id?</a></li>
-<li><a href=https://developer.twitter.com/en/docs/platform-overview target=_blank rel="noopener noreffer">Twitter developer Documentation</a></li>
-<li><a href=https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule target=_blank rel="noopener noreffer">Filtered stream</a></li>
-<li><a href=https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment target=_blank rel="noopener noreffer">Using environments for deployment</a></li>
-<li><a href=https://docs.github.com/en/actions/security-guides/encrypted-secrets target=_blank rel="noopener noreffer">Encrypted secrets</a></li>
+<li><a href="https://core.telegram.org/bots#6-botfather" target="_blank" rel="noopener noreffer">How to Create telegram bot</a></li>
+<li><a href="https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id" target="_blank" rel="noopener noreffer">StackOverflow - Telegram Bot - how to get a group chat id?</a></li>
+<li><a href="https://developer.twitter.com/en/docs/platform-overview" target="_blank" rel="noopener noreffer">Twitter developer Documentation</a></li>
+<li><a href="https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule" target="_blank" rel="noopener noreffer">Filtered stream</a></li>
+<li><a href="https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment" target="_blank" rel="noopener noreffer">Using environments for deployment</a></li>
+<li><a href="https://docs.github.com/en/actions/security-guides/encrypted-secrets" target="_blank" rel="noopener noreffer">Encrypted secrets</a></li>
 </ul>
 <p>使用或參考的 packages：</p>
 <ul>
-<li><a href=https://github.com/MDSK-UltraIN/TawawaBot_forTelegram target=_blank rel="noopener noreffer">MDSK-UltraIN/TawawaBot_forTelegram</a></li>
-<li><a href=https://github.com/twitterdev/Twitter-API-v2-sample-code target=_blank rel="noopener noreffer">twitterdev/Twitter-API-v2-sample-code</a></li>
-<li><a href=https://github.com/theskumar/python-dotenv target=_blank rel="noopener noreffer">theskumar/python-dotenv</a></li>
-<li><a href=https://github.com/appleboy/telegram-action target=_blank rel="noopener noreffer">appleboy/telegram-action</a></li>
-</ul></div><div class=post-footer id=post-footer>
-<div class=post-info>
-<div class=post-info-line>
-<div class=post-info-mod>
-<span>Updated on 2023-02-08</span>
+<li><a href="https://github.com/MDSK-UltraIN/TawawaBot_forTelegram" target="_blank" rel="noopener noreffer">MDSK-UltraIN/TawawaBot_forTelegram</a></li>
+<li><a href="https://github.com/twitterdev/Twitter-API-v2-sample-code" target="_blank" rel="noopener noreffer">twitterdev/Twitter-API-v2-sample-code</a></li>
+<li><a href="https://github.com/theskumar/python-dotenv" target="_blank" rel="noopener noreffer">theskumar/python-dotenv</a></li>
+<li><a href="https://github.com/appleboy/telegram-action" target="_blank" rel="noopener noreffer">appleboy/telegram-action</a></li>
+</ul></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-02-08</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://ekoismylove.github.io/posts/application/catchtawawa/" data-title="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一" data-via="wiwi571246" data-hashtags="Github Actions,Telegram bot,Twitter"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://ekoismylove.github.io/posts/application/catchtawawa/" data-hashtag="Github Actions"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://ekoismylove.github.io/posts/application/catchtawawa/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://ekoismylove.github.io/posts/application/catchtawawa/" data-title="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/github-actions/">Github Actions</a>,&nbsp;<a href="/tags/telegram-bot/">Telegram bot</a>,&nbsp;<a href="/tags/twitter/">Twitter</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/go/06-pointer/" class="prev" rel="prev" title="Golang - 指標(Pointer)"><i class="fas fa-angle-left fa-fw"></i>Golang - 指標(Pointer)</a>
+            <a href="/posts/go/07-type-methods-interfaces/" class="next" rel="next" title="Golang - 類型、方法與介面(Types, Methods, and Interfaces)">Golang - 類型、方法與介面(Types, Methods, and Interfaces)<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-<div class=post-info-license></div>
-</div>
-<div class=post-info-line>
-<div class=post-info-md></div>
-<div class=post-info-share>
-<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/application/catchtawawa/ data-title="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一" data-via=wiwi571246 data-hashtags="Github Actions,Telegram bot,Twitter"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/application/catchtawawa/ data-hashtag="Github Actions"><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/application/catchtawawa/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/application/catchtawawa/ data-title="星期一就憂鬱？每週透過 Github Actions, Telegram bot 與 Twitter stream 給你豐滿的星期一"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
-</div>
-</div>
-</div>
-<div class=post-info-more>
-<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/github-actions/>Github Actions</a>,&nbsp;<a href=/tags/telegram-bot/>Telegram bot</a>,&nbsp;<a href=/tags/twitter/>Twitter</a></section>
-<section>
-<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
-</section>
-</div>
-<div class=post-nav><a href=/posts/go/06-pointer/ class=prev rel=prev title="Golang - 指標(Pointer)"><i class="fas fa-angle-left fa-fw"></i>Golang - 指標(Pointer)</a>
-<a href=/posts/go/07-type-methods-interfaces/ class=next rel=next title="Golang - 類型、方法與介面(Types, Methods, and Interfaces)">Golang - 類型、方法與介面(Types, Methods, and Interfaces)<i class="fas fa-angle-right fa-fw"></i></a></div>
-</div>
-<div id=comments><div id=utterances></div><noscript>
-Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
-</noscript></div></article></div>
-</main><footer class=footer>
-<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
-</div>
-</footer></div>
-<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
-<i class="fas fa-arrow-up fa-fw"></i>
-</a><a href=# id=view-comments class=fixed-button title="View Comments">
-<i class="fas fa-comment fa-fw"></i>
-</a>
-</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+<div id="comments"><div id="utterances"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Wei</a></span>&nbsp;|&nbsp;<span class="license"><a href = "https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script src="/dayjs.min.js"></script><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":200},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"EKOISMYLOVE/blog_comment"}},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"V23NTWV8MR","algoliaIndex":"EKOISMYLOVE","algoliaSearchKey":"ecc9ae3d4e27fdfec35503cae9c6b716","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

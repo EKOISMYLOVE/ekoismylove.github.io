@@ -1,0 +1,270 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>【TroubleShooting】Invalid Response on Squid(Duo to BOM) - Wei's Note</title><meta name=description content="關於遇到 Squid 因為 UTF8-BOM 而導致 Invalid Response 的問題。"><meta name=keywords content="Infra,squid,encoding,UTF-8,UTF-8 with BOM,UTF8BOM"><meta property="og:title" content="【TroubleShooting】Invalid Response on Squid(Duo to BOM)">
+<meta property="og:description" content="關於遇到 Squid 因為 UTF8-BOM 而導致 Invalid Response 的問題。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/troubleshooting/invalid-response-on-squidduo-to-bom/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-06-01T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-06-01T00:00:00+00:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="【TroubleShooting】Invalid Response on Squid(Duo to BOM)">
+<meta name=twitter:description content="關於遇到 Squid 因為 UTF8-BOM 而導致 Invalid Response 的問題。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/troubleshooting/invalid-response-on-squidduo-to-bom/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible-debug/><link rel=next href=http://ekoismylove.github.io/posts/ansible/ansible-roles/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"【TroubleShooting】Invalid Response on Squid(Duo to BOM)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/invalid-response-on-squidduo-to-bom\/"},"genre":"posts","keywords":"Infra, squid, encoding, UTF-8, UTF-8 with BOM, UTF8BOM","wordcount":471,"url":"http:\/\/ekoismylove.github.io\/posts\/troubleshooting\/invalid-response-on-squidduo-to-bom\/","datePublished":"2023-06-01T00:00:00+00:00","dateModified":"2023-06-01T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">【TroubleShooting】Invalid Response on Squid(Duo to BOM)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/troubleshooting/><i class="far fa-folder fa-fw"></i>TroubleShooting</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-06-01>2023-06-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;471 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#問題>問題</a></li>
+<li><a href=#過程>過程</a>
+<ul>
+<li><a href=#拓墣>拓墣</a></li>
+<li><a href=#log>Log</a></li>
+</ul>
+</li>
+<li><a href=#轉折點>轉折點</a></li>
+<li><a href=#byte-order-mark-bom>Byte Order Mark (BOM)</a>
+<ul>
+<li><a href=#簡介>簡介</a></li>
+<li><a href=#建議>建議</a></li>
+</ul>
+</li>
+<li><a href=#wireshark>Wireshark</a>
+<ul>
+<li><a href=#allow-subdissector-to-reassemble-tcp-streams>Allow subdissector to reassemble tcp streams</a></li>
+<li><a href=#follow>Follow</a></li>
+</ul>
+</li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>關於遇到 Squid 因為 UTF8-BOM 而導致 Invalid Response 的問題。</p>
+<h2 id=問題>問題</h2>
+<p>客戶端使用 Squid 作為 proxy server 並連線到一台帶有網頁管理介面的 Layer3 Switch，發生了錯誤導致網頁無法瀏覽。<br>
+但是，不透過 Squid，直接連線到設備時，網頁又正常運作。<br>
+<figure><a class=lightgallery href=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/error.png title=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/error.png data-thumbnail=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/error.png data-sub-html="<h2>Squid 給我的錯誤訊息，真不想看到這個。(已刪除敏感訊息)</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=error.png data-srcset="/posts/troubleshooting/invalid-response-on-squidduo-to-bom/error.png, error.png 1.5x, /posts/troubleshooting/invalid-response-on-squidduo-to-bom/error.png 2x" data-sizes=auto alt=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/error.png width=100%>
+</a><figcaption class=image-caption>Squid 給我的錯誤訊息，真不想看到這個。(已刪除敏感訊息)</figcaption>
+</figure></p>
+<p>此時要先釐清問題點是在設備上，還是 Squid 上。<del>如果是 Squid 就不甘我的事了！！</del></p>
+<h2 id=過程>過程</h2>
+<h3 id=拓墣>拓墣</h3>
+<p>拓墣是 Squid 跟 Switch 之間直接連線。客戶端再與 Squid 直接連線。<br>
+Switch 192.168.0.1 &lt;&mdash;> Squid 192.168.0.111 &lt;&mdash;> Client 192.168.0.10</p>
+<h3 id=log>Log</h3>
+<p>因為看到錯誤訊息是 Invalid Response，在想應該是 Squid 跟 設備之間有傳輸問題，先看了一下 <code>/var/log/squid/access.log</code> 跟 <code>var/log/squid/cache.log</code><br>
+(這邊我會調整一下資訊，會與我真實遇到的情況不同，但我盡可能保留原本的樣子。)</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo tail -f /var/log/squid/access.log
+1685583425.309     <span class=m>89</span> 192.168.0.10 TCP_REFRESH_IGNORED/200 <span class=m>10211</span> GET http://192.168.0.1/login.lsp - HIER_DIRECT/192.168.0.1 text/html
+1685583433.755     <span class=m>97</span> 192.168.0.10 TCP_MISS/200 <span class=m>563</span> POST http://192.168.0.1/login.lua - HIER_DIRECT/192.168.0.1 application/json
+1685583433.871    <span class=m>103</span> 192.168.0.10 TCP_REFRESH_FAIL_ERR/502 <span class=m>5077</span> GET http://192.168.0.1/main.lsp - HIER_DIRECT/192.168.0.1 text/html
+</code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ sudo tail -f /var/log/squid/cache.log
+2023/05/31 09:38:12 kid1<span class=p>|</span> WARNING: HTTP: Invalid Response: Bad header encountered from http://192.168.0.1/main.lsp AKA http://192.168.0.1/main.lsp
+</code></pre></div><p>在觀察到 <code>access.log</code> 產生 502 錯誤時， <code>cache.log</code> 也紀錄了一筆警告資訊，遇到錯誤的 header。</p>
+<blockquote>
+<p><strong>&mldr; Bad header encountered &mldr;</strong></p>
+</blockquote>
+<p>好的，看起來是 header 有問題，這邊可以用 <code>curl</code> 去觀察 header，也可以在 squid.conf 中加入 <code>log_mime_hdrs on</code> 這個參數，這樣會紀錄傳輸時的 header。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>1685499970.322     <span class=m>95</span> 192.168.0.10 TCP_MISS/200 <span class=m>588</span> POST http://192.168.0.1/login.lua - HIER_DIRECT/192.168.0.1 application/json <span class=o>[</span>User-Agent: Mozilla/5.0 <span class=o>(</span>Macintosh<span class=p>;</span> Intel Mac OS X 10.15<span class=p>;</span> rv:109.0<span class=o>)</span> Gecko/20100101 Firefox/113.0<span class=se>\r\n</span>Accept: application/json, text/javascript, */*<span class=p>;</span> <span class=nv>q</span><span class=o>=</span>0.01<span class=se>\r\n</span>Accept-Language: zh-TW,zh<span class=p>;</span><span class=nv>q</span><span class=o>=</span>0.8,en-US<span class=p>;</span><span class=nv>q</span><span class=o>=</span>0.5,en<span class=p>;</span><span class=nv>q</span><span class=o>=</span>0.3<span class=se>\r\n</span>Accept-Encoding: gzip, deflate<span class=se>\r\n</span>Content-Type: application/x-www-form-urlencoded<span class=p>;</span> <span class=nv>charset</span><span class=o>=</span>UTF-8<span class=se>\r\n</span>X-Requested-With: XMLHttpRequest<span class=se>\r\n</span>Content-Length: 119<span class=se>\r\n</span>Origin: http://192.168.0.1<span class=se>\r\n</span>Connection: keep-alive<span class=se>\r\n</span>Referer: http://192.168.0.1/login.lsp<span class=se>\r\n</span>Cookie:<span class=se>\r\n</span>Host: 192.168.0.1<span class=se>\r\n</span><span class=o>]</span> <span class=o>[</span>HTTP/1.1 <span class=m>200</span> OK<span class=se>\r\n</span>Transfer-Encoding: chunked<span class=se>\r\n</span>X-Frame-Options: SAMEORIGIN<span class=se>\r\n</span>Date: Wed, <span class=m>02</span> Jan <span class=m>2019</span> 19:36:58 GMT<span class=se>\r\n</span>Server: lighttpd<span class=se>\r\n</span>Content-Type: application/json<span class=se>\r\n</span>Expires: Wed, <span class=m>02</span> Jan <span class=m>2019</span> 19:36:58 GMT<span class=se>\r\n</span>Last-Modified: Wed, <span class=m>02</span> Jan <span class=m>2019</span> 19:36:58 GMT<span class=se>\r\n</span>Cache-Control: no-cache<span class=se>\r\n</span>Set-Cookie:<span class=se>\r\n\r</span><span class=o>]</span>
+1685599970.433     <span class=m>84</span> 192.168.0.10 TCP_MISS/502 <span class=m>5078</span> GET http://192.168.0.1/main.lsp - HIER_DIRECT/192.168.0.1 text/html <span class=o>[</span>User-Agent: Mozilla/5.0 <span class=o>(</span>Macintosh<span class=p>;</span> Intel Mac OS X 10.15<span class=p>;</span> rv:109.0<span class=o>)</span> Gecko/20100101 Firefox/113.0<span class=se>\r\n</span>Accept: text/html,application/xhtml+xml,application/xml<span class=p>;</span><span class=nv>q</span><span class=o>=</span>0.9,image/avif,image/webp,*/*<span class=p>;</span><span class=nv>q</span><span class=o>=</span>0.8<span class=se>\r\n</span>Accept-Language: zh-TW,zh<span class=p>;</span><span class=nv>q</span><span class=o>=</span>0.8,en-US<span class=p>;</span><span class=nv>q</span><span class=o>=</span>0.5,en<span class=p>;</span><span class=nv>q</span><span class=o>=</span>0.3<span class=se>\r\n</span>Accept-Encoding: gzip, deflate<span class=se>\r\n</span>Connection: keep-alive<span class=se>\r\n</span>Referer: http://192.168.0.1/login.lsp<span class=se>\r\n</span>Cookie: <span class=se>\r\n</span>Upgrade-Insecure-Requests: 1<span class=se>\r\n</span>Host: 192.168.0.1<span class=se>\r\n</span><span class=o>]</span> <span class=o>[</span>HTTP/1.1 <span class=m>502</span> Bad Gateway<span class=se>\r\n</span>Server: squid/4.13<span class=se>\r\n</span>Mime-Version: 1.0<span class=se>\r\n</span>Date: Wed, <span class=m>31</span> May <span class=m>2023</span> 02:26:10 GMT<span class=se>\r\n</span>Content-Type: text/html<span class=p>;</span><span class=nv>charset</span><span class=o>=</span>utf-8<span class=se>\r\n</span>Content-Length: 4710<span class=se>\r\n</span>X-Squid-Error: ERR_INVALID_RESP 0<span class=se>\r\n</span>Vary: Accept-Language<span class=se>\r\n</span>Content-Language: zh-tw<span class=se>\r\n\r</span><span class=o>]</span>
+</code></pre></div><p><strong>Header 看起來沒有問題呀！！！</strong><br>
+但是他就是寫 Header 有錯啊！！！</p>
+<p>這時我做了兩件事情：</p>
+<ol>
+<li>問我的大神朋友。</li>
+<li>通靈！土法煉鋼！wireshark 用起來。</li>
+</ol>
+<p>最後都指出了一樣的事情。UTF-8 with BOM(Byte Order Mark)。</p>
+<h2 id=轉折點>轉折點</h2>
+<p>觀察了 Squid 回傳 200 跟跟 Squid 回傳 502 前，Switch 的傳輸內容，發現在 Header 的部分多了 <code>ef bb bf</code>。<br>
+這三個 Byte 扔到 Google 發現是 BOM(Byte Order Mark)，是關於編碼的 Mark。<br>
+但我在 <code>curl</code> 跟 <code>access.log</code> 都沒看到，隱隱約約覺得是這個 BOM 而導致 header 有問題。</p>
+<figure><a class=lightgallery href=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/no_bom.png title=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/no_bom.png data-thumbnail=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/no_bom.png data-sub-html="<h2>正常結果。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=no_bom.png data-srcset="/posts/troubleshooting/invalid-response-on-squidduo-to-bom/no_bom.png, no_bom.png 1.5x, /posts/troubleshooting/invalid-response-on-squidduo-to-bom/no_bom.png 2x" data-sizes=auto alt=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/no_bom.png width=100%>
+</a><figcaption class=image-caption>正常結果。</figcaption>
+</figure>
+<figure><a class=lightgallery href=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/have_bom.png title=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/have_bom.png data-thumbnail=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/have_bom.png data-sub-html="<h2>有 BOM 的結果。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=have_bom.png data-srcset="/posts/troubleshooting/invalid-response-on-squidduo-to-bom/have_bom.png, have_bom.png 1.5x, /posts/troubleshooting/invalid-response-on-squidduo-to-bom/have_bom.png 2x" data-sizes=auto alt=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/have_bom.png width=100%>
+</a><figcaption class=image-caption>有 BOM 的結果。</figcaption>
+</figure>
+<hr>
+<p>同時我的大神朋友也回傳給我了他的分析結果。<br>
+<del>大神的 wireshark 會給 Expert info，不愧是大神！！！</del></p>
+<figure><a class=lightgallery href=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/expert_ana.jpeg title=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/expert_ana.jpeg data-thumbnail=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/expert_ana.jpeg data-sub-html="<h2>Illegal Characters.</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=expert_ana.jpeg data-srcset="/posts/troubleshooting/invalid-response-on-squidduo-to-bom/expert_ana.jpeg, expert_ana.jpeg 1.5x, /posts/troubleshooting/invalid-response-on-squidduo-to-bom/expert_ana.jpeg 2x" data-sizes=auto alt=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/expert_ana.jpeg width=100%>
+</a><figcaption class=image-caption>Illegal Characters.</figcaption>
+</figure>
+<p>到這邊就確定是 BOM 在搞事，影響了 header，重新編碼有問題的網頁後，這個問題就解決了。</p>
+<figure><a class=lightgallery href=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/diff.jpeg title=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/diff.jpeg data-thumbnail=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/diff.jpeg data-sub-html="<h2>Code review 時還花了一堆時間解釋&mldr;</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=diff.jpeg data-srcset="/posts/troubleshooting/invalid-response-on-squidduo-to-bom/diff.jpeg, diff.jpeg 1.5x, /posts/troubleshooting/invalid-response-on-squidduo-to-bom/diff.jpeg 2x" data-sizes=auto alt=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/diff.jpeg width=50%>
+</a><figcaption class=image-caption>Code review 時還花了一堆時間解釋&mldr;</figcaption>
+</figure>
+<p>雖然還有個問題，是要找出哪些網頁也是用這個編碼方式儲存，但這個屬於小問題好解決啦～</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ find . -type f -name <span class=s2>&#34;*.html&#34;</span> <span class=p>|</span> xargs file <span class=p>|</span> grep <span class=s2>&#34;UTF-8 Unicode (with BOM)&#34;</span>
+./path/to/file/index.html:              HTML document, UTF-8 Unicode<span class=o>(</span>with BOM<span class=o>)</span> text, with CRLF line termintors
+<span class=c1># 建議先用自己環境的 find 跟 file，可能需要依據結果做調整這段 script。</span>
+<span class=c1># html 可以依據自己需求更改檔案類型或名稱，反正根據需求使用 regex 即可。</span>
+</code></pre></div><p><del>我要來問大神為什麼他的 wireshark 像個 expert 而我的不像了。</del></p>
+<h2 id=byte-order-mark-bom>Byte Order Mark (BOM)</h2>
+<h3 id=簡介>簡介</h3>
+<p>網路上其實很多資源說的蠻清楚的，我這邊就簡單說明一下。</p>
+<p>Byte Order Mark 常被用來當做標示檔案是以 UTF-8、UTF-16或 UTF-32 編碼的記號。<br>
+他會在檔案開始處使用特定字元來標記，一般常用的編輯器是看不到這些特定字元，通常要使用 binary 或是 hex 的方式來打開，像是用 <code>hexdump</code> 或是 <code>vim</code> 搭配 <code>xxd</code>。<br>
+要不要使用看個人的設計與需求，但經常會干擾應用程式的運作，而導致檔案出現空白或是亂碼的情形。</p>
+<h3 id=建議>建議</h3>
+<ol>
+<li>檔案中有架構可以明確給出編碼的，盡量不要使用 UTF-8 with BOM 做編碼；但如果是不會明確給出編碼的，你要怎麼確保別人開啟時會用 UTF-8？說不定他用別的編碼方式呀，此時用 UTF-8 with BOM 是沒問題的。<br>
+下面舉了兩個例子：html, xml</li>
+</ol>
+<ul>
+<li>html</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=p>&lt;</span><span class=nt>head</span><span class=p>&gt;</span>
+<span class=p>&lt;</span><span class=nt>meta</span> <span class=na>http-equiv</span><span class=o>=</span><span class=s>&#34;Content-Type&#34;</span> <span class=na>content</span><span class=o>=</span><span class=s>&#34;text/html; charset=utf-8&#34;</span><span class=p>&gt;</span>
+<span class=p>&lt;/</span><span class=nt>head</span><span class=p>&gt;</span>
+</code></pre></div><ul>
+<li>xml</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=cp>&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34; standalone = &#34;no&#34; ?&gt;</span>
+</code></pre></div><ol start=2>
+<li>注意編輯器的編碼方式，<del>據說 notepad 常常使用 UTF-8 with BOM。</del></li>
+<li>如果有發現使用錯誤的編碼方式，可以透過編輯器用別的編碼方式再儲存一次，但要記得編碼後作驗證，避免有其他問題發生。</li>
+</ol>
+<h2 id=wireshark>Wireshark</h2>
+<p>因應這次的問題，請教了朋友，朋友也給了一些建議，故紀錄：</p>
+<h3 id=allow-subdissector-to-reassemble-tcp-streams>Allow subdissector to reassemble tcp streams</h3>
+<p><figure><a class=lightgallery href=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/unAllow.png title=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/unAllow.png data-thumbnail=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/unAllow.png data-sub-html="<h2>這個預設是開啟的。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=unAllow.png data-srcset="/posts/troubleshooting/invalid-response-on-squidduo-to-bom/unAllow.png, unAllow.png 1.5x, /posts/troubleshooting/invalid-response-on-squidduo-to-bom/unAllow.png 2x" data-sizes=auto alt=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/unAllow.png width=100%>
+</a><figcaption class=image-caption>這個預設是開啟的。</figcaption>
+</figure>
+在傳輸時，往往會因為資料大於 MTU、MSS 的關係而分段傳輸。<br>
+Wireshark 會將屬於同一個 PDU 的封包集合起來，關閉這個功能可以呈現較真實的傳輸情形。</p>
+<h3 id=follow>Follow</h3>
+<p><figure><a class=lightgallery href=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/follow.png title=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/follow.png data-thumbnail=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/follow.png data-sub-html="<h2>追蹤。</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=follow.png data-srcset="/posts/troubleshooting/invalid-response-on-squidduo-to-bom/follow.png, follow.png 1.5x, /posts/troubleshooting/invalid-response-on-squidduo-to-bom/follow.png 2x" data-sizes=auto alt=/posts/troubleshooting/invalid-response-on-squidduo-to-bom/follow.png width=100%>
+</a><figcaption class=image-caption>追蹤。</figcaption>
+</figure>
+透過這個功能，可以較容易觀察該 stream 收發了什麼資料。</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li>我的神朋友 Oscar.</li>
+<li><a href=https://stackoverflow.com/questions/2223882/whats-the-difference-between-utf-8-and-utf-8-with-bom target=_blank rel="noopener noreffer">What&rsquo;s the difference between UTF-8 and UTF-8 with BOM?</a></li>
+<li><a href=https://zh.wikipedia.org/zh-tw/%E4%BD%8D%E5%85%83%E7%B5%84%E9%A0%86%E5%BA%8F%E8%A8%98%E8%99%9F target=_blank rel="noopener noreffer">wikipedia-位元組順序記號</a></li>
+<li><a href=https://www.zhihu.com/question/20167122 target=_blank rel="noopener noreffer">「带 BOM 的 UTF-8」和「无 BOM 的 UTF-8」有什么区别？网页代码一般使用哪个？</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2023-06-01</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/troubleshooting/invalid-response-on-squidduo-to-bom/ data-title="【TroubleShooting】Invalid Response on Squid(Duo to BOM)" data-via=wiwi571246 data-hashtags="Infra,squid,encoding,UTF-8,UTF-8 with BOM,UTF8BOM"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/troubleshooting/invalid-response-on-squidduo-to-bom/ data-hashtag=Infra><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/troubleshooting/invalid-response-on-squidduo-to-bom/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/troubleshooting/invalid-response-on-squidduo-to-bom/ data-title="【TroubleShooting】Invalid Response on Squid(Duo to BOM)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/infra/>Infra</a>,&nbsp;<a href=/tags/squid/>squid</a>,&nbsp;<a href=/tags/encoding/>encoding</a>,&nbsp;<a href=/tags/utf-8/>UTF-8</a>,&nbsp;<a href=/tags/utf-8-with-bom/>UTF-8 with BOM</a>,&nbsp;<a href=/tags/utf8bom/>UTF8BOM</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/ansible/ansible-debug/ class=prev rel=prev title="Ansible - Debug"><i class="fas fa-angle-left fa-fw"></i>Ansible - Debug</a>
+<a href=/posts/ansible/ansible-roles/ class=next rel=next title="Ansible - Roles">Ansible - Roles<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
