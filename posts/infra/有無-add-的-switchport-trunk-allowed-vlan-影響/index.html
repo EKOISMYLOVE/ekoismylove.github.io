@@ -1,0 +1,210 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>【Network】有無 add 的 switchport trunk allowed vlan 影響 - Wei's Note</title><meta name=description content="話說 switchport trunk allowed vlan {vlan ID} 與 switchport trunk allowed vlan add {vlan ID} 這兩種方法實際上是等價的，在工作時也沒有想那麼多，想說就新增一個 allowed vlan，就用第一個方法，結果被經驗老到的同事制止了，要求我使用第二個方法，這又是為什麼呢？讓我們繼續看下去 &mldr;VLAN, trunk"><meta name=keywords content="VLAN,trunk"><meta property="og:title" content="【Network】有無 add 的 switchport trunk allowed vlan 影響">
+<meta property="og:description" content="話說 switchport trunk allowed vlan {vlan ID} 與 switchport trunk allowed vlan add {vlan ID} 這兩種方法實際上是等價的，在工作時也沒有想那麼多，想說就新增一個 allowed vlan，就用第一個方法，結果被經驗老到的同事制止了，要求我使用第二個方法，這又是為什麼呢？讓我們繼續看下去 &mldr;">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/infra/%E6%9C%89%E7%84%A1-add-%E7%9A%84-switchport-trunk-allowed-vlan-%E5%BD%B1%E9%9F%BF/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2024-01-17T00:00:00+00:00">
+<meta property="article:modified_time" content="2024-01-18T00:00:00+00:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="【Network】有無 add 的 switchport trunk allowed vlan 影響">
+<meta name=twitter:description content="話說 switchport trunk allowed vlan {vlan ID} 與 switchport trunk allowed vlan add {vlan ID} 這兩種方法實際上是等價的，在工作時也沒有想那麼多，想說就新增一個 allowed vlan，就用第一個方法，結果被經驗老到的同事制止了，要求我使用第二個方法，這又是為什麼呢？讓我們繼續看下去 &mldr;">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/infra/%E6%9C%89%E7%84%A1-add-%E7%9A%84-switchport-trunk-allowed-vlan-%E5%BD%B1%E9%9F%BF/><link rel=prev href=http://ekoismylove.github.io/posts/misc/2023-%E5%B9%B4%E5%BA%A6%E5%B0%8F%E7%B8%BD%E7%B5%90%E8%88%87-2024-%E5%B9%B4%E5%BA%A6%E6%96%B0%E7%9B%AE%E6%A8%99/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"【Network】有無 add 的 switchport trunk allowed vlan 影響","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/infra\/%E6%9C%89%E7%84%A1-add-%E7%9A%84-switchport-trunk-allowed-vlan-%E5%BD%B1%E9%9F%BF\/"},"genre":"posts","keywords":"VLAN, trunk","wordcount":250,"url":"http:\/\/ekoismylove.github.io\/posts\/infra\/%E6%9C%89%E7%84%A1-add-%E7%9A%84-switchport-trunk-allowed-vlan-%E5%BD%B1%E9%9F%BF\/","datePublished":"2024-01-17T00:00:00+00:00","dateModified":"2024-01-18T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">【Network】有無 add 的 switchport trunk allowed vlan 影響</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/infra/><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2024-01-17>2024-01-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;250 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#什麼是-allowed-vlan>什麼是 allowed vlan</a></li>
+<li><a href=#例子>例子</a></li>
+<li><a href=#太長>太長</a></li>
+<li><a href=#set-add>Set, Add</a></li>
+<li><a href=#結論>結論</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>話說 switchport trunk allowed vlan {vlan ID} 與 switchport trunk allowed vlan add {vlan ID} 這兩種方法實際上是等價的，在工作時也沒有想那麼多，想說就新增一個 allowed vlan，就用第一個方法，結果被經驗老到的同事制止了，要求我使用第二個方法，這又是為什麼呢？讓我們繼續看下去 &mldr;</p>
+<h2 id=什麼是-allowed-vlan>什麼是 allowed vlan</h2>
+<p>請直接看網路上 Jan Ho 大神的筆記比較快，<a href=https://www.jannet.hk/virtual-lan-vlan-zh-hant/#Allowed_VLAN target=_blank rel="noopener noreffer">allowed vlan</a></p>
+<h2 id=例子>例子</h2>
+<pre tabindex=0><code># show running gi 1/1/1
+interface GigabitEthernet1/1/1
+switchport mode trunk
+switchport trunk allowed vlan 10
+</code></pre><p>今天因為工作需求，我需要增加 VLAN20 的流量，我有兩種新增方式<br>
+以下兩種方式省略了一些前置，像是怎麼進入該 interface 等等。</p>
+<p>第一種：</p>
+<pre tabindex=0><code>switch(config-if)# switchport trunk allowed vlan 10,20
+</code></pre><p>第二種：</p>
+<pre tabindex=0><code>switch(config-if)# switchport trunk allowed vlan add 20 
+</code></pre><p>讓我們再回來檢查設定：</p>
+<pre tabindex=0><code># show running gi 1/1/1
+interface GigabitEthernet1/1/1
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+</code></pre><p>一樣啊，為什麼要我用第二種呢？</p>
+<h2 id=太長>太長</h2>
+<p>如果我現在的情況如下：</p>
+<pre tabindex=0><code># show running gi 1/1/1
+interface GigabitEthernet1/1/1
+switchport mode trunk
+switchport trunk allowed vlan 10,30,40,55,100,288,333,401,507
+</code></pre><p>我使用第一個方法的話，我就要輸入：</p>
+<pre tabindex=0><code>switch(config-if)#switchport trunk allowed vlan 10,20,30,40,55,100,288,333,401,507
+</code></pre><p>這樣子新增時，我需要重新輸入這些 vlan ID，這可能會有打錯的風險，當我們使用錯誤的 vlan ID 時，可能會影響網路的運作。<br>
+好，但是現在資訊愈來愈發達，我在 cmd, putty 上都可以使用複製貼上了，我直接用複製貼上總行了吧？</p>
+<div class="details admonition danger open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-skull-crossbones fa-fw"></i>Danger<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>複製貼上有時候不小心碰到右鍵，阿就把指令給輸進去了！
+再來，你真的這麼有自信複製貼上會貼對？以上面例子來說，你不怕後面的 507 少一個 7 變成 50 嗎？</div>
+</div>
+</div>
+<p>如果真的要貼，會建議另外開個文字編輯先貼上去做確認後，再貼到 Console 中。
+這可能會是一個選擇第二個方法的原因，但這並不是主要原因。</p>
+<h2 id=set-add>Set, Add</h2>
+<p>以前面提到的兩種方式來說，第一種是 Set，第二種則是 Add。</p>
+<pre tabindex=0><code>switch(config-if)# switchport trunk allowed vlan 10,20
+</code></pre><p>用 Set 的話，代表我會下一次設定，把 vlan 10, 20 設定為 allowed，即便我的 vlan 10 已經 allowed，他仍然會重新加入。</p>
+<p>至於重新加入會做什麼事呢？這就要看設備的製造商怎麼設計的了，比方說設備可能會先建立一個 list，將我們要 allow 的 vlan 加到該 list 中，那我們再下一次設定時，是不是又要重新建立一個 list，這個時候原先的設定就會暫時消失，然後再重新加入一次，原先在 queue 的封包可能因為這樣子不符規則而 Drop，就可能會對網路現況造成影響，比方說瞬斷。</p>
+<p>但 add 就比較像是我透過 pointer 存取這個 list，然後透過 push 的方式加入，不太會影響原先的設定。<br>
+也有可能說，我知道會有這個問題，但我在設計時有注意就好，但也要注意 chip 的運作方式，現在許多的 switch 都是使用別家廠商的晶片，比方說 Broadcom, Marvell, 透過這些晶片廠提供的晶片與API 進行設備開發，因此在晶片原先的設計上也有可能導致這種問題的發生，這就無法避免。</p>
+<p>比較直白點，我下了 switchport trunk allowed vlan 10,20 結果到 chip 前只剩下 vlan 20，這樣肯定是不符合我原先所想要的設定。</p>
+<p>二來是必須為了這種情況開發判斷式，多一次運算都會影響設備的效能，不要忘記 switch 每秒鐘可是幾千萬上下，而且是每一個 port &mldr;</p>
+<pre tabindex=0><code># show running gi 1/1/1
+interface GigabitEthernet1/1/1
+switchport mode trunk
+switchport trunk allowed vlan 10,30,40,55,100,288,333,401,507
+
+switchport trunk allowed vlan 10,20,30,40,55,100,288,333,401,507 
+! 這樣我得看有沒有在裡面，我就要看 10 次，不然就是全部重新再設一次。
+
+switchport trunk allowed vlan add 20
+! 我只要看 20 有沒有在裡面就好。
+</code></pre><h2 id=結論>結論</h2>
+<p>雖然前面提到的兩種 command 是等價的，但希望在變更環境需要加入 vlan 時，可以透過 add 的方式，盡可能降低設定時對現有網路所帶來的影響。</p>
+<p>另外在變更網路時，需要先擬好要變更的點，要如何變更，變更後可能會帶來什麼影響，如果帶來影響後我能如何處理？復歸準備好了嗎？發生影響後能不能看 log 來判斷如何處理？<br>
+無論如何，為了避免現有的網路環境受影響，設定前能夠先做好妥善的預防，設定中盡量採取影響程度最小的設定方式，設定後再檢查、測試一下是否符合預期。</p>
+<p>雖然只是改變小小的改變架構，仍然要小心，可不要像我一樣認為等價，指令下下去結果就瞬斷啦！</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li>以前開發 Switch 的經驗</li>
+<li>幾位沒有到很熟的 CCNP, CCIE 也踩過這個坑</li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2024-01-18</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/infra/%E6%9C%89%E7%84%A1-add-%E7%9A%84-switchport-trunk-allowed-vlan-%E5%BD%B1%E9%9F%BF/ data-title="【Network】有無 add 的 switchport trunk allowed vlan 影響" data-via=wiwi571246 data-hashtags=VLAN,trunk><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/infra/%E6%9C%89%E7%84%A1-add-%E7%9A%84-switchport-trunk-allowed-vlan-%E5%BD%B1%E9%9F%BF/ data-hashtag=VLAN><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/infra/%E6%9C%89%E7%84%A1-add-%E7%9A%84-switchport-trunk-allowed-vlan-%E5%BD%B1%E9%9F%BF/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/infra/%E6%9C%89%E7%84%A1-add-%E7%9A%84-switchport-trunk-allowed-vlan-%E5%BD%B1%E9%9F%BF/ data-title="【Network】有無 add 的 switchport trunk allowed vlan 影響"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/vlan/>VLAN</a>,&nbsp;<a href=/tags/trunk/>trunk</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/misc/2023-%E5%B9%B4%E5%BA%A6%E5%B0%8F%E7%B8%BD%E7%B5%90%E8%88%87-2024-%E5%B9%B4%E5%BA%A6%E6%96%B0%E7%9B%AE%E6%A8%99/ class=prev rel=prev title="2023 年度小總結與 2024 年度新目標"><i class="fas fa-angle-left fa-fw"></i>2023 年度小總結與 2024 年度新目標</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
