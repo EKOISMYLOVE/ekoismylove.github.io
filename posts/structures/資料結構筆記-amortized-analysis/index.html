@@ -1,0 +1,178 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis) - Wei's Note</title><meta name=description content="上一次我們提到演算法分析，有常數、線性與平方執行時間等等，但有時我們設計的程式直觀上看不出執行時間，又或者是執行時間看起來像常數，但其實是線性等，這時我們可以使用平攤分析法來得到執行時間。Java, Data Structures, Amortized,Analysis, 平攤分析"><meta name=keywords content="Java,Data Structures,Amortized,Analysis,平攤分析"><meta property="og:title" content="寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis)">
+<meta property="og:description" content="上一次我們提到演算法分析，有常數、線性與平方執行時間等等，但有時我們設計的程式直觀上看不出執行時間，又或者是執行時間看起來像常數，但其實是線性等，這時我們可以使用平攤分析法來得到執行時間。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/structures/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-01-31T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-01-31T00:00:00+00:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis)">
+<meta name=twitter:description content="上一次我們提到演算法分析，有常數、線性與平方執行時間等等，但有時我們設計的程式直觀上看不出執行時間，又或者是執行時間看起來像常數，但其實是線性等，這時我們可以使用平攤分析法來得到執行時間。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/structures/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis/><link rel=prev href=http://ekoismylove.github.io/posts/ansible/ansible-inventory%E4%B8%8B/><link rel=next href=http://ekoismylove.github.io/posts/ansible/ansible-variables-%E8%88%87-facts/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis)","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/structures\/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis\/"},"genre":"posts","keywords":"Java, Data Structures, Amortized,Analysis, 平攤分析","wordcount":109,"url":"http:\/\/ekoismylove.github.io\/posts\/structures\/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis\/","datePublished":"2023-01-31T00:00:00+00:00","dateModified":"2023-01-31T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/data-structures/><i class="far fa-folder fa-fw"></i>Data Structures</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-01-31>2023-01-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;109 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#例子>例子</a></li>
+<li><a href=#結論>結論</a></li>
+<li><a href=#參考資料>參考資料</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>上一次我們提到演算法分析，有常數、線性與平方執行時間等等，但有時我們設計的程式直觀上看不出執行時間，又或者是執行時間看起來像常數，但其實是線性等，這時我們可以使用平攤分析法來得到執行時間。</p>
+<h2 id=前言>前言</h2>
+<p>平攤分析法（Amortized Analysis）通常用於分析一個算法的效能，特別是用在動態的資料結構，動態資料結構是一種在運行時可以動態調整大小的結構。這種結構可以根據實際需要動態增加或減少其大小，而不需要事先指定固定大小。<br>
+像我們前面提到的 ArrayList 與 LinkedList 就是屬於這種動態資料結構。<br>
+平攤分析法會以最壞的情況，對每一次的操作進行分析，將這些操作情況加以平均，來得到平均的操作時間。也因此平攤分析法通常是算出在最壞情況的平均執行時間，並不代表所有情況的平均執行時間。</p>
+<h2 id=例子>例子</h2>
+<p>我們來計算一下在 ArrayList 中，add 的執行時間。
+宣告一個 ArrayList，發現裡面還有兩個空間。<br>
+接著我們來加入(add)幾個元素：</p>
+<ol>
+<li>第一次使用 add : 因為還有空間所以直接加入。</li>
+<li>第二次使用 add : 因為還有空間所以直接加入。</li>
+<li>第三次使用 add : 因為空間滿了，所以擴大為兩倍空間，然後複製 2 個元素後，再加入一個。現在的長度為 2x2。</li>
+<li>第四次使用 add : 因為還有空間所以直接加入。</li>
+<li>第五次使用 add : 因為空間滿了，所以擴大為兩倍空間，然後複製 4 個元素後，再加入一個。現在的長度為 2x2x2。</li>
+<li>第六次使用 add : 因為還有空間所以直接加入。</li>
+<li>第七次使用 add : 因為還有空間所以直接加入。</li>
+<li>第八次使用 add : 因為空間滿了，所以擴大為兩倍空間，然後複製 8 個元素後，再加入一個。現在的長度為 2x2x2x2。</li>
+</ol>
+<p>接著我們把這些動作相加起來：
+在第四次使用時，我們儲存了4個元素、複製2個。<br>
+在第八次使用時，我們儲存了8個元素、複製6個。<br>
+在第十六次使用時，我們儲存了16個元素、複製14個。(自己算一下)</p>
+<p>也就是說，當我們做 n 次 add，我們會儲存 n 個元素，複製 n-2 個元素，所以總動作的次數是 n+n-2。
+為了得到平均動作次數，我們要將總動作次數除以我們執行的次數，也就是 (n+n-2)/n -> (2n-2)/n -> 2-2/n
+我們在平攤分析時採用最壞情況，也就是 n 趨近於無限大，那這樣我們的平均動作次數會愈趨近於 2 ，因此 add 為常數執行時間。<br>
+這種方式也被稱為聚合分析法（Aggregate Method），將所有結果聚合後計算平均。</p>
+<p>可以回憶一下，我們在執行 add 時，不論 ArrayList 多長，執行時間都是差不多的。</p>
+<p>另外還有兩種方式，會計分析（Accounting Method）與勢能分析（Potential Method）<br>
+後續會介紹到。（<del>其實是因為現在的我看不懂</del>）</p>
+<h2 id=結論>結論</h2>
+<p>平攤分析法用來分析執行時間會有變化的時間複雜度，有些操作會花費極大的時間，但平攤分析會考量到這種情況，將該操作全部做完的總動作次數，除以執行次數來得到平均複雜度。
+通常會用在動態的資料結構，例如 ArrayList, HashTable, Binary Tree &mldr; 等。<br>
+這些架構允許在運行時根據需要動態調整其大小，這使得最壞情況下的平均執行時間成為一個重要的性能指標。<br>
+在這種情況下我們則會使用平攤分析法來了解執行時間與時間複雜度。</p>
+<h2 id=參考資料>參考資料</h2>
+<ol>
+<li><a href=https://greenteapress.com/thinkdast/html/thinkdast003.html target=_blank rel="noopener noreffer">thinkdast</a></li>
+</ol></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2023-01-31</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/structures/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis/ data-title="寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis)" data-via=wiwi571246 data-hashtags="Java,Data Structures,Amortized,Analysis,平攤分析"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/structures/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis/ data-hashtag=Java><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/structures/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/structures/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis/ data-title="寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis)"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/java/>Java</a>,&nbsp;<a href=/tags/data-structures/>Data Structures</a>,&nbsp;<a href=/tags/amortizedanalysis/>Amortized,Analysis</a>,&nbsp;<a href=/tags/%E5%B9%B3%E6%94%A4%E5%88%86%E6%9E%90/>平攤分析</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/ansible/ansible-inventory%E4%B8%8B/ class=prev rel=prev title="Ansible - Inventory(下)"><i class="fas fa-angle-left fa-fw"></i>Ansible - Inventory(下)</a>
+<a href=/posts/ansible/ansible-variables-%E8%88%87-facts/ class=next rel=next title="Ansible - Variables 與 facts">Ansible - Variables 與 facts<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
