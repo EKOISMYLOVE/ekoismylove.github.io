@@ -1,0 +1,196 @@
+<!doctype html><html lang=zh-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>AWS Certified Cloud Practitioner (CLF-C02) 證照考試心得 - Wei's Note</title><meta name=description content="本篇文章分享關於 AWS CLF-C02 考試的準備心得，包括考試主要範圍、準備過程中的學習資源及建議，以及考試當日的流程和心得。希望本文能為欲嘗試取得此認證的人提供心得與參考。Misc, Infra, AWS, CLF-C02, AWS Certified Cloud Practitioner"><meta name=keywords content="Misc,Infra,AWS,CLF-C02,AWS Certified Cloud Practitioner"><meta property="og:title" content="AWS Certified Cloud Practitioner (CLF-C02) 證照考試心得">
+<meta property="og:description" content="本篇文章分享關於 AWS CLF-C02 考試的準備心得，包括考試主要範圍、準備過程中的學習資源及建議，以及考試當日的流程和心得。希望本文能為欲嘗試取得此認證的人提供心得與參考。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://ekoismylove.github.io/posts/misc/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97/"><meta property="og:image" content="http://ekoismylove.github.io/posts/misc/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97/pass.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2024-02-19T00:00:00+00:00">
+<meta property="article:modified_time" content="2024-02-19T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://ekoismylove.github.io/posts/misc/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97/pass.png">
+<meta name=twitter:title content="AWS Certified Cloud Practitioner (CLF-C02) 證照考試心得">
+<meta name=twitter:description content="本篇文章分享關於 AWS CLF-C02 考試的準備心得，包括考試主要範圍、準備過程中的學習資源及建議，以及考試當日的流程和心得。希望本文能為欲嘗試取得此認證的人提供心得與參考。">
+<meta name=application-name content="Wei's Note">
+<meta name=apple-mobile-web-app-title content="Wei's Note"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://ekoismylove.github.io/posts/misc/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97/><link rel=prev href=http://ekoismylove.github.io/posts/structures/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"AWS Certified Cloud Practitioner (CLF-C02) 證照考試心得","inLanguage":"zh-TW","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/ekoismylove.github.io\/posts\/misc\/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97\/"},"image":[{"@type":"ImageObject","url":"http:\/\/ekoismylove.github.io\/posts\/misc\/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97\/pass.png","width":1222,"height":834}],"genre":"posts","keywords":"Misc, Infra, AWS, CLF-C02, AWS Certified Cloud Practitioner","wordcount":133,"url":"http:\/\/ekoismylove.github.io\/posts\/misc\/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97\/","datePublished":"2024-02-19T00:00:00+00:00","dateModified":"2024-02-19T00:00:00+00:00","publisher":{"@type":"Organization","name":"Wei","logo":"http:\/\/ekoismylove.github.io\/favicon.ico"},"author":{"@type":"Person","name":"Wei"},"description":""}</script></head>
+<body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':''==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:''==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Wei's Note">Wei's Note</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">AWS Certified Cloud Practitioner (CLF-C02) 證照考試心得</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Wei</a></span>&nbsp;<span class=post-category>included in <a href=/categories/misc/><i class="far fa-folder fa-fw"></i>Misc</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2024-02-19>2024-02-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;133 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#何謂-clf-c02與-clf-c01-差在哪裡>何謂 CLF-C02？與 CLF-C01 差在哪裡？</a></li>
+<li><a href=#考前準備>考前準備</a></li>
+<li><a href=#考試報名>考試報名</a></li>
+<li><a href=#考試當日>考試當日</a></li>
+<li><a href=#結論>結論</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>本篇文章分享關於 AWS CLF-C02 考試的準備心得，包括考試主要範圍、準備過程中的學習資源及建議，以及考試當日的流程和心得。希望本文能為欲嘗試取得此認證的人提供心得與參考。</p>
+<h2 id=前言>前言</h2>
+<p>近年來，科技蓬勃發展，其中雲端技術的崛起為企業經營帶來顯著的變革。透過將資料或系統上雲，企業能夠降低維護費用、提升資源運用效率，同時擁有更大的彈性與擴充性。雲端運算的全球性更為企業提供了無縫連接的可能，不再需要在各個國家地區建置獨立的資料中心，甚至連要使用多大多好的設備也不用預先考慮。在這個數位時代，企業透過雲端技術不僅能夠迎合市場變革，更能夠快速適應不斷變化的環境，為未來的發展奠定穩固基石。</p>
+<p>自己有軟體開發、系統與網路經驗，但隨著雲端的興起，自己有體悟到雲端吃 IT 這塊餅的速度非常快，雖然還是有些企業需要地端的系統與網路，但自己覺得多學一個技能並不吃虧，還能拓展自己的視野與想法，學一學覺得可以考個證照來作證明，準備考試時也受用了許多網路資源，故也想分享自己的心得，提供給有需要的人。</p>
+<h2 id=何謂-clf-c02與-clf-c01-差在哪裡>何謂 CLF-C02？與 CLF-C01 差在哪裡？</h2>
+<p>取得此認證可證明應試人員對 AWS 雲端、服務和術語有高層級理解。對於無 IT 背景但改從事雲端工作的應試人員來說，此認證是雲端職涯的進入點。根據 Lightcast™ 2022 年 10 月的調查，要求具有 AWS Certified Cloud Practitioner 認證的職缺增加了 84% (2021 年 10 月至 2022 年 9 月)。此認證還適合希望培養基礎雲端素養並與技術團隊及客戶更高效溝通的企業營運員工 (銷售、產品管理、專案管理等)。</p>
+<p>也就是說，擁有這張證照，代表你對 AWS 雲端、服務、安全與收費有一定程度的理解。</p>
+<p>考試主要分成四大範圍：</p>
+<ul>
+<li>領域 1： 雲端概念 (佔計分內容的 24%)</li>
+<li>領域 2： 安全性和合規性 (佔計分內容的 30%)</li>
+<li>領域 3： 雲端技術與服務 (佔計分內容的 34%)</li>
+<li>領域 4： 帳單、定價和支援 (佔計分內容的 12%)</li>
+</ul>
+<p>至於兩者有什麼不同呢？？</p>
+<ul>
+<li>配分的方式不同</li>
+<li>當然是有多出一些新的考題與內容，比方說 CLF-C02 就新增了 AWS Cloud Adoption Framework (AWS CAF)
+我這邊附上考試指南，可以參考該指南內的內容。<a href=https://d1.awsstatic.com/zh_TW/training-and-certification/docs-cloud-practitioner/AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf target=_blank rel="noopener noreffer">連結</a></li>
+</ul>
+<h2 id=考前準備>考前準備</h2>
+<p>如果是像我完全對雲端沒有概念，或是只有一點概念的，可以先看官方的 <a href="https://www.aws.training/Details/eLearning?id=60697" target=_blank rel="noopener noreffer">AWS Cloud Practitioner Essential</a>，大約四小時的課程，會用一個咖啡廳營運的方式來說明雲端概念。說明的很清晰，且並不會太困難，剛開始會比較苦手的應該是專有名詞，不熟的或是沒辦法直覺知道這是什麼時，建議做個筆記。</p>
+<p>我看完這個課程後，有在 Udemy 上購買課程，很多人推薦這個課程，會深入說明，且會對幾個相似的服務或是概念說明不同的地方。<br>
+<a href=https://www.udemy.com/course/aws-certified-cloud-practitioner-new/ target=_blank rel="noopener noreffer">Ultimate AWS Certified Cloud Practitioner CLF-C02</a></p>
+<p>我認為看完這兩個課程就差不多可以準備考試了，當然如果要看其他參考文件深入了解也是可行。</p>
+<hr>
+<p>課程看完後，可以在網路上找題目練習，我認為不需要花錢買題庫，基本上概念有建立起來應該就沒有問題了。</p>
+<ul>
+<li><a href=https://www.examtopics.com/exams/amazon/aws-certified-cloud-practitioner-clf-c02/ target=_blank rel="noopener noreffer">examtopic</a></li>
+<li><a href=https://www.passnexam.com/amazon/clf-c02/1 target=_blank rel="noopener noreffer">passnexam</a></li>
+<li><a href=https://explore.skillbuilder.aws/learn/course/internal/view/elearning/17479/exam-prep-official-practice-exam-aws-certified-cloud-practitioner-clf-c02-traditional-chinese target=_blank rel="noopener noreffer">官方的練習考試</a></li>
+</ul>
+<p>我只有準備 CLF-C02 的題庫，如果你的時間夠多，想準備得更充分，網路上的 CLF-C01 題庫也可以練習，題目是類似的，但我會建議你以 CLF-C02 為主。</p>
+<p>另外會建議不要以背題庫為主，CLF-C02 認證有 65 題，其中會有一些新題目，大約是10-15題，這些題目不會計分，是用來收集數據來判斷考試難度，但考試時你不會知道哪些題目是不計分的，請你以每一題都會計分的心態來準備會好一些。</p>
+<h2 id=考試報名>考試報名</h2>
+<p>考試報名費用為 100 美金，不過 AWS 不時會舉辦活動，可以領取相關的折扣券。</p>
+<p>考試語言可以選英文與中文，如果你選擇中文，考試時還是會提供英文的試題可以參考。</p>
+<p>報名網址：<a href=https://www.aws.training/Certification target=_blank rel="noopener noreffer">AWS Certification</a></p>
+<h2 id=考試當日>考試當日</h2>
+<p>考試當天記得帶兩樣物品：</p>
+<ul>
+<li>身分證</li>
+<li>護照或是信用卡（要有英文姓名）</li>
+</ul>
+<p>我選擇的考試方式，是到 AWS 認證的考試中心應考，我是到台北的恆逸教育訓練中心，一來是交通比較方便，捷運南京復興站出站就是了，二來是好像只有他能安排在假日考試。</p>
+<p>到櫃檯後請告知說自己是來考試，服務人員會請你寫相關文件，如果你提早到可以先稍做休息，考試前會請你關閉電子設備並繳交，並做一些簡單的檢查，檢查後確認沒問題則開始考試。</p>
+<p>100 分鐘的考試，我記得我花不到 30 分鐘就交卷了，當你交卷後螢幕則會顯示你的考試結果：</p>
+<p><strong>合格。</strong></p>
+<p>五個工作天內，AWS 會寄信告知你考試結果，我是考試完當天就收到了。</p>
+<figure><a class=lightgallery href=pass.png title=pass.png data-thumbnail=pass.png data-sub-html="<h2>pass</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=pass.png data-srcset="pass.png, pass.png 1.5x, pass.png 2x" data-sizes=auto alt=pass.png width=100%>
+</a><figcaption class=image-caption>pass</figcaption>
+</figure>
+<h2 id=結論>結論</h2>
+<p>把概念與專有名詞弄清楚，考試時帶著準備充裕的自信心，應該就能順利取得這張證照。</p></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2024-02-19</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=http://ekoismylove.github.io/posts/misc/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97/ data-title="AWS Certified Cloud Practitioner (CLF-C02) 證照考試心得" data-via=wiwi571246 data-hashtags="Misc,Infra,AWS,CLF-C02,AWS Certified Cloud Practitioner"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=http://ekoismylove.github.io/posts/misc/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97/ data-hashtag=Misc><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://ekoismylove.github.io/posts/misc/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://ekoismylove.github.io/posts/misc/aws-certified-cloud-practitioner-clf-c02-%E8%AD%89%E7%85%A7%E8%80%83%E8%A9%A6%E5%BF%83%E5%BE%97/ data-title="AWS Certified Cloud Practitioner (CLF-C02) 證照考試心得"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/misc/>Misc</a>,&nbsp;<a href=/tags/infra/>Infra</a>,&nbsp;<a href=/tags/aws/>AWS</a>,&nbsp;<a href=/tags/clf-c02/>CLF-C02</a>,&nbsp;<a href=/tags/aws-certified-cloud-practitioner/>AWS Certified Cloud Practitioner</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/structures/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98-amortized-analysis/ class=prev rel=prev title="寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis)"><i class="fas fa-angle-left fa-fw"></i>寫給我自己看的資料結構筆記-平攤分析(Amortized Analysis)</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Wei</a></span>&nbsp;|&nbsp;<span class=license><a href=https://creativecommons.org/licenses/by-nc/4.0/deed.en target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script src=/dayjs.min.js></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:200},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"EKOISMYLOVE/blog_comment"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"V23NTWV8MR",algoliaIndex:"EKOISMYLOVE",algoliaSearchKey:"ecc9ae3d4e27fdfec35503cae9c6b716",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
